@@ -258,6 +258,8 @@ struct ManualDetailsWireV: View {
     let stack: CallStack
     let reservePub: String
     let payto: PayTo
+    let paytoStr: String
+    let kycPaytoStr: String?
 
     let restrictions: [AccountRestriction]?               // only if restrictions apply
 //    let iban: String?                   // TODO: BBAN
@@ -267,6 +269,9 @@ struct ManualDetailsWireV: View {
     let debitIBAN: String?              // only for deposit auth
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @State var isCopied1: Bool? = false
+    @State var isCopied2: Bool? = false
+
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer instructions")
 
     private func step3(_ amountS: String) -> String {
@@ -320,7 +325,7 @@ struct ManualDetailsWireV: View {
 
     var body: some View {
       if let receiverStr = payto.receiver {
-        List {
+        let list = List {
             let warningIcon = Image(systemName: WARNING)
             let note = Text("**Note: Don't forget to copy and paste the code in Step 2.**")
             let manda = debitIBAN == nil ? String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
@@ -390,6 +395,19 @@ struct ManualDetailsWireV: View {
         .onAppear() {
 //            symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_INSTRUCTIONS, stack: stack.push())
+        }
+
+        if #available(iOS 16.0, *) {
+            list.toolbar {
+                ToolbarTitleMenu {
+                    CopyButton(paytoStr, isCopied: $isCopied1, title: "Copy destination payto")
+                    if let kycPaytoStr {
+                        CopyButton(kycPaytoStr, isCopied: $isCopied2, title: "Copy validation payto")
+                    }
+                }
+            }
+        } else {
+            list
         }
       } // if receiverStr
     }

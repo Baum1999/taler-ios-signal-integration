@@ -122,6 +122,8 @@ struct WireTransferView: View {
                         let wireDetails = ManualDetailsWireV(stack: stack.push(),
                                                         reservePub: reservePub,
                                                              payto: payto,
+                                                          paytoStr: paytoUri,
+                                                       kycPaytoStr: kycData?.debitPayto,
                                                       restrictions: account.creditRestrictions,
                                                        amountValue: amountValue,
                                                          amountStr: amountStr,

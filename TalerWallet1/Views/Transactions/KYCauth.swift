@@ -12,6 +12,7 @@ import taler_swift
 struct KycData {
     let debitIBAN: String
     let depositStr: (String, String)
+    let debitPayto: String
 }
 // pretty much the same as ManualDetailsV
 struct KYCauth: View {
@@ -31,7 +32,8 @@ struct KYCauth: View {
                 if let validDetails = accountDetails.validDetails {
                     if let scope: ScopeInfo = common.scopes.first {
                         let depositStr = common.amountRaw.formatted(scope, isNegative: false)
-                        let kycData = KycData(debitIBAN: debitIban, depositStr: depositStr)
+                        let kycData = KycData(debitIBAN: debitIban, depositStr: depositStr,
+                                             debitPayto: info.debitPaytoUri)
                         WireTransferView(stack: stack.push(),
                                          title: title(depositStr.0),
                                      titleA11y: title(depositStr.1),
