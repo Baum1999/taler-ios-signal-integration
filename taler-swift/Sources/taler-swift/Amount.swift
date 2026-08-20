@@ -47,8 +47,8 @@ enum AmountError: Error {
 
 /// A value of some currency.
 public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringConvertible {        // TODO: @unchecked
-    /// Format that a currency must match.
-    private static let currencyRegex = #"^[-_*A-Za-z0-9]{1,12}$"#
+    /// Format that a currency must match:  at most 11 ASCII letters
+    private static let currencyRegex = #"^[A-Za-z]{1,11}$"#
     
     /// The largest possible value that can be represented.
     private static let maxValue: UInt64 = 1 << 52
