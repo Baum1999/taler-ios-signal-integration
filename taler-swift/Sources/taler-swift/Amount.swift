@@ -163,17 +163,21 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The string representation of the value, formatted as "`integer`.`fraction`",
     /// no trailing zeroes, no group separator.
     public var valueStr: String {
-        if fraction == 0 {
-            return String(integer)
+        // Render a normalized copy: a fraction >= fractionalBase() would otherwise
+        // produce extra leading digits, e.g. fraction 4_000_000_000 as "0.400"
+        // instead of "40". Fall back to self when normalization is impossible.
+        let this = (try? normalizedCopy()) ?? self
+        if this.fraction == 0 {
+            return String(this.integer)
         } else {
-            var frac = UInt64(fraction)
+            var frac = UInt64(this.fraction)
             let base = UInt64(fractionalBase())
             var fracStr = ""
             while (frac > 0) {
                 fracStr += String(frac / ( base / 10))
                 frac = (frac * 10) % base
             }
-            return "\(integer)\(Self.decimalSeparator)\(fracStr)"
+            return "\(this.integer)\(Self.decimalSeparator)\(fracStr)"
         }
     }
 
