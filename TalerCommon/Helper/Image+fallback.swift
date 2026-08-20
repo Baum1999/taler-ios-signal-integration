@@ -39,6 +39,13 @@ extension Image {
     /// the main thread and telling the merchant when (and how often) the user looks at
     /// the transaction - or read a local file for a `file:` URL.
     init?(imageBase64: String) {
+        // The data URL comes from merchant-controlled contract terms (merchant.logo,
+        // product.image). Reject anything implausibly large before decoding it, so a
+        // malicious merchant can't force us to allocate an unbounded buffer just to
+        // render a payment/transaction screen.
+        let maxDataUrlLength = 1 * 1024 * 1024 // ~3/4 MB decoded, generous for a logo/product image
+        guard imageBase64.utf8.count <= maxDataUrlLength else { return nil }
+
         let anchored: String.CompareOptions = [.caseInsensitive, .anchored]
         guard let dataUrlPrefix = imageBase64.range(of: "data:image/png;base64,", options: anchored)
                                ?? imageBase64.range(of: "data:image/jpeg;base64,", options: anchored),
