@@ -249,7 +249,11 @@ class APDU {
 
         guard commandApdu.count >= 2 else { return A_ERROR }
         /// Sixth (and seventh) Command: Read the NDEF File       // 00b0 00 02 3b, and 00b0 00 3d 27
-        if NDEF_READ_BINARY == commandApdu[0..<2] {
+        let start = commandApdu.startIndex
+        // a Data slice's valid indices need not start at 0, and subscripting with an absolute range
+        // would crash if they didn't.
+        let prefixEnd = commandApdu.index(start, offsetBy: 2)
+        if NDEF_READ_BINARY == commandApdu[start..<prefixEnd] {
             let count = commandApdu.count
             if count > 4 {
                 var arrayApdu = Array<UInt8>(repeating: 0, count: count)
