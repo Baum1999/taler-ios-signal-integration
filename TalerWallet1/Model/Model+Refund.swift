@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -36,7 +36,8 @@ struct StartRefundQueryRequest: WalletBackendFormattedRequest {
         var transactionId: String
     }
 
-    /// no error means the refunds was successful
+    /// No error means the background refund query was started
+    /// the actual outcome arrives later via notification
     struct Response: Decodable {}
 }
 // MARK: -
