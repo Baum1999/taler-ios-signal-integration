@@ -261,7 +261,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
             let amountStr = String(string[string.index(separatorIndex, offsetBy: 1)...])
             if let dotIndex = amountStr.firstIndex(of: ".") {
                 let integerStr = String(amountStr[..<dotIndex])
-                let fractionStr = String(amountStr[string.index(dotIndex, offsetBy: 1)...])
+                let fractionStr = String(amountStr[amountStr.index(dotIndex, offsetBy: 1)...])
                 if (fractionStr.isEmpty) {   // reject a trailing separator, e.g. "EUR:1."
                     throw AmountError.invalidStringRepresentation
                 }
