@@ -45,12 +45,13 @@ struct P2PReadyV: View {
             return
         }
         transactionStarted = true
+        // keep expiration of outgoing P2P in developer mode for debugging
         let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)   // 24h
                                                               : expireDays > 5  ? 60        //  1h
                                                                                 : 3)        //  3m
                                       : Timestamp.inSomeDays(expireDays)
         let purseExpiration = developerMode ? timestamp
-                                 : outgoing ? nil : timestamp
+                                 : outgoing ? nil : timestamp                   // nil for outgoing (non-dev)
         let terms = PeerContractTerms(amount: amountToTransfer,
                                      summary: summary,
                             purse_expiration: purseExpiration,

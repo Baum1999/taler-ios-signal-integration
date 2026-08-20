@@ -89,7 +89,6 @@ struct P2PSubjectV: View {
                 maxExpirationDate = ppCheck.maxExpirationDate
             } else {
                 print("❗️ checkPeerPushDebitM failed")
-
             }
         }
     }
