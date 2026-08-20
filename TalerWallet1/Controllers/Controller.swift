@@ -170,6 +170,7 @@ class Controller: ObservableObject {
     var progressToken: String? = nil
 
     private let monitor = NWPathMonitor()
+    private var isMonitoringConnection = false
 
     private var diagnosticModeObservation: NSKeyValueObservation?
 #if OIM
@@ -271,7 +272,16 @@ class Controller: ObservableObject {
         }
     }
 
+    // NWPathMonitor cannot be restarted after `cancel()` - so we just keep it running forever
+//    func stopCheckingConnection() {
+//        self.logger.log("Stop monitoring internet connection")
+//        isMonitoringConnection = false
+//        monitor.cancel()
+//    }
+
     func checkInternetConnection() {
+        guard !isMonitoringConnection else { return }      // don't try to start NWPathMonitor a second time
+        isMonitoringConnection = true
         monitor.pathUpdateHandler = { path in
             let status = switch path.status {
                 case .satisfied: "active"
@@ -286,7 +296,6 @@ class Controller: ObservableObject {
                         await WalletModel.shared.hintNetworkAvailabilityT(false)
                     }
                 } else {
-                    self.stopCheckingConnection()
                     self.isConnected = true
                     Task.detached {
                         await WalletModel.shared.hintNetworkAvailabilityT(true)
@@ -297,10 +306,6 @@ class Controller: ObservableObject {
         self.logger.log("Start monitoring internet connection")
         let queue = DispatchQueue(label: "InternetMonitor")
         monitor.start(queue: queue)
-    }
-    func stopCheckingConnection() {
-        self.logger.log("Stop monitoring internet connection")
-        monitor.cancel()
     }
 
     func printFonts() {
