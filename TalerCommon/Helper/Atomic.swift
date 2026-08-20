@@ -57,6 +57,6 @@ class Atomic<Value> where Value: BinaryInteger {
         lock.lock()
         defer { lock.unlock() }
         self.value += value
-        return value
+        return self.value
     }
 }
