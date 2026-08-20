@@ -73,7 +73,7 @@ struct QRGeneratorView: View {
 //    func getQRCode(text: String) -> UIImage? {
     func getQRCodeData(text: String) -> Data? {
         guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
-        let data = text.data(using: .ascii, allowLossyConversion: false)
+        let data = text.data(using: .utf8, allowLossyConversion: false)
         filter.setValue(data, forKey: "inputMessage")
         filter.setValue("Q", forKey: "inputCorrectionLevel")    // 4 levels: L M Q H 
         guard let ciimage = filter.outputImage else { return nil }
