@@ -254,6 +254,10 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
                     amount.removeDigit(textfieldRepresentable.currencyInfo)
                     setValue(amount)
                 }
+                // We already applied (or intentionally skipped) the edit ourselves above -
+                // returning true here would let UIKit apply its own, now-stale range edit
+                // on top of what setPlainText just set, desyncing text from lastValidInput.
+                return false
             }
             return true
         }
