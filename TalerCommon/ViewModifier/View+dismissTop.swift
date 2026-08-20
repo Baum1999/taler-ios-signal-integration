@@ -64,7 +64,9 @@ extension View {
         }
 
         for childViewController in viewController.children {
-            return findNavigationController(viewController: childViewController)
+            if let found = findNavigationController(viewController: childViewController) {
+                return found
+            }
         }
 
         return nil
