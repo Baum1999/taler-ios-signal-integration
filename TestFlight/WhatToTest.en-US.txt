@@ -1,3 +1,10 @@
+Version 1.6.10 (wallet-core 1.6.30)
+
+• Discounts + Passes for all
+- handle missing ToS
+- handle Exchange master-key rotation
+
+
 Version 1.6.9 (wallet-core 1.6.26)
 
 - fix deposit for CH QR reference
