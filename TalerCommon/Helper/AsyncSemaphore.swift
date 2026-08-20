@@ -234,21 +234,31 @@ public final class AsyncSemaphore: @unchecked Sendable {
     @discardableResult
     public func signal() -> Bool {
         lock()
-        
+
         value += 1
-        
-        switch suspensions.popLast()?.state { // FIFO
-        case let .suspendedUnlessCancelled(continuation):
-            unlock()
-            continuation.resume()
-            return true
-        case let .suspended(continuation):
-            unlock()
-            continuation.resume()
-            return true
-        default:
+
+        guard let suspension = suspensions.popLast() else { // FIFO
             unlock()
             return false
+        }
+        switch suspension.state {
+            case let .suspendedUnlessCancelled(continuation):
+                // Mark this suspension as spent *before* unlocking. Otherwise, if
+                // the waiting task is cancelled concurrently, its `onCancel`
+                // handler (TalerCommon/Helper/AsyncSemaphore.swift) would still
+                // see `.suspendedUnlessCancelled` on `suspension.state` (we never
+                // mutated it) and resume `continuation` a second time.
+                suspension.state = .cancelled
+                unlock()
+                continuation.resume()
+                return true
+            case let .suspended(continuation):
+                unlock()
+                continuation.resume()
+                return true
+            default:
+                unlock()
+                return false
         }
     }
 }
