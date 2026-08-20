@@ -538,7 +538,12 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
             return (leftNormalized.integer == rightNormalized.integer && leftNormalized.fraction == rightNormalized.fraction)
         }
         catch {
-            return false
+            // Normalization failed (invalid amount). `hash(into:)` falls back to the
+            // raw fields in that case, so compare them here too - otherwise an
+            // invalid amount is not even equal to itself, which breaks Set/Dictionary.
+            return left.currency == right.currency
+                && left.integer  == right.integer
+                && left.fraction == right.fraction
         }
     }
 
