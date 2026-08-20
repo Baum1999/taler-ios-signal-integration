@@ -259,6 +259,14 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// - Throws:
     ///   - `AmountError.invalidStringRepresentation` if the string cannot be parsed.
     ///   - `AmountError.invalidAmount` if the string can be parsed, but the resulting amount is not valid.
+    /// The protocol's amount syntax is ASCII-only. `UInt64.init(_: String)` accepts a
+    /// leading "+" and `Character.wholeNumberValue` is defined for every Unicode decimal
+    /// digit (e.g. Arabic-Indic), so both have to be screened out here - wallet-core's
+    /// Amounts.parse() and api-common.rst reject those spellings.
+    private static func isASCIIDigits(_ s: String) -> Bool {
+        !s.isEmpty && s.allSatisfy { $0.isASCII && $0.isNumber }
+    }
+
     public init(fromString string: String) throws {
         if let separatorIndex = string.firstIndex(of: ":") {
             self.currency = String(string[..<separatorIndex])
@@ -272,17 +280,20 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
                 if (fractionStr.count > Self.fractionalBaseDigits) {
                     throw AmountError.invalidStringRepresentation
                 }
-                guard let intValue = UInt64(integerStr) else { throw AmountError.invalidStringRepresentation }
+                guard Self.isASCIIDigits(integerStr),
+                      let intValue = UInt64(integerStr) else { throw AmountError.invalidStringRepresentation }
                 self.integer = intValue
                 self.fraction = 0
                 var digitValue = fractionalBase() / 10
                 for char in fractionStr {
-                    guard let digit = char.wholeNumberValue else { throw AmountError.invalidStringRepresentation }
+                    guard char.isASCII,
+                          let digit = char.wholeNumberValue else { throw AmountError.invalidStringRepresentation }
                     self.fraction += digitValue * UInt32(digit)
                     digitValue /= 10
                 }
             } else {
-                guard let intValue = UInt64(amountStr) else { throw AmountError.invalidStringRepresentation }
+                guard Self.isASCIIDigits(amountStr),
+                      let intValue = UInt64(amountStr) else { throw AmountError.invalidStringRepresentation }
                 self.integer = intValue
                 self.fraction = 0
             }
