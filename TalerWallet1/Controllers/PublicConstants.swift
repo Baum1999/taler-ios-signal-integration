@@ -64,6 +64,7 @@ public let CHEVRON = "chevron.forward"              // 􀯻  􀯶               
 public let CHEVRON_UP = "chevron.up"                // 􀆇                       1.0 (iOS 13)
 
 public let BANKNOTE = "banknote.fill"               // 􀮀                       2.0 (iOS 14)
+public let MORE = "ellipsis"                        // 􀍠                       1.0 (iOS 13)
 public let PLUS = "plus"                            // 􀅼                       1.0 (iOS 13)
 public let XMARK = "xmark"                          // 􀆄                       1.0 (iOS 13)
 public let LIGHT_OFF = "lightbulb"                  // 􀛭                       1.0 (iOS 13)

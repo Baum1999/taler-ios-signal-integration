@@ -172,6 +172,20 @@ struct PlusButton : View  {
     }
 }
 
+struct MoreButton : View  {
+    let accessibilityLabelStr: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: MORE)
+        }
+        .tint(WalletColors().primaryAccent)
+        .talerFont(.title)
+        .accessibilityLabel(accessibilityLabelStr)
+    }
+}
+
 @available(iOS 26.0, *)
 struct SettingsButton26 : View  {
     let sortPriority: Double
