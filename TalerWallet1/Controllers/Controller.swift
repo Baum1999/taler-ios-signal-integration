@@ -547,15 +547,21 @@ class Controller: ObservableObject {
 #endif
                 walletCore.versionInfo = versionInfo
                 if developerMode {
-                    try await model.setConfig(setTesting: true)
-                    if developDelay == true {
+                    // best-effort dev-mode setup: a network hiccup here must not abort
+                    // wallet-core startup (see the force `try!` at the call site)
+                    do {
+                        try await model.setConfig(setTesting: true)
+                        if developDelay == true {
+                            try await model.devExperimentT(
+                                "taler://dev-experiment/start-tc?delay_resp=\(TCDELAY)")
+                        }
+//                        try await model.devExperimentT("taler://dev-experiment/start-tc?fake_500=0.7")
+//                        try await model.devExperimentT("taler://dev-experiment/default-exchange-demo?val=1")
                         try await model.devExperimentT(
-                            "taler://dev-experiment/start-tc?delay_resp=\(TCDELAY)")
+                            "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
+                    } catch {
+                        self.logger.error("developer-mode setup failed, continuing without it: \(error.localizedDescription)")
                     }
-//                    try await model.devExperimentT("taler://dev-experiment/start-tc?fake_500=0.7")
-//                    try await model.devExperimentT("taler://dev-experiment/default-exchange-demo?val=1")
-                    try await model.devExperimentT(
-                        "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                 }
                 defaultExchanges = await model.getDefaultExchanges()
 #if GNU_TALER
