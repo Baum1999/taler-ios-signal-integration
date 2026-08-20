@@ -73,10 +73,13 @@ struct TransactionButton: View {
     private func doAction() {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor
-            if let _ = try? await action(transactionId, false) {
+            do {
+                try await action(transactionId, false)
 //                symLog.log("\(executed) \(transactionId)")
                 executed = true             // change button text
                 didExecute = true
+            } catch {
+                disabled = false            // allow the user to retry after a failure
             }
         }
     }
