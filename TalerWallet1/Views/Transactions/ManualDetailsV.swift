@@ -123,7 +123,7 @@ struct WireTransferView: View {
                                                         reservePub: reservePub,
                                                              payto: payto,
                                                           paytoStr: paytoUri,
-                                                       kycPaytoStr: kycData?.debitPayto,
+                                                     debitPaytoStr: kycData?.debitPayto,
                                                       restrictions: account.creditRestrictions,
                                                        amountValue: amountValue,
                                                          amountStr: amountStr,

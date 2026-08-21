@@ -259,7 +259,7 @@ struct ManualDetailsWireV: View {
     let reservePub: String
     let payto: PayTo
     let paytoStr: String
-    let kycPaytoStr: String?
+    let debitPaytoStr: String?
 
     let restrictions: [AccountRestriction]?               // only if restrictions apply
 //    let iban: String?                   // TODO: BBAN
@@ -400,9 +400,11 @@ struct ManualDetailsWireV: View {
         if #available(iOS 16.0, *) {
             list.toolbar {
                 ToolbarTitleMenu {
-                    CopyButton(paytoStr, isCopied: $isCopied1, title: "Copy destination payto")
-                    if let kycPaytoStr {
-                        CopyButton(kycPaytoStr, isCopied: $isCopied2, title: "Copy validation payto")
+                    if let debitPaytoStr {
+                        CopyButton(paytoStr, isCopied: $isCopied1, title: "Copy validation payto")
+                        CopyButton(debitPaytoStr, isCopied: $isCopied2, title: "Copy deposit payto")
+                    } else {
+                        CopyButton(paytoStr, isCopied: $isCopied1, title: "Copy transfer payto")
                     }
                 }
             }
