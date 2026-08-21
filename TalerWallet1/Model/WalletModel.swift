@@ -406,6 +406,10 @@ extension WalletModel {
     }
 }
 // MARK: -
+struct InitResponse: Decodable {
+    var versionInfo: VersionInfo
+    var databaseBackend: String?
+}
 ///  A request to initialize Wallet-core
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
     var persistentStoragePath: String
@@ -432,19 +436,17 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
         var config: Config
         var useNativeLogging: Bool
     }
-    struct Response: Decodable {
-        var versionInfo: VersionInfo
-    }
+    typealias Response = InitResponse
 }
 
 extension WalletModel {
     /// initalize Wallet-Core. Might do networking
-    nonisolated func initWalletCore(setTesting: Bool, migrateNativeDb: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
+    nonisolated func initWalletCore(setTesting: Bool, migrateNativeDb: Bool, viewHandles: Bool = false) async throws -> InitResponse {
         let dbPath = try dbPath()
 //        logger.debug("dbPath: \(dbPath)")
         let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting, migrateNativeDb: migrateNativeDb)
         let response = try await sendRequest(request, viewHandles: viewHandles)    // no Delay
-        return response.versionInfo
+        return response
     }
 
     private func dbUrl(_ folder: URL) -> URL {

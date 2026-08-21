@@ -545,12 +545,9 @@ class Controller: ObservableObject {
             backendState = .initing
             do {
                 let walletCore = WalletCore.shared
-#if TALER_NIGHTLY
-                let versionInfo = try await model.initWalletCore(setTesting: setTesting, migrateNativeDb: true)
-#else
-                let versionInfo = try await model.initWalletCore(setTesting: setTesting, migrateNativeDb: false)
-#endif
-                walletCore.versionInfo = versionInfo
+                let response = try await model.initWalletCore(setTesting: setTesting, migrateNativeDb: MIGRATE_DB)
+                walletCore.versionInfo = response.versionInfo
+                walletCore.nativeDB = (response.databaseBackend == "sqlite")
                 if developerMode {
                     // best-effort dev-mode setup: a network hiccup here must not abort
                     // wallet-core startup (see the force `try!` at the call site)

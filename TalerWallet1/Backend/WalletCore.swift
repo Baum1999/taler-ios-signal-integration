@@ -33,6 +33,7 @@ class WalletCore: QuickjsMessageHandler {
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
+    var nativeDB: Bool
     var isObserving: Int
     var isLogging: Bool
     var logTransactions: Bool
@@ -93,6 +94,7 @@ class WalletCore: QuickjsMessageHandler {
     }
 
     init() throws {
+        nativeDB = false
         isObserving = 0
         isLogging = false
         logTransactions = false
@@ -600,11 +602,13 @@ extension WalletCore {
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
                 if let error {
-                    logger.error("Request \"id\":\(requestId, privacy: .public) failed after \(millisecs, privacy: .public) ms")
+                    logger.error("Request \"id\":\(requestId, privacy: .public) failed after \(millisecs, privacy: .public) ms, error: \(error.code, privacy: .public)")
                 } else {
-                    if millisecs > 50 {
+#if DEBUG
+                    if millisecs > (nativeDB ? 20 : 50) {
                         logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
                     }
+#endif
                 }
                 var err: Error? = nil
                 if let json = result, error == nil {
