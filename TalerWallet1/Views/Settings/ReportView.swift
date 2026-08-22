@@ -33,6 +33,7 @@ struct ReportView: View {
             if let diagnostics = try? await model.getDiagnostics() {
                 report = diagnostics
             }
+            creating = false
         }
     }
 
