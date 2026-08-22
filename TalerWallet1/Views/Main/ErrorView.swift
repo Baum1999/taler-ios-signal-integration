@@ -109,13 +109,20 @@ struct ErrorView: View {
                                 onDismiss: onDismiss)
                                 break
                             }
-                            // for now, always show JSON and allow to copy it
+                            let hint = responseError.errorResponse?.hint ?? responseError.hint      // nested one preferred
+                            if !devMode, let hint {
+                                // prefer hint for regular users
+                                self.init(stack, title: walletCoreError, message: hint, copyable: true, onDismiss: onDismiss)
+                                break
+                            }
                             if let json = responseError.toJSON() {
+                                // raw JSON for developers, or if there is no hint
                                 self.init(stack, title: walletCoreError, message: json, copyable: true, onDismiss: onDismiss)
                                 break
-//                            } else if let hint = responseError.errorResponse?.hint ?? responseError.hint {
-//                                self.init(stack, title: walletCoreError, message: hint, copyable: true, onDismiss: onDismiss)
-//                                break
+                            } else if let hint {
+                                // should never happen
+                                self.init(stack, title: walletCoreError, message: hint, copyable: true, onDismiss: onDismiss)
+                                break
 //                            } else if let message = responseError.message {
 //                                self.init(stack, title: walletCoreError, message: message, copyable: true, onDismiss: onDismiss)
 //                                break
