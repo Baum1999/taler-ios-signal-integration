@@ -162,7 +162,8 @@ struct PaymentView2: View, Sendable {
 
     func computeFee(raw: Amount?, eff: Amount?) -> Amount? {
         if let raw, let eff {
-            return try! Amount.diff(raw, eff)      // TODO: different currencies
+            // fee can only be computed if raw and eff are the same currency
+            return try? Amount.diff(raw, eff)
         }
         return nil
     }
