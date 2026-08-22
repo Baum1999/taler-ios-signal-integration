@@ -54,7 +54,9 @@ struct OIMp2pReadyView: View {
                 }
             }
 //              .border(.red)
-        }.task {
+        }
+        .onTapGesture(perform: action)
+        .task {
             withAnimation(.basic1) {
                 appeared = true
             }
