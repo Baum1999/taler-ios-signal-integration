@@ -86,15 +86,18 @@ struct OIMbalances: View {
     func closeChest() {
         if !closing {
             closing = true
+            let chestBeingClosed = selectedBalance   // so a stale timer can't stomp on a chest opened later
             viewState = .chestClosing
             let delay = cash.flyOneByOne(to: .curve)        // back to chest...
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 print("closeChest", delay)
-                withAnimation(.basic1) {
-                    print("🚩OIMbalances.closeChest() reset selectedBalance")
-                    selectedBalance = nil
-                    available = nil
-                    viewState = .chestsClosed
+                if selectedBalance == chestBeingClosed {    // still the same chest? otherwise a newer
+                    withAnimation(.basic1) {                // openChest() already replaced it - leave it alone
+                        print("🚩OIMbalances.closeChest() reset selectedBalance")
+                        selectedBalance = nil
+                        available = nil
+                        viewState = .chestsClosed
+                    }
                 }
                 closing = false
             }
