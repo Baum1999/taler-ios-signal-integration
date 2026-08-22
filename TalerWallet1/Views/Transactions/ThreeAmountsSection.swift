@@ -234,7 +234,7 @@ struct ThreeAmountsSection: View {
                 }
             }
         } header: {
-            let header = scope?.url?.trimURL ?? scope?.currency ?? summary != nil ? "Summary" : nil
+            let header = scope?.url?.trimURL ?? scope?.currency ?? (summary != nil ? "Summary" : nil)
             if let header {
                 Text(header)
                     .talerFont(.title3)
