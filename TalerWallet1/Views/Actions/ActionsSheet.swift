@@ -226,7 +226,9 @@ struct ShoppingView: View {
 
         let image = Image(systemName: currency == nil ? LINK : MAPPIN)          // 􀉣 or 􀎫
         Button("\(image) \(buttonTitle)") {
-            UIApplication.shared.open(URL(string: buttonLink)!, options: [:])
+            if let url = URL(string: buttonLink) {
+                UIApplication.shared.open(url, options: [:])
+            }
             dismissTop(stack.push())
         }
             .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
