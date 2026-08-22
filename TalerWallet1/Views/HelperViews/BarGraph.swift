@@ -80,7 +80,7 @@ struct BarGraph: View {
                     let common = transaction.common
                     let incoming = common.isIncoming
                     let netto = common.amountEffective.value
-                    let valueColored = barHeight * netto / maxValue
+                    let valueColored = maxValue > 0 ? barHeight * netto / maxValue : 0
                     let valueTransparent = barHeight - valueColored
 //                    let _ = print("max: \(maxValue), ", incoming ? "+" : "-", netto)
                     VStack(spacing: 0) {
