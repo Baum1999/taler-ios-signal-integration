@@ -273,7 +273,10 @@ extension OIMtransactions {
             let incoming = common.isIncoming
             let pending = common.isPending
             let timestamp = common.timestamp
-            let date = try! Date(milliseconds: timestamp.milliseconds())
+            guard let ms = try? timestamp.milliseconds() else {
+                return nil            // timestamp is .never: can't place this item on the timeline
+            }
+            let date = Date(milliseconds: ms)
             let components = calendar.dateComponents([.year, .month, .day, .weekOfMonth], from: date)
             // add spacers
             var marker: HistoryMarker = .none
