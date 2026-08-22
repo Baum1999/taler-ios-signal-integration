@@ -322,7 +322,10 @@ public class CurrencyFormatter: NumberFormatter {
         formatter.currency = currency
 //        formatter.setCode(to: EUR_4217)
 //        formatter.setSymbol(to: "€")
-        formatter.setMinimumFractionDigits(specs.fractionalTrailingZeroDigits)
+        // clamp: specs comes from the exchange and is untrusted; an out-of-range or negative
+        // value here would make NumberFormatter try to render millions of fractional digits
+        let trailingZeroDigits = min(max(specs.fractionalTrailingZeroDigits, 0), 8)
+        formatter.setMinimumFractionDigits(trailingZeroDigits)
         return formatter
     }
 
