@@ -171,13 +171,18 @@ struct RiverTileView: View {
                         let height = geo.size.height
                         let width = geo.size.width
 //                        let _ = print("width = \(width), height = \(height)")
-                        let treeCount = Int.random(in: 23...57)
-                        ForEach(0..<treeCount, id: \.self) { treeIndex in
-                            let xOffset = Double.random(in: 3...width-treeSpace)
-                            let yOffset = Double.random(in: 3...height-treeSpace)
-                            let treeSize = Double.random(in: 10...20)
-                            tree.frame(width: treeSize, height: treeSize)
-                                .offset(x: xOffset, y: yOffset)
+                        // width/height can be 0 (or smaller than treeSpace) during the first
+                        // layout pass or when the tile is zoomed very small - skip the trees
+                        // then instead of handing Double.random an inverted range (crash).
+                        if width > treeSpace + 3 && height > treeSpace + 3 {
+                            let treeCount = Int.random(in: 23...57)
+                            ForEach(0..<treeCount, id: \.self) { treeIndex in
+                                let xOffset = Double.random(in: 3...width-treeSpace)
+                                let yOffset = Double.random(in: 3...height-treeSpace)
+                                let treeSize = Double.random(in: 10...20)
+                                tree.frame(width: treeSize, height: treeSize)
+                                    .offset(x: xOffset, y: yOffset)
+                            }
                         }
                     }
                 }
