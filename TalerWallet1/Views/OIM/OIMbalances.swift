@@ -262,6 +262,7 @@ struct OIMbalances: View {
                                 .frame(width: size, height: size)
                                 .zIndex(itsMe ? 3 : 0)
                                 .opacity((isClosed || itsMe) ? 1 : INVISIBLE)
+                                .disabled(!(isClosed || itsMe))     // disable invisible
                                 .matchedGeometryEffect(id: itsMe ? OIMNUMBER // (sending ? OIMBACK : OIMNUMBER)
 //                                                               : String(index),
                                                                  : oimCurrency.currencyStr,

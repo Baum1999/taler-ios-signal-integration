@@ -427,6 +427,7 @@ final class OIMcash: ObservableObject, Sendable {
     func flyToTarget(target: FundState, index: Int, after delay: TimeInterval) {
         let interval = fastAnimations ? 0.2 : 0.4
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            guard index < self.funds.count else { return }   // funds may have been cleared/mutated meanwhile
             var fund = self.funds[index]
             withAnimation(.move1) {
                 fund.state = target
@@ -441,9 +442,8 @@ final class OIMcash: ObservableObject, Sendable {
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
                         withAnimation(.move1) {
-                            do {
-                                self.funds.remove(at: index)
-                            } catch {}
+                            // remove by identity, not by (possibly stale) array index
+                            self.removeCash(id: fund.id, value: fund.value)
                         }
                     }
                 }
