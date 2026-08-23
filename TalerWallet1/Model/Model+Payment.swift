@@ -343,12 +343,11 @@ struct PreparePayResult2: Codable {
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
     var operation: String { "preparePayForUriV2" }
-    func args() -> Args { Args(talerPayUri: talerPayUri, progressToken: talerPayUri ) }
+    func args() -> Args { Args(talerPayUri: talerPayUri) }  // No progressToken!
 
     var talerPayUri: String
     struct Args: Encodable {
         var talerPayUri: String
-        var progressToken: String
     }
 }
 
@@ -674,9 +673,6 @@ extension WalletModel {
     nonisolated func preparePayForUri(_ talerPayUri: String, viewHandles: Bool = false)
       async throws -> PreparePayResult2 {
         let request = PreparePayForUri(talerPayUri: talerPayUri)
-        let controller = Controller.shared
-        controller.progressOperation = request.operation
-        controller.progressToken = talerPayUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
