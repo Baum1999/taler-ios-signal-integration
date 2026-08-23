@@ -194,9 +194,10 @@ struct WalletMain: View {
                             SettingsButton26(sortPriority: 0)
                         }
                         Spacer()
-                        ActionItem(tab: TalerTab.actions,
-                                 onTap: onActionTab,
-                                onDrag: onActionDrag)
+                        ActionItem(stack: stack.push(),
+                                     tab: TalerTab.actions,
+                                   onTap: onActionTab,
+                                  onDrag: onActionDrag)
                         .accessibilitySortPriority(2) // Reads second
                         .matchedTransitionSource(id: "unique_transition_id", in: wrapper.namespace)
 //                        .navigationTransition(.zoom(sourceID: "unique_transition_id", in: wrapper.namespace))
@@ -256,18 +257,25 @@ struct WalletMain: View {
         showActionSheet = true
     }
 
-    func onActionDrag() {                           // TODO: gets called multiple times
-        logger.log("onActionDrag: showScanner = true")
-        showScanner = true
+    func onActionDrag(_ stack: CallStack) {
+        if !showScanner {                           // gets called multiple times - log only once
+#if DEBUG
+            if let caller = stack.peek() {
+                logger.log("showScanner = true (onActionDrag: \(caller.file):\(caller.function))")
+            }
+#endif
+            showScanner = true
+        }
     }
 
     func tabBarView() -> some View {
         // iOS 15..18: custom tabBar (with Actions button) is rendered on top of the TabView,
         // and overlays the native iOS tabBar (which is still used for VoiceOver)
-        TabBarView(selection: tabSelection(),
-                      hidden: $tabBarModel.tabBarHidden,
-                 onActionTab: onActionTab,
-                onActionDrag: onActionDrag)
+        TabBarView(stack: stack.push(),
+               selection: tabSelection(),
+                  hidden: $tabBarModel.tabBarHidden,
+             onActionTab: onActionTab,
+            onActionDrag: onActionDrag)
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
     }

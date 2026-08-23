@@ -10,9 +10,10 @@ import SymLog
 
 struct ActionItem: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let tab: TalerTab
     let onTap: () -> Void
-    let onDrag: () -> Void
+    let onDrag: (CallStack) -> Void
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("tapped") var tapped: Int = 0
@@ -46,7 +47,7 @@ struct ActionItem: View {
                         offset = .zero
                     }
                     didDrag = true
-                    onDrag()    // switch to camera
+                    onDrag(stack.push())    // switch to camera
                     if tapped >= TAPPED {
                         dragged += 1
                     }
@@ -86,7 +87,7 @@ struct ActionItem: View {
 //                .opacity(1 - Double(abs(offset.height / 35)))
                 .gesture(dragGesture())
                 .onLongPressGesture(minimumDuration: 0.4) {
-                    onDrag()
+                    onDrag(stack.push())
                 }
                 .onTapGesture {
                     onTap()
@@ -136,10 +137,11 @@ struct ActionItem: View {
 // MARK: -
 struct TabBarView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @Binding var selection: TalerTab
     @Binding var hidden: Int
     let onActionTab: () -> Void
-    let onActionDrag: () -> Void
+    let onActionDrag: (CallStack) -> Void
 
     @Environment(\.keyboardShowing) var keyboardShowing
     @EnvironmentObject private var controller: Controller
@@ -191,9 +193,10 @@ struct TabBarView: View {
             if keyboardShowing || hidden > 0 {
                 EmptyView()
             } else {
-                let actionTab = ActionItem(tab: TalerTab.actions,
-                                         onTap: onActionTab,
-                                        onDrag: onActionDrag)
+                let actionTab = ActionItem(stack: stack.push(),
+                                             tab: TalerTab.actions,
+                                           onTap: onActionTab,
+                                          onDrag: onActionDrag)
                 let balanceTab = tabBarItem(for: TalerTab.balances)
                     .onTapGesture {
                         selection = .balances

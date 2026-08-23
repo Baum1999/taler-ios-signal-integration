@@ -108,7 +108,7 @@ struct TransactionSummaryList: View {
                 if transition.transactionId == talerTX.common.transactionId {       // is the transition for THIS transaction?
                     symLog.log(logStr)
                     if talerTX.common.type.isPayment {
-                        checkReload(notification, logStr)
+                        checkReload(stack.push("checkDismiss1"), notification, logStr)
                     } else {
                         dismissTop(stack.push())        // if this view is in a sheet then dissmiss the sheet
                         return true
@@ -116,7 +116,7 @@ struct TransactionSummaryList: View {
                 }
             }
         } else { // no sheet but the details view -> reload
-            checkReload(notification, logStr)
+            checkReload(stack.push("checkDismiss2"), notification, logStr)
         }
         return false
     }
@@ -130,16 +130,26 @@ struct TransactionSummaryList: View {
         }
     }
 
-    func checkReload(_ notification: Notification, _ logStr: String = EMPTYSTRING) {
-        if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
+    func checkReload(_ stack: CallStack, _ notification: Notification, _ logStr: String = EMPTYSTRING) {
+        if let transition: TransactionTransition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
             if transition.transactionId == transactionId {       // is the transition for THIS transaction?
                 let newMajor = transition.newTxState.major
-                Task { // runs on MainActor
-                       // flush the screen first, then reload
-                    withAnimation { talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
-                    symLog.log("newState: \(newMajor), reloading transaction")
-                    if newMajor != .none {              // don't reload after delete
-                        await loadTransaction()
+                let message = stack.peek()?.message ?? "?"
+                if newMajor == .deleted {
+                    symLog.log("newState: \(newMajor), show 'deleted', for: \(message)")
+                    let error = transition.errorInfo ??
+                        TalerErrorDetail(code: 7049,  // WALLET_MERCHANT_ORDER_NOT_FOUND
+                                         when: .now(),
+                                         hint: "Transaction has been deleted")
+                    model.setError(WalletBackendError.walletCoreError(error))
+                } else {
+                    Task { // runs on MainActor
+                           // flush the screen first, then reload
+                        withAnimation { talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                        if newMajor != .none {              // don't reload after delete
+                            symLog.log("newState: \(newMajor), reloading transaction, for: \(message)")
+                            await loadTransaction()
+                        }
                     }
                 }
             }
@@ -335,11 +345,11 @@ struct TransactionSummaryList: View {
                 checkDismiss(notification, "exchangeWaitReserve or withdrawCoins  => dismiss sheet")
             }
             .onNotification(.PendingReady) { notification in
-                checkReload(notification, "pending ready ==> reload for talerURI")
+                checkReload(stack.push("pendingReady"), notification, "pending ready ==> reload for talerURI")
             }
             .onNotification(.TransactionStateTransition) { notification in
                 if !didDelete {
-                    checkReload(notification, "some transition ==> reload")
+                    checkReload(stack.push("TransactionStateTransition"), notification, "some transition ==> reload")
                 }
             }
             .navigationTitle(navTitle ?? navTitle2)
