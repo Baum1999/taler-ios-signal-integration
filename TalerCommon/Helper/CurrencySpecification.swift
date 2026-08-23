@@ -269,7 +269,11 @@ public struct CurrencyInfo: Sendable {
                                                    : " " + String(integer))
 //        let homeCurrency = Locale.current.currency      //'currency' is only available in iOS 16 or newer
         madeUpStr += formatter.currencyDecimalSeparator ?? Locale.current.decimalSeparator ?? "."
-        madeUpStr += String(String(fraction).dropFirst())       // remove the leading 0
+        // String(fraction) can be "0.5" (its own '.' would double up the separator we just
+        // appended) or scientific notation for tiny values (e.g. "5e-08").
+        // Format with a fixed number of digits, then drop the leading "0."
+        let fixedFractionStr = String(format: "%.8f", fraction)
+        madeUpStr += String(fixedFractionStr.dropFirst(2))
         // TODO: fractionalNormalDigits, fractionalTrailingZeroDigits
         return madeUpStr
     }
