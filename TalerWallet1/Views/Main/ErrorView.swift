@@ -68,16 +68,18 @@ enum ErrorData {
 struct ErrorView: View {
     let stack: CallStack
     var title: String
+    var exclam: Bool
     var message: String? = nil
     var requestUrl: String? = nil
     var copyable: Bool
 
     var onDismiss: (() -> Void)?
 
-    init(_ stack: CallStack, title: String, message: String? = nil,
+    init(_ stack: CallStack, title: String, exclam: Bool = true, message: String? = nil,
          requestUrl: String? = nil, copyable: Bool = false, onDismiss: (() -> Void)? = nil) {
         self.stack = stack
         self.title = title
+        self.exclam = exclam
         self.message = message
         self.requestUrl = requestUrl
         self.copyable = copyable
@@ -93,6 +95,7 @@ struct ErrorView: View {
         let deserializationError = String(localized: "Deserialization error")
         let unknownError = String(localized: "Unknown error")
         let userCancelled = String(localized: "User cancelled")
+        let transactionError = String(localized: "Transaction Error")
 
         switch error {
             case let walletError as WalletBackendError:
@@ -100,9 +103,11 @@ struct ErrorView: View {
                     case .walletCoreError(let walletBackendResponseError):
                         if let responseError = walletBackendResponseError {
                             let code = responseError.code
-                            if code == 7002 || code == 7005 || code == 7032 || code == 7036 {
+                            if code == 7002 || code == 7005 || code == 7032 || code == 7036 || code == 7049 {
                                 self.init(stack,
-                                    title: code == 7036 ? userCancelled : internetError,
+                                    title: code == 7036 ? userCancelled
+                                         : code == 7049 ? transactionError : internetError,
+                                   exclam: code != 7036 && code != 7049,
                                   message: responseError.hint ?? internetMessage,
                                requestUrl: responseError.requestUrl,
                                  copyable: false,
@@ -153,13 +158,14 @@ struct ErrorView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Image(systemName: EXCLAMATION)
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .aspectRatio(contentMode: .fit)
-                    .foregroundStyle(WalletColors().attention)
-                    .padding()
-
+                if exclam {
+                    Image(systemName: EXCLAMATION)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(WalletColors().attention)
+                        .padding()
+                }
                 Text(title)
                     .talerFont(.title)
                     .padding(.bottom)
