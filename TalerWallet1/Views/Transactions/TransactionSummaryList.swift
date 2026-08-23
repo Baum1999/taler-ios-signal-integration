@@ -293,7 +293,7 @@ struct TransactionSummaryList: View {
                                      payNow: $payNow,
                              selectedChoice: $selectedChoice,
                                       scope: $scope,
-                                  effective: $effective,
+                                  effective: $effective,    // return amount for "Pay <amount> now"
                                     hasDone: hasDone)
 
                 // TODO: Retry Countdown, Retry Now button
@@ -321,12 +321,12 @@ struct TransactionSummaryList: View {
                     } else {
                         Button("Cancel") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: .bordered))
-                            .padding(.horizontal)
+                            .padding()
                     } // Cancel
                 } else if let showDone {
                     Button("Done") { dismissTop(stack.push()) }
                         .buttonStyle(TalerButtonStyle(type: showDone))
-                        .padding(.horizontal)
+                        .padding()
                 }
             }
             .navigationTitle(navTitle ?? navTitleStr)
