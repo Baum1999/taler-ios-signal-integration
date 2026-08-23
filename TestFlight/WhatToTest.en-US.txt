@@ -1,3 +1,8 @@
+Version 1.6.11 (wallet-core 1.6.32)
+
+- error handling
+
+
 Version 1.6.10 (wallet-core 1.6.30)
 
 • Discounts + Passes for all
