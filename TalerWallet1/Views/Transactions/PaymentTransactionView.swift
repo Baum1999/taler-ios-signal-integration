@@ -185,6 +185,18 @@ struct PaymentTransactionView: View {
                                        summary: summary(details.info),
                                       products: details.info?.products ?? [],
                                 balanceDetails: selectionDetail.balanceDetails)
+                        } else if let choice = choices.first {
+                            let selectionDetail: ChoiceSelectionDetail = choice.0
+
+                            PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
+                                          paid: false,
+                                           raw: selectionDetail.amountRaw,
+                                     effective: nil,
+                                    firstScope: scope,
+                                       baseURL: nil,
+                                       summary: summary(details.info),
+                                      products: details.info?.products ?? [],
+                                balanceDetails: selectionDetail.balanceDetails)
                         }
                     } else { // should never happen...
                         // TODO: show some error
