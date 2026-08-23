@@ -253,6 +253,14 @@ struct TransactionSummaryList: View {
         } // Delete button
     }
 
+    var navTitleStr: String {
+        let isPaying = talerTX.isPayment && talerTX.isDialog
+        return talerTX.isDone ? talerTX.localizedTypePast
+            : isPaying ? (effective != nil ? String(localized: "Confirm Payment", comment:"pay merchant navTitle")
+                                           : String(localized: "Payment not possible", comment:"pay merchant navTitle"))
+            : talerTX.localizedType
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -262,9 +270,6 @@ struct TransactionSummaryList: View {
 //        let scope = common.scopes.first                                     // might be nil if scopes == []
         let locale = TalerDater.shared.locale
         let isPaying = talerTX.isPayment && talerTX.isDialog
-        let navTitle2 = talerTX.isDone ? talerTX.localizedTypePast
-                            : isPaying ? String(localized: "Confirm Payment", comment:"pay merchant navTitle")
-                                       : talerTX.localizedType
         Group {
           if common.type != .dummy && transactionId == common.transactionId {
             let list = List {
@@ -324,6 +329,7 @@ struct TransactionSummaryList: View {
                         .padding(.horizontal)
                 }
             }
+            .navigationTitle(navTitle ?? navTitleStr)
             .onChange(of: payNow) { payNow2 in
                 if payNow2 {
                     Task {
@@ -352,7 +358,6 @@ struct TransactionSummaryList: View {
                     checkReload(stack.push("TransactionStateTransition"), notification, "some transition ==> reload")
                 }
             }
-            .navigationTitle(navTitle ?? navTitle2)
 
             if #available(iOS 17.0, *) {
                 list
