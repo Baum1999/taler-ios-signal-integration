@@ -304,10 +304,10 @@ extension WalletCore {
                             }
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
-                        case .aborting:
+                        case .aborting, .aborted:
                             logger.log("handleStateTransition: Aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
-                        case .expired:
+                        case .expired, .deleted:
                             logger.warning("handleStateTransition: Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             if let index = expired.firstIndex(of: components[2]) {
                                 expired.remove(at: index)                       // don't beep twice
