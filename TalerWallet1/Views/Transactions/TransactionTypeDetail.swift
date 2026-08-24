@@ -56,6 +56,19 @@ struct TransactionTypeDetail: View {
         return nil
     }
 
+    func errorHintStack(_ hint: String?, _ stack: String?) -> String? {
+        if let hint, !hint.isEmpty {
+            if let stack, !stack.isEmpty {
+                return hint + "\n" + stack
+            }
+            return hint
+        }
+        if let stack, !stack.isEmpty {
+            return stack
+        }
+        return nil
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -197,22 +210,24 @@ struct TransactionTypeDetail: View {
                         if let error = details.error {
                             HStack {
                                 VStack(alignment: .leading) {
-                                    Text(error.hint)
-                                        .talerFont(.headline)
-                                        .foregroundColor(errorColor)
-                                        .listRowSeparator(.hidden)
-                                    if let stack = error.stack {
+                                    if let hint = error.hint, !hint.isEmpty {
+                                        Text(hint)
+                                            .talerFont(.headline)
+                                            .foregroundColor(errorColor)
+                                            .listRowSeparator(.hidden)
+                                    }
+                                    if let stack = error.stack, !stack.isEmpty {
                                         Text(stack)
                                             .talerFont(.body)
                                             .foregroundColor(errorColor)
                                             .listRowSeparator(.hidden)
                                     }
                                 }
-                                let stackStr = error.stack ?? EMPTYSTRING
-                                let errorStr = error.hint + "\n" + stackStr
-                                CopyButton(errorStr, vertical: true)
-                                    .accessibilityLabel(Text("Copy the error", comment: "a11y"))
-                                    .disabled(false)
+                                if let errorStr = errorHintStack(error.hint, error.stack) {
+                                    CopyButton(errorStr, vertical: true)
+                                        .accessibilityLabel(Text("Copy the error", comment: "a11y"))
+                                        .disabled(false)
+                                }
                             }
                         }
                     }

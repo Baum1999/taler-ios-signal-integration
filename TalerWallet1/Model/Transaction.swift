@@ -590,8 +590,8 @@ enum RefreshReason: String, Decodable {
 }
 struct RefreshError: Decodable {
     var code: Int
-    var when: Timestamp
-    var hint: String
+    var when: Timestamp?
+    var hint: String?
     var stack: String?
     var numErrors: Int?                 // how many coins had errors
     var errors: [TalerErrorDetail]?     // 1..max(5, numErrors)
