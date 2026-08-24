@@ -51,7 +51,10 @@ struct TransactionPayDetailV: View {
                     .talerFont(.body)
 
                 if let fulfillmentUrl = info.fulfillmentUrl {
-                    if let destination = URL(string: fulfillmentUrl) {
+                    // per api-common.rst's WebURL definition, fulfillment_url must be http(s) -
+                    // reject any other scheme (tel:, sms:, a third-party app's custom scheme, ...)
+                    if let destination = URL(string: fulfillmentUrl),
+                       let scheme = destination.scheme?.lowercased(), scheme == "http" || scheme == "https" {
                         let buttonTitle = info.fulfillmentMessage ?? String(localized: "Open merchant website")
                         Link(buttonTitle, destination: destination)
                             .buttonStyle(TalerButtonStyle(type: .prominent))
