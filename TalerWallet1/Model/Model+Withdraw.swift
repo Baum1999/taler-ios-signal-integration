@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -149,7 +149,7 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
     func args() -> Args { Args(amount: amount,
                       exchangeBaseUrl: baseUrl,
                         restrictScope: scope,
-                 clientCancellationId: "cancel") }
+                        progressToken: baseUrl) }
     var amount: Amount
     var baseUrl: String?
     var scope: ScopeInfo?
@@ -157,7 +157,7 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
         var amount: Amount
         var exchangeBaseUrl: String?            // needed for b-i-withdrawals
         var restrictScope: ScopeInfo?           // only if exchangeBaseUrl is nil
-        var clientCancellationId: String?
+        var progressToken: String?
     }
 }
 // MARK: -
@@ -286,6 +286,9 @@ extension WalletModel {
                                                 viewHandles: Bool = false)
       async throws -> WithdrawalDetailsForAmount {
         let request = GetWithdrawalDetailsForAmount(amount: amount, baseUrl: baseUrl, scope: scope)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = baseUrl
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }

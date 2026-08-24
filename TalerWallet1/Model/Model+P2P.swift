@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -58,13 +58,13 @@ fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     var operation: String { "checkPeerPushDebit" }
     func args() -> Args { Args(amount: amount,
                         restrictScope: scope,
-                 clientCancellationId: "cancel") }
+                        progressToken: operation) }
     var amount: Amount
     var scope: ScopeInfo
     struct Args: Encodable {
         var amount: Amount
         var restrictScope: ScopeInfo
-        var clientCancellationId: String?
+        var progressToken: String?
     }
 }
 extension WalletModel {
@@ -73,6 +73,9 @@ extension WalletModel {
                                      viewHandles: Bool = false)
       async throws -> CheckPeerPushDebitResponse {
         let request = CheckPeerPushDebit(amount: amount, scope: scope)
+//        let controller = Controller.shared
+//        controller.progressOperation = request.operation
+//        controller.progressToken = request.operation
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
@@ -124,14 +127,14 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     func args() -> Args { Args(amount: amount,
                         restrictScope: scope,
                       exchangeBaseUrl: scope?.url,
-                 clientCancellationId: "cancel") }
+                        progressToken: operation) }
     var amount: Amount
     var scope: ScopeInfo?
     struct Args: Encodable {
         var amount: Amount
         var restrictScope: ScopeInfo?
         var exchangeBaseUrl: String?
-        var clientCancellationId: String?
+        var progressToken: String?
     }
 }
 extension WalletModel {
@@ -140,6 +143,9 @@ extension WalletModel {
                                       viewHandles: Bool = false)
       async throws -> CheckPeerPullCreditResponse {
         let request = CheckPeerPullCredit(amount: amount, scope: scope)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = request.operation
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }

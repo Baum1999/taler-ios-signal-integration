@@ -185,7 +185,7 @@ struct ManualWithdrawContent: View {
         } catch WalletBackendError.walletCoreError(let walletBackendResponseError) {
             symLog.log(walletBackendResponseError?.hint)
                 // TODO: ignore WALLET_CORE_REQUEST_CANCELLED but handle all others
-                // Passing non-nil to clientCancellationId will throw WALLET_CORE_REQUEST_CANCELLED
+                // Passing non-nil to progressToken will throw WALLET_CORE_REQUEST_CANCELLED
                 // when calling getWithdrawalDetailsForAmount again before the last call returned.
                 // Since amountToTransfer changed and we don't need the old fee anymore, we just
                 // ignore it and do nothing.

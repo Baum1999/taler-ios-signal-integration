@@ -185,13 +185,13 @@ fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
     var operation: String { "checkDeposit" }
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
                                         amount: amount,
-                          clientCancellationId: "cancel") }
+                                 progressToken: depositPaytoUri) }
     var depositPaytoUri: String
     var amount: Amount
     struct Args: Encodable {
         var depositPaytoUri: String
         var amount: Amount
-        var clientCancellationId: String?
+        var progressToken: String?
     }
 }
 extension WalletModel {
@@ -199,6 +199,9 @@ extension WalletModel {
     nonisolated func checkDeposit4711(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> CheckDepositResponse {
         let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = depositPaytoUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
