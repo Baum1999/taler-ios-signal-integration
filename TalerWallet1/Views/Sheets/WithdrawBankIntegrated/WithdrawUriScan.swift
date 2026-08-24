@@ -211,7 +211,7 @@ struct WithdrawUriScan: View {
             }
         } else if exchangeError {
             let possibleExchangeBaseUrl: String? = possibleExchanges.first?.exchangeBaseUrl
-            let message = defaultExchangeBaseUrl != nil ? "defaultExchangeBaseUrl: \(defaultExchangeBaseUrl)"
+            let message = defaultExchangeBaseUrl != nil ? String(localized: "Payment service \(defaultExchangeBaseUrl ?? EMPTYSTRING) could not be loaded.")
                        : possibleExchanges.first != nil ? String(localized: "No default - first possible payment service: \(possibleExchangeBaseUrl ?? EMPTYSTRING)")
                                                         : String(localized: "No default, no possible payment services")
             ErrorView(stack.push(),
