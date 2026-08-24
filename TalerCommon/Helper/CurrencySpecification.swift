@@ -304,6 +304,36 @@ public struct CurrencySpecification: Codable, Equatable, Hashable, Sendable {
     let altUnitNames: [Int : String]?
 }
 // MARK: -
+/// `name` and `altUnitNames` come from the exchange's /keys response and are rendered
+/// verbatim into nav titles and accessibility labels on money-movement screens, so strip
+/// Unicode formatting control characters (bidi overrides, isolates, zero-width joiners):
+/// a malicious or misconfigured exchange must not be able to reorder what the user reads.
+///
+/// This lives in an extension on purpose. A custom `init(from:)` written inside the struct's
+/// own declaration would suppress the synthesized memberwise initializer, which
+/// `CurrencyInfo.zero(_:nu:)` and three other call sites in this file rely on.
+extension CurrencySpecification {
+    private static func sanitized(_ text: String) -> String {
+        String(String.UnicodeScalarView(text.unicodeScalars.filter {
+            $0.properties.generalCategory != .format
+        }))
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = Self.sanitized(try container.decode(String.self, forKey: .name))
+        commonAmounts = try container.decodeIfPresent([Amount].self, forKey: .commonAmounts)
+        fractionalInputDigits = try container.decode(Int.self, forKey: .fractionalInputDigits)
+        fractionalNormalDigits = try container.decode(Int.self, forKey: .fractionalNormalDigits)
+        fractionalTrailingZeroDigits = try container.decode(Int.self, forKey: .fractionalTrailingZeroDigits)
+        if let rawAltUnitNames = try container.decodeIfPresent([Int : String].self, forKey: .altUnitNames) {
+            altUnitNames = rawAltUnitNames.mapValues(Self.sanitized)
+        } else {
+            altUnitNames = nil
+        }
+    }
+}
+// MARK: -
 public class CurrencyFormatter: NumberFormatter {
 
     var name: String?
