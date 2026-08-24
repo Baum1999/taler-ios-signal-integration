@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -334,7 +334,7 @@ extension CurrencySpecification {
     }
 }
 // MARK: -
-public class CurrencyFormatter: NumberFormatter {
+public class CurrencyFormatter: NumberFormatter, @unchecked Sendable {
 
     var name: String?
     var altUnitName0: String?           // specs.altUnitNames[0] should have either the name
