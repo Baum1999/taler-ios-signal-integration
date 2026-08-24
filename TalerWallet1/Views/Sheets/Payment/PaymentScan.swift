@@ -279,6 +279,9 @@ struct PaySafeArea: View, Sendable {
             .accessibilityLabel(Text("Pay \(amountA11y) now", comment: "a11y"))
             .buttonStyle(TalerButtonStyle(type: .prominent, disabled: wasTapped))
             .disabled(wasTapped)
+            .onChange(of: payNow) { newValue in
+                if !newValue { wasTapped = false }  // this attempt finished (success or failure) - allow retry
+            }
             .padding(.horizontal)
 
         if showTime {

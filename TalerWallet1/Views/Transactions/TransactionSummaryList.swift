@@ -333,8 +333,8 @@ struct TransactionSummaryList: View {
             .onChange(of: payNow) { payNow2 in
                 if payNow2 {
                     Task {
-                        payNow = false
                         await payTransaction()
+                        payNow = false   // re-enable "Pay now" if this attempt did not lead to a state transition
                     }
                 }
             }
