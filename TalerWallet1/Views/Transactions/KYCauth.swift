@@ -24,7 +24,7 @@ struct KYCauth: View {
     }
 
     var body: some View {
-        let kycErr = "KYC Error"
+        let kycErr = String(localized: "KYC Error")
         if let info = common.kycAuthTransferInfo {
             let debitPayTo = PayTo(info.debitPaytoUri)
             if let debitIban = debitPayTo.iban {
@@ -41,12 +41,12 @@ struct KYCauth: View {
                                      obtainStr: nil,
                                        kycData: kycData,
                                   validDetails: validDetails)
-                    } else { ErrorView(stack.push(), title: kycErr, message: "No scope") }
+                    } else { ErrorView(stack.push(), title: kycErr, message: String(localized: "No scope")) }
                 } else { ErrorView(stack.push(), title: kycErr, message: "No valid details") }
             } else {
                 // TODO: What if payto contains no IBAN, but URL?
-                ErrorView(stack.push(), title: kycErr, message: "No IBAN")
+                ErrorView(stack.push(), title: kycErr, message: String(localized: "No IBAN"))
             }
-        } else { ErrorView(stack.push(), title: kycErr, message: "No KYC infos") }
+        } else { ErrorView(stack.push(), title: kycErr, message: String(localized: "No KYC infos")) }
     } // body
 }

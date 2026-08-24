@@ -14,6 +14,9 @@ struct ManualDetailsV: View {
     let common: TransactionCommon
     let details: WithdrawalDetails
 
+    var errTitle: String {
+        String(localized: "Payment Error")
+    }
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails,
            let validDetails = accountDetails.validDetails {
@@ -27,8 +30,8 @@ struct ManualDetailsV: View {
                              obtainStr: obtainStr,              // only for withdrawal
                                kycData: nil,                    // only for deposit auth
                           validDetails: validDetails)
-            } else { ErrorView(stack.push(), title: "Payment Error", message: "No scope") }
-        } else { ErrorView(stack.push(), title: "Payment Error", message: "No valid details") }
+            } else { ErrorView(stack.push(), title: errTitle, message: String(localized: "No scope")) }
+        } else { ErrorView(stack.push(), title: errTitle, message: String(localized: "No valid details")) }
     } // body
 }
 // MARK: -
@@ -168,10 +171,10 @@ struct WireTransferView: View {
                             }
                         }
 #endif
-                    } else { ErrorView(stack.push(), title: "No receiver", message: json, copyable: true) }
-                } else { ErrorView(stack.push(), title: "No payto URL", message: json, copyable: true) }
-            } else { ErrorView(stack.push(), title: "No transfer options", message: json, copyable: true) }
-        } else { ErrorView(stack.push(), title:  "No amount", message: json, copyable: true) }
+                    } else { ErrorView(stack.push(), title: String(localized: "No receiver"), message: json, copyable: true) }
+                } else { ErrorView(stack.push(), title: String(localized: "No payto URL"), message: json, copyable: true) }
+            } else { ErrorView(stack.push(), title: String(localized: "No transfer options"), message: json, copyable: true) }
+        } else { ErrorView(stack.push(), title: String(localized: "No amount"), message: json, copyable: true) }
     }
 }
 // MARK: -

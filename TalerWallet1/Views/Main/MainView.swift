@@ -228,7 +228,7 @@ struct MainView: View {
                 case .ready: mainContent
                 case .error(let error):
                     ErrorView(stack.push("mainGroup"),
-                              title: "Launch error",   // TODO: String(localized: "")
+                              title: String(localized: "Launch error"),
                             message: error.localizedDescription,
                            copyable: true
                     ) {}

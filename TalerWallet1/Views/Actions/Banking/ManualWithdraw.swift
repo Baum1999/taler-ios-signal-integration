@@ -93,8 +93,8 @@ struct ManualWithdraw: View {
                            amountToTransfer: $amountToTransfer,
                                    exchange: exchange)
             } else {  // should never happen, we either have an exchange or a balance
-                ErrorView(stack.push(), title: "ManualWithdraw",
-                        message: "ManualWithdrawContent: Cannot determine scope", copyable: true)
+                ErrorView(stack.push(), title: navTitle,
+                        message: String(localized: "No scope"), copyable: true)
             }
         } // ScrollView
             .navigationTitle(navTitle)
