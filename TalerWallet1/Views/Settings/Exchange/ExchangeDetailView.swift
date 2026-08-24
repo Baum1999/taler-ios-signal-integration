@@ -33,7 +33,7 @@ struct ExchangeDetailView: View {
             if !minimalistic {
                 Text("Status:")
             }
-            Text(exchange.exchangeUpdateStatus.rawValue)  // VIEW_WITHDRAW_TOS
+            Text(exchange.exchangeUpdateStatus.localized)  // VIEW_WITHDRAW_TOS
         }
             .talerFont(.body)
         rowView
