@@ -310,7 +310,7 @@ struct TransactionSummaryList: View {
             .safeAreaInset(edge: .bottom) {
                 if isPaying, case .payment(let paymentTransaction) = talerTX {
                     let details = paymentTransaction.details
-                    if let effective, let url, let terms = details.contractTerms {
+                    if let effective, let terms = details.contractTerms {
                         let formatted = effective.formatted(currencyInfo)
                         PaySafeArea(symLog: symLog,
                                      stack: stack.push(),
