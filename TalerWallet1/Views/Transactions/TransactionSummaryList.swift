@@ -308,24 +308,33 @@ struct TransactionSummaryList: View {
             .navigationBarBackButtonHidden(hasDone)
             .interactiveDismissDisabled(hasDone && !isPaying)     // can only use "Done" button to dismiss
             .safeAreaInset(edge: .bottom) {
-                if isPaying, case .payment(let paymentTransaction) = talerTX {
-                    let details = paymentTransaction.details
-                    if let effective, let terms = details.contractTerms {
-                        let formatted = effective.formatted(currencyInfo)
-                        PaySafeArea(symLog: symLog,
-                                     stack: stack.push(),
-                                     terms: terms,
-                              amountString: formatted.0,
-                                amountA11y: formatted.1,
-                                    payNow: $payNow)
-                    } else {
-                        Button("Cancel") { dismissTop(stack.push()) }
-                            .buttonStyle(TalerButtonStyle(type: .bordered))
+                let bottomButton = ZStack {
+                    if isPaying, case .payment(let paymentTransaction) = talerTX {
+                        let details = paymentTransaction.details
+                        if let effective, let terms = details.contractTerms {
+                            let formatted = effective.formatted(currencyInfo)
+                            PaySafeArea(symLog: symLog,
+                                         stack: stack.push(),
+                                         terms: terms,
+                                  amountString: formatted.0,
+                                    amountA11y: formatted.1,
+                                        payNow: $payNow)
+                        } else {
+                            Button("Cancel") { dismissTop(stack.push()) }
+                                .buttonStyle(TalerButtonStyle(type: .bordered))
+                                .padding()
+                        } // Cancel
+                    } else if let showDone {
+                        Button("Done") { dismissTop(stack.push()) }
+                            .buttonStyle(TalerButtonStyle(type: showDone))
                             .padding()
-                    } // Cancel
-                } else if let showDone {
-                    Button("Done") { dismissTop(stack.push()) }
-                        .buttonStyle(TalerButtonStyle(type: showDone))
+                    }
+                }
+                if #available(iOS 26.0, *) {
+                    bottomButton
+                        .padding(.horizontal)
+                } else {
+                    bottomButton
                         .padding()
                 }
             }

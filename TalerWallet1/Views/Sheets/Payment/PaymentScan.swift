@@ -290,12 +290,10 @@ struct PaySafeArea: View, Sendable {
                                   seconds: timeToPay)
                     .padding(.top)
                 button
-                    .padding(.bottom, 4)
             }
             if #available(iOS 26.0, *) {
                 view
                     .glassEffect(in: .rect(cornerRadius: 16.0))
-                    .padding(.horizontal)
             } else {
                 view
             }
