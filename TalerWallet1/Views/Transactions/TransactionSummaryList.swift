@@ -306,7 +306,7 @@ struct TransactionSummaryList: View {
             .listStyle(myListStyle.style).anyView
             .background(FullBackground())
             .navigationBarBackButtonHidden(hasDone)
-            .interactiveDismissDisabled(hasDone)           // can only use "Done" button to dismiss
+            .interactiveDismissDisabled(hasDone && !isPaying)     // can only use "Done" button to dismiss
             .safeAreaInset(edge: .bottom) {
                 if isPaying, case .payment(let paymentTransaction) = talerTX {
                     let details = paymentTransaction.details
