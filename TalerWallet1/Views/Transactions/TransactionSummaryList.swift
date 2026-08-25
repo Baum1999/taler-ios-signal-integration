@@ -103,9 +103,13 @@ struct TransactionSummaryList: View {
     @MainActor
     @discardableResult
     func checkDismiss(_ notification: Notification, _ logStr: String = EMPTYSTRING) -> Bool {
-        if hasDone {
-            if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
-                if transition.transactionId == talerTX.common.transactionId {       // is the transition for THIS transaction?
+        if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
+            if transition.transactionId == talerTX.common.transactionId {       // is the transition for THIS transaction?
+                if transition.newTxState.major == .deleted {
+                    dismissTop(stack.push())        // dissmiss the sheet / the navigation stack
+                    return true
+                }
+                if hasDone {
                     symLog.log(logStr)
                     if talerTX.common.type.isPayment {
                         checkReload(stack.push("checkDismiss1"), notification, logStr)
@@ -113,10 +117,10 @@ struct TransactionSummaryList: View {
                         dismissTop(stack.push())        // if this view is in a sheet then dissmiss the sheet
                         return true
                     }
+                } else { // no sheet but the details view -> reload
+                    checkReload(stack.push("checkDismiss2"), notification, logStr)
                 }
             }
-        } else { // no sheet but the details view -> reload
-            checkReload(stack.push("checkDismiss2"), notification, logStr)
         }
         return false
     }
