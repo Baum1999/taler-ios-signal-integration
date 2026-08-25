@@ -236,39 +236,46 @@ struct DiscountPassesSection: View {
         let passText = String(localized: "Passes")
         let activeColor = WalletColors().primaryAccent
         let inactiveColor = WalletColors().secondary(colorScheme, colorSchemeContrast)
-        Section {
-            let discCount = controller.discounts.count
-            let discColor = discCount > 0 ? activeColor : inactiveColor
-            let discountsLabel = Label {
-                                     Text(discText)
-                                 } icon: {
-                                     Image(ICONNAME_DISCOUNTS, SYSTEM_DISCOUNTS)
-                                         .renderingMode(.template)
-                                         .foregroundColor(discColor)
-                                 }
+        let discCount = controller.discounts.count
+        let passCount = controller.subscriptions.count
+        if discCount > 0 || passCount > 0 {
+            Section {
+                if discCount > 0 {
+                    // TODO: only show active color if at least 1 discount is active
+                    let discColor = discCount > 0 ? activeColor : inactiveColor
+                    let discountsLabel = Label {
+                                             Text(discText)
+                                         } icon: {
+                                             Image(ICONNAME_DISCOUNTS, SYSTEM_DISCOUNTS)
+                                                 .renderingMode(.template)
+                                                 .foregroundColor(discColor)
+                                         }
+                    let discountsDest = DiscountsPassesList(stack: stack.push(),
+                                                           isPass: false,
+                                                         navTitle: discText)
+                    NavigationLink(destination: discountsDest) { discountsLabel }
+                    // TODO: a11y for discCount > 0
+                }
+                if passCount > 0 {
+                    // TODO: only show active color if at least 1 pass is active
+                    let passColor = passCount > 0 ? activeColor : inactiveColor
+                    let passesLabel = Label {
+                                          Text(passText)
+                                      } icon: {
+                                          Image(ICONNAME_PASSES, SYSTEM_PASSES)
+                                              .renderingMode(.template)
+                                              .foregroundColor(passColor)
+                                      }
 
-            let passCount = controller.subscriptions.count
-            let passColor = passCount > 0 ? activeColor : inactiveColor
-            let passesLabel = Label {
-                                  Text(passText)
-                              } icon: {
-                                  Image(ICONNAME_PASSES, SYSTEM_PASSES)
-                                      .renderingMode(.template)
-                                      .foregroundColor(passColor)
-                              }
-
-            let discountsDest = DiscountsPassesList(stack: stack.push(),
-                                                   isPass: false,
-                                                 navTitle: discText)
-            let passesDest = DiscountsPassesList(stack: stack.push(),
-                                                isPass: true,
-                                              navTitle: passText)
-            NavigationLink(destination: discountsDest) { discountsLabel }
-            // TODO: a11y for discCount > 0
-            NavigationLink(destination: passesDest) { passesLabel }
-            // TODO: a11y for passCount > 0
+                    let passesDest = DiscountsPassesList(stack: stack.push(),
+                                                        isPass: true,
+                                                      navTitle: passText)
+                    NavigationLink(destination: passesDest) { passesLabel }
+                    // TODO: a11y for passCount > 0
+                }
+            }
+            .listRowSeparator(.hidden)
+            .talerFont(.title2)
         }
-        .listRowSeparator(.hidden)
-        .talerFont(.title2)
     }
 }
