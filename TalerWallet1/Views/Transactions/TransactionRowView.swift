@@ -112,10 +112,10 @@ struct TransactionRowView: View {
     func textColor() -> Color {
         let isDark = colorScheme == .dark
         let increasedContrast = colorSchemeContrast == .increased
-        return doneOrPending ? .primary
-                    : isDark ? .secondary
-         : increasedContrast ? Color(.darkGray)
-                             : .secondary  // Color(.tertiaryLabel)
+        return donePendingDialog ? .primary
+                        : isDark ? .secondary
+             : increasedContrast ? Color(.darkGray)
+                                 : .secondary  // Color(.tertiaryLabel)
         }
     var strikeColor: Color? { donePendingDialog ? nil : WalletColors().negative }
     func foreColor(_ textColor: Color) -> Color {
