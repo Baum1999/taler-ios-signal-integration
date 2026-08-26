@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -21,6 +21,7 @@ enum BackendState: Equatable {
     case none
     case instantiated
     case initing
+    case update
     case ready
     case error(EquatableError)
 
@@ -31,6 +32,8 @@ enum BackendState: Equatable {
             case (.instantiated, .instantiated):
                 return true
             case (.initing, .initing):
+                return true
+            case (.update, .update):
                 return true
             case (.ready, .ready):
                 return true
@@ -545,7 +548,7 @@ class Controller: ObservableObject {
             backendState = .initing
             do {
                 let walletCore = WalletCore.shared
-                let response = try await model.initWalletCore(setTesting: setTesting, migrateNativeDb: MIGRATE_DB)
+                let response = try await model.initWalletCore(setTesting: setTesting)
                 walletCore.versionInfo = response.versionInfo
                 walletCore.nativeDB = (response.databaseBackend == "sqlite")
                 if developerMode {
@@ -584,13 +587,15 @@ class Controller: ObservableObject {
                     }
                 }
 #endif
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    self.backendState = .ready              // dismiss the launch animation
+                let launchDelay: TimeInterval = walletCore.nativeDB ? 0.1 : delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + launchDelay) {
+                    // dismiss the launch animation
+                    self.backendState = walletCore.nativeDB ? .ready : .update
                 }
                 await loadBalances(CallStack(), model)
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
-                backendState = .error(error.toEquatableError())                       // ❗️Yikes app cannot continue
+                backendState = .error(error.toEquatableError())                 // ❗️Yikes app cannot continue
                 throw error
             }
         } else {

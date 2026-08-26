@@ -9,13 +9,10 @@ import Foundation
 
 #if TALER_WALLET
 let TALER_LOGO = "taler-logo-2023-blue"
-let MIGRATE_DB = false
 #elseif TALER_NIGHTLY
 let TALER_LOGO = "taler-logo-2023-black"
-let MIGRATE_DB = true
 #else   // GNU_TALER
 let TALER_LOGO = "taler-logo-2023-red"
-let MIGRATE_DB = false
 #endif
 let TALER_LOGO_FULL = "taler-logo-full"
 let TALER_LOGO_QR = "taler-logo-qr"

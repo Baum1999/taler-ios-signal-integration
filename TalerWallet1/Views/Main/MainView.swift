@@ -226,6 +226,7 @@ struct MainView: View {
             // show launch animation until either ready or error
             switch controller.backendState {
                 case .ready: mainContent
+                case .update: MigrationView()
                 case .error(let error):
                     ErrorView(stack.push("mainGroup"),
                               title: String(localized: "Launch error"),

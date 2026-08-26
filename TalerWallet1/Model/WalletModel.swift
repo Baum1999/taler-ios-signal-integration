@@ -366,7 +366,8 @@ fileprivate struct Builtin: Encodable {
 }
 
 fileprivate struct Features: Encodable {
-    var migrateNativeDb: Bool           // needed only once to migrate the DB
+    var migrateNativeDb: Bool           // obsolete - use migrateDatabase() instead
+    var useNativeDb: Bool
 }
 
 fileprivate struct Config: Encodable {
@@ -383,7 +384,7 @@ fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
-        let features = Features(migrateNativeDb: false)
+        let features = Features(migrateNativeDb: false, useNativeDb: true)
         let config = Config(testing: testing, builtin: builtin, features: features)
         return Args(config: config)
     }
@@ -414,13 +415,12 @@ struct InitResponse: Decodable {
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
     var persistentStoragePath: String
     var setTesting: Bool
-    var migrateNativeDb: Bool
 
     var operation: String { "init" }
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
-        let features = Features(migrateNativeDb: migrateNativeDb)
+        let features = Features(migrateNativeDb: false, useNativeDb: true)
         let config = Config(testing: testing, builtin: builtin, features: features)
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",  qtart can ONLY use sync, that's the default anyway
@@ -441,10 +441,10 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Might do networking
-    nonisolated func initWalletCore(setTesting: Bool, migrateNativeDb: Bool, viewHandles: Bool = false) async throws -> InitResponse {
+    nonisolated func initWalletCore(setTesting: Bool, viewHandles: Bool = false) async throws -> InitResponse {
         let dbPath = try dbPath()
 //        logger.debug("dbPath: \(dbPath)")
-        let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting, migrateNativeDb: migrateNativeDb)
+        let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting)
         let response = try await sendRequest(request, viewHandles: viewHandles)    // no Delay
         return response
     }
@@ -537,6 +537,28 @@ extension WalletModel {
             logger.error("cachePath: No cachesDirectory")
             throw WalletBackendError.initializationError
         }
+    }
+}
+// MARK: -
+///  A request to migrate the Wallet-core DB from indexed to native sqlite.
+fileprivate struct MigrateRequest: WalletBackendFormattedRequest {
+    var operation: String { "migrateDatabase" }
+    func args() -> Args { Args(progressToken: operation) }
+
+    struct Args: Encodable {
+        var progressToken: String
+    }
+    struct Response: Decodable {}                       // no result - instead there are Notifications
+}
+
+extension WalletModel {
+    /// reset Wallet-Core
+    nonisolated func migrateDatabase(viewHandles: Bool = false) async throws {
+        let request = MigrateRequest()
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = request.operation
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
 // MARK: -
