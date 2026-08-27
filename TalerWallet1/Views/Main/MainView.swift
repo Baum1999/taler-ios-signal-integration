@@ -182,45 +182,44 @@ struct MainView: View {
 //                  Color.clear
                 }
             }
-        }
-            .overlay {
-                if locked {
-                    Color.gray.opacity(0.75)
-                        .animation(.easeInOut, value: biometricService.isAuthenticated)
-                    if let errorMessage = biometricService.authenticationError {
-                        Text(errorMessage)
-                            .talerFont(.title)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                            .background(WalletColors().backgroundColor)
-                            .onTapGesture {
+        }.overlay {
+            if locked {
+                Color.gray.opacity(0.75)
+                    .animation(.easeInOut, value: biometricService.isAuthenticated)
+                if let errorMessage = biometricService.authenticationError {
+                    Text(errorMessage)
+                        .talerFont(.title)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .background(WalletColors().backgroundColor)
+                        .onTapGesture {
+                            biometricService.authenticationError = nil
+                            biometricService.authenticateUser()
+                        }
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 biometricService.authenticationError = nil
-                                biometricService.authenticateUser()
-                            }
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    biometricService.authenticationError = nil
-                                    if !biometricService.canAuthenticate {
-                                        let _ = print("authentication not available")
-                                        useAuthentication = false           // switch off
-                                    }
+                                if !biometricService.canAuthenticate {
+                                    let _ = print("authentication not available")
+                                    useAuthentication = false           // switch off
                                 }
                             }
-                    } else {
-                        Image(TALER_LOGO)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .onAppear {
-                                biometricService.authenticateUser()
-                            }
-                            .onTapGesture {
-                                biometricService.authenticateUser()
-                            }
-                    }
+                        }
+                } else {
+                    Image(TALER_LOGO)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .onAppear {
+                            biometricService.authenticateUser()
+                        }
+                        .onTapGesture {
+                            biometricService.authenticateUser()
+                        }
                 }
-            }   // biometrics
+            }
+        }   // biometrics
 
         let mainGroup = Group {
             // show launch animation until either ready or error
