@@ -110,39 +110,33 @@ struct SettingsView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-#if TALER_WALLET
-        let appName = "Taler Wallet"
-#elseif TALER_NIGHTLY
-        let appName = "Taler Nightly"
-#else
-        let appName = "GNU Taler"
-#endif
-        let localizedAppName = Bundle.main.bundleName ?? appName
+        let localizedAppName = controller.localizedAppName
         let list = List {
-                let aboutStr = String(localized: "About \(localizedAppName)")
-                NavigationLink {        // whole row like in a tableView
-                    AboutView(stack: stack.push(), localizedAppName: localizedAppName, navTitle: aboutStr)
-                } label: {
-                    SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
-                }
+            let aboutStr = String(localized: "About \(localizedAppName)")
+            NavigationLink {        // whole row like in a tableView
+                AboutView(stack: stack.push(), localizedAppName: localizedAppName,
+                       navTitle: aboutStr)
+            } label: {
+                SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
+            }
 
-                NavigationLink {        // whole row like in a tableView
-                    ExchangeListView(stack: stack.push(), url: .constant(nil))
-                } label: {
-                    SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges", imageName: EXCHANGE_LOGO,
-                          description: String(localized: "Manage payment services")) {}
-                }
+            NavigationLink {        // whole row like in a tableView
+                ExchangeListView(stack: stack.push(), url: .constant(nil))
+            } label: {
+                SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges", imageName: EXCHANGE_LOGO,
+                      description: String(localized: "Manage payment services")) {}
+            }
 
-                let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
-                let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
-                                                 navTitle: bankAccountsTitle)
-                NavigationLink {        // whole row like in a tableView
-                    bankAccountsDest
-                } label: {
-                    SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
-                            imageName: "building.columns",
-                          description: String(localized: "Your accounts for deposit")) {}
-                }
+            let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
+            let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
+                                             navTitle: bankAccountsTitle)
+            NavigationLink {        // whole row like in a tableView
+                bankAccountsDest
+            } label: {
+                SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
+                        imageName: "building.columns",
+                      description: String(localized: "Your accounts for deposit")) {}
+            }
 
             let biometryType = controller.biometryType() ?? biometricService.biometryType()
             let hasFaceID = biometryType == .faceID
@@ -211,7 +205,7 @@ struct SettingsView: View {
                     } label: {
                         SettingsItem(name: devTitle, id1: "developer",
                                 imageName: "hammer",        // 􀙄
-                              description: String(localized: "Help debug \(localizedAppName)")) {}
+                                     description: String(localized: "Help debug \(localizedAppName)")) {}
                     }
                 }
 
