@@ -548,17 +548,24 @@ fileprivate struct MigrateRequest: WalletBackendFormattedRequest {
     struct Args: Encodable {
         var progressToken: String
     }
-    struct Response: Decodable {}                       // no result - instead there are Notifications
+    typealias Response = MigrationResult                      // plus notifications
+}
+
+struct MigrationResult: Decodable {
+    var migrated: Bool?
+    var databaseBackend: String?
 }
 
 extension WalletModel {
     /// reset Wallet-Core
-    nonisolated func migrateDatabase(viewHandles: Bool = false) async throws {
+    nonisolated func migrateDatabase(viewHandles: Bool = false)
+      async throws -> MigrationResult {
         let request = MigrateRequest()
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = request.operation
-        _ = try await sendRequest(request, viewHandles: viewHandles)
+        let result = try await sendRequest(request, viewHandles: viewHandles)
+        return result
     }
 }
 // MARK: -
