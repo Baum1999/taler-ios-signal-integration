@@ -112,21 +112,6 @@ struct TransactionTypeDetail: View {
                               feeIsNegative: true,
                                       large: false,
                                     summary: nil)
-                    if developerMode {
-                        let withdrawalDetails = details.withdrawalDetails
-                        if let validDetails = withdrawalDetails.exchangeCreditAccountDetails?.validDetails {
-                            let validCount = validDetails.count
-                            if validCount > 0 {
-                                ForEach(validDetails, id: \.self) { detail in
-                                    let label = detail.bankLabel ?? EMPTYSTRING
-                                    if let options = detail.transferOptions, !options.isEmpty {
-                                        ForEach(options, id: \.self) { option in
-                                            if let uri = option.uri {
-                                                CopyButton(uri, title: "Copy \(label) uri")
-                                            } else if let payto = option.paytoUri {
-                                                CopyButton(payto, title: "Copy \(label) payto")
-                                            }
-                    }   }   }   }   }   }
                 }
                 case .deposit(let depositTransaction): Group {
                     if transaction.common.isPendingKYCauth {
