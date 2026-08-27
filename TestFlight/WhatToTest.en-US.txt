@@ -1,3 +1,8 @@
+Version 1.6.13 (wallet-core 1.6.36)
+
+• DB migration
+
+
 Version 1.6.12 (wallet-core 1.6.32.1)
 
 - fix: scanned transactions
