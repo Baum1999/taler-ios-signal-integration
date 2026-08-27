@@ -4,6 +4,7 @@
  */
 /**
  * @author Iván Ávalos
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -66,7 +67,7 @@ enum ErrorData {
 }
 
 struct ErrorView: View {
-    let stack: CallStack
+    let stack: CallStack?
     var title: String
     var exclam: Bool
     var message: String? = nil
@@ -75,7 +76,7 @@ struct ErrorView: View {
 
     var onDismiss: (() -> Void)?
 
-    init(_ stack: CallStack, title: String, exclam: Bool = true, message: String? = nil,
+    init(_ stack: CallStack?, title: String, exclam: Bool = true, message: String? = nil,
          requestUrl: String? = nil, copyable: Bool = false, onDismiss: (() -> Void)? = nil) {
         self.stack = stack
         self.title = title
@@ -86,7 +87,7 @@ struct ErrorView: View {
         self.onDismiss = onDismiss
     }
 
-    init(_ stack: CallStack, error: Error, devMode: Bool, onDismiss: (() -> Void)? = nil) {
+    init(_ stack: CallStack?, error: Error, devMode: Bool, onDismiss: (() -> Void)? = nil) {
         let internetError = String(localized: "Network problem")
         let internetMessage = String(localized: "Please check your internet connection and try again.")
         let walletCoreError = String(localized: "Internal core error")
@@ -146,7 +147,7 @@ struct ErrorView: View {
         }
     }
 
-    init(_ stack: CallStack, data: ErrorData, devMode: Bool, onDismiss: (() -> Void)? = nil) {
+    init(_ stack: CallStack?, data: ErrorData, devMode: Bool, onDismiss: (() -> Void)? = nil) {
         switch data {
             case .message(let title, let message):
                 self.init(stack, title: title, message: message, copyable: false, onDismiss: onDismiss)
@@ -200,7 +201,7 @@ struct ErrorView: View {
                 if let onDismiss {
                     onDismiss()
                 } else {
-                    dismissTop(stack.push())
+                    dismissTop(stack?.push())
                 }
             }
             .buttonStyle(TalerButtonStyle(type: .bordered))
