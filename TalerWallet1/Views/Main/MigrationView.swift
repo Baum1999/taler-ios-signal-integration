@@ -26,15 +26,20 @@ struct MigrationView: View {
     @State private var isMigrating: Bool = false
     @State private var fakeMigration: Bool = false
     @State private var isFinished: Bool = false
+    @State private var isCancelled: Bool = false
     @State private var progress: Double = 0
+    @State private var error2: Error? = nil
 
     func buttonAction() {
         if !isMigrating {
-            Task {
-//                try? await model.migrateDatabase()
-            }
             withAnimation {
                 self.isMigrating = true
+            }
+            Task {
+                let result = try? await model.migrateDatabase()
+                if let migrated = result?.migrated {
+                    isFinished = migrated
+                }
             }
         }
     }
@@ -48,29 +53,30 @@ struct MigrationView: View {
         }
     }
 
-    func cancelAction() {
-        self.isMigrating = false
-        // TODO: cancel migration
-        finishAction()
-    }
+    // Too much hassle for wallet-core to check this everywhere
+//    func cancelAction() {
+//        self.isMigrating = false
+//        self.isCancelled = true
+//        if let operation = controller.progressOperation,
+//           let token = controller.progressToken {
+//            Task {
+//                try? await model.cancelProgressToken(operation, token: token)
+//                controller.progressOperation = nil
+//                controller.progressToken = nil
+//            }
+//        }
+//    }
 
     func finishAction() {
         withAnimation {
             controller.backendState = .ready
         }
     }
+
     var body: some View {
-        List {
+        let list = List {
             Section(header: Text("Update database")) {
-                if isFinished {
-                    Text("Finished")
-                        .talerFont(.title)
-                        .task {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                finishAction()
-                            }
-                        }
-                } else if isMigrating {
+                if isMigrating || isFinished || isCancelled {
                     if fakeMigration {
                         Text("Faking migration")
                             .talerFont(.title)
@@ -88,11 +94,20 @@ struct MigrationView: View {
                             .talerFont(.title)
                     }
                     ProgressView(value: progress)
-                    Button("Cancel", action: cancelAction)
-                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        .padding()
+//                    Button("Cancel", action: cancelAction)
+//                        .buttonStyle(TalerButtonStyle(type: .bordered))
+//                        .padding()
+                    if isFinished || isCancelled {
+                        Text(isCancelled ? "Cancelled" : "Finished")
+                            .talerFont(.title)
+                            .task {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    finishAction()
+                                }
+                            }
+                    }
                 } else {
-                    Text("The money database needs to be updated.")
+                    Text("The digital cash database needs to be updated.")
                         .talerFont(.title)
                     Text("This might take a while...")
                         .talerFont(.body)
@@ -113,14 +128,44 @@ struct MigrationView: View {
                 }
             }
             .listRowSeparator(.hidden)
-        }
+        }.id("list")
         .listStyle(myListStyle.style).anyView
         .talerFont(.title2)
-        .background(FullBackground())
+        .onNotification(.DatabaseMaintenance) { notification in
+            if let payload = notification.userInfo?[NOTIFICATIONPAYLOAD] as? WalletCore.Payload {
+                if let error = payload.error {
+                    self.error2 = WalletBackendError.walletCoreError(error)
+                } else if let percent = payload.completionPercent {
+                    progress = Double(percent) / 100
+                    if percent == 100 {
+                        withAnimation {
+                            isFinished = true
+                        }
+                    }
+                }
+            }
+        }
+        let stack = ZStack {
+            if preferredColorScheme == 3, #available(iOS 17.0, *) {
+                list.scrollContentBackground(.hidden)
+            } else {
+                list
+            }
+            if let error2 {
+                ErrorView(nil, error: error2, devMode: developerMode) {
+                    self.error2 = nil
+                }.interactiveDismissDisabled()
+            }
+        }.id("stack")
+        NavigationView {
+            ZStack {
+                WalletHeader(showSettings: false, content: stack)
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(FullBackground())
+        }.navigationViewStyle(.stack)
     }
 }
-
-
+// MARK: -
 struct MigrationView_Previews: PreviewProvider {
     static var previews: some View {
         MigrationView()
