@@ -123,22 +123,36 @@ struct ProdSectionView: View {
         }
     }
 }
-
+// MARK: -
 /// This view shows hints if a wallet is empty
 /// It is the very first thing the user sees after installing the app
-
 struct WalletEmptyHeader: View {
     let stack: CallStack
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
-    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     func refresh() async {
         controller.hapticNotification(.success)
 //        symLog.log("refreshing balances")
         await controller.loadBalances(stack.push("refreshing balances"), model)
     }
+
+    var body: some View {
+        let emptyView =  WalletEmptyView(stack: stack.push("isEmpty"))
+//                  .navigationTitle("Taler Wallet")
+            .refreshable {
+                await refresh()
+            }
+        WalletHeader(showSettings: true, content: emptyView)
+    }
+}
+// MARK: -
+struct WalletHeader<Content: View> : View {
+    let showSettings: Bool
+    let content: Content
+
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     var body: some View {
         let talerLogo = HStack(spacing: 2) {
@@ -155,22 +169,17 @@ struct WalletEmptyHeader: View {
             .accessibilityAddTraits(.isHeader)
             .accessibilityLabel(Text("Taler Wallet", comment: "a11y"))
 
-        let emptyView =  WalletEmptyView(stack: stack.push("isEmpty"))
-        //                  .navigationTitle("Taler Wallet")
-            .refreshable {
-                await refresh()
-            }
 
         let logoItem = ToolbarItem(placement: .principal) {
             talerLogo
                 .padding(.top, 10)
         }
-        if #available(iOS 26.0, *) {
+        if showSettings, #available(iOS 26.0, *) {
             if voiceOverEnabled {
-                emptyView
+                content
                     .toolbar { logoItem }
             } else {
-                emptyView
+                content
                     .toolbar {
                         ToolbarItem(placement: .principal) {
                             HStack {
@@ -187,12 +196,12 @@ struct WalletEmptyHeader: View {
                     }
             }
         } else { // iOS 15..18 Settings is the 3rd tab
-            emptyView
+            content
                 .toolbar { logoItem }
         }
     }
 }
-
+// MARK: -
 struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -275,7 +284,7 @@ struct WalletEmptyView: View {
         }
     }
 }
-
+// MARK: -
 struct WalletEmptyView_Previews: PreviewProvider {
     static var previews: some View {
         WalletEmptyView(stack: CallStack("Preview"))
