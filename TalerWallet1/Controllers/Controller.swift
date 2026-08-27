@@ -193,6 +193,17 @@ class Controller: ObservableObject {
     }
 #endif
 
+    var localizedAppName: String {
+#if TALER_WALLET
+        let appName = "Taler Wallet"
+#elseif TALER_NIGHTLY
+        let appName = "Taler Nightly"
+#else
+        let appName = "GNU Taler"
+#endif
+        return Bundle.main.bundleName ?? appName
+    }
+
     func biometryType() -> LABiometryType? {
         let context = LAContext()
         var error: NSError? = nil
