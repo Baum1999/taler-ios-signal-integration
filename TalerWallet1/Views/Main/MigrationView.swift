@@ -105,11 +105,14 @@ struct MigrationView: View {
                                     finishAction()
                                 }
                             }
+                    } else {
+                        Text("Please don't close the app now, or we need to start over next time.")
+                            .talerFont(.body)
                     }
                 } else {
-                    Text("The digital cash database needs to be updated.")
+                    Text("The \(controller.localizedAppName) database needs to be updated.")
                         .talerFont(.title)
-                    Text("This might take a while...")
+                    Text("This might take from a few seconds to a minute or two, depending on how many transactions you made.")
                         .talerFont(.body)
 
                     Button("Update now", action: buttonAction)
