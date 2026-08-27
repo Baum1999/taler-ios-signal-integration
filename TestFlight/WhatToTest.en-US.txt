@@ -1,4 +1,4 @@
-Version 1.6.13 (wallet-core 1.6.36)
+Version 1.6.13 (wallet-core 1.6.38)
 
 • DB migration
 
