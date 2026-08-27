@@ -85,6 +85,16 @@ class WalletCore: QuickjsMessageHandler {
         let isInternal: Bool?
         let hintTransactionId: String?
         let event: [String: AnyCodable]?
+
+        let operation: String?      // indexeddb-to-native-migration
+        let phase: String?          // fixup | copy | verify | complete | failed
+        let error: TalerErrorDetail?    // only when phase is "failed"
+        let step: String?           // config | currencyInfo | contacts | mailboxMessages | mailboxConfigurations | contractTerms | tombstones | operationRetries | bankAccounts | globalCurrencyExchanges | globalCurrencyAuditors | exchangeBaseUrlFixups | exchangeBaseUrlMigrationLog | reserves | exchanges | exchangeDetails | exchangeSignKeys | denominationFamilies | denominations | withdrawalGroups | purchases | refreshGroups | coins | planchets | refreshSessions | coinHistory | coinAvailability | refundGroups | tokens | slates | depositGroups | recoupGroups | denomLossEvents | peerPushDebit | peerPushCredit | peerPullDebit | peerPullCredit | donationSummaries | donationPlanchets | donationReceipts | transactionsMeta | refundItems
+        let completedSteps: Int?
+        let totalSteps: Int?
+        let processedRecords: Int?
+        let totalRecords: Int?
+        let completionPercent: Int?
     }
 
     deinit {
@@ -376,6 +386,10 @@ extension WalletCore {
             switch payload.type {
                 case Notification.Name.Idle.rawValue:
 //                    symLog.log(message)
+                    break
+                case Notification.Name.DatabaseMaintenance.rawValue:
+                    symLog.log(message)
+                    postNotification(.DatabaseMaintenance, userInfo: [NOTIFICATIONPAYLOAD: payload])
                     break
                 case Notification.Name.ExchangeStateTransition.rawValue:
                     symLog.log(message)

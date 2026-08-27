@@ -215,12 +215,14 @@ public let NOTIFICATIONPHASE = "notif.phase"
 public let NOTIFICATIONANIMATION = "notif.animation"
 public let NOTIFICATIONSHARE = "notif.share"
 public let NOTIFICATIONPASTE = "notif.paste"
+public let NOTIFICATIONPAYLOAD = "notif.payload"
 
 /// Notifications sent by wallet-core
 extension Notification.Name {
     static let Idle = Notification.Name("idle")
     static let BalanceChange = Notification.Name("balance-change")
     static let BankAccountChange = Notification.Name(AccountChange.TransitionType.change.rawValue)
+    static let DatabaseMaintenance = Notification.Name("database-maintenance-progress")
     static let ExchangeAdded = Notification.Name("exchange-added")
     static let ExchangeDeleted = Notification.Name("exchange-deleted")
     static let ExchangeStateTransition = Notification.Name("exchange-state-transition")
