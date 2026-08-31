@@ -588,14 +588,15 @@ extension WalletModel {
 // MARK: -
 fileprivate struct ExportDbToFile: WalletBackendFormattedRequest {
     var operation: String { "exportDbToFile" }
-    func args() -> Args { Args(directory: directory, stem: stem, forceFormat: "json") }
+    func args() -> Args { Args(directory: directory, stem: stem, forceFormat: asJSON ? "json" : nil) }
 
     var directory: String
     var stem: String
+    var asJSON: Bool
     struct Args: Encodable {
         var directory: String
         var stem: String
-        var forceFormat: String
+        var forceFormat: String?
     }
     struct Response: Decodable, Sendable {              // path of the copied DB
         var path: String
@@ -629,11 +630,11 @@ fileprivate struct GetPerformanceStats: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// export, import DB, get diagnostics
-    nonisolated func exportDbToFile(stem: String, viewHandles: Bool = false)
+    nonisolated func exportDbToFile(stem: String, asJSON: Bool = true, viewHandles: Bool = false)
       async throws -> String? {
         if let docDirUrl = URL.docDirUrl {
             let dbPath = docDirUrl.path(withSlash: false)
-            let request = ExportDbToFile(directory: dbPath, stem: stem)
+            let request = ExportDbToFile(directory: dbPath, stem: stem, asJSON: asJSON)
     print(dbPath, stem)
             let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.path

@@ -37,12 +37,12 @@ struct BackupView: View {
         }
     }
 
-    private func createBackup() {
+    private func createBackup(asJSON: Bool) {
         created = true
         Task {
             let dateString = Date().iso
             let stem = String(BACKUP + dateString)
-            if let backupFile = try? await model.exportDbToFile(stem: stem) {
+            if let backupFile = try? await model.exportDbToFile(stem: stem, asJSON: asJSON) {
                 filename = backupFile
                 await viewDidLoad()
             }
@@ -92,7 +92,8 @@ struct BackupView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let buttonTitle = String(localized: "Create Backup", comment: "button")
+        let buttonTitle1 = String(localized: "Create JSON backup", comment: "button")
+        let buttonTitle2 = String(localized: "Create sqlite backup", comment: "button")
 
         let backupHint = Text("Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to the computer.")
 
@@ -104,7 +105,10 @@ struct BackupView: View {
             Section {
                 backupHint
                     .listRowSeparator(.hidden)
-                FeedbackButton(buttonTitle, disabled: created) { createBackup() }
+                FeedbackButton(buttonTitle1, disabled: created) { createBackup(asJSON: true) }
+                    .padding(.horizontal)
+                    .listRowSeparator(.hidden)
+                FeedbackButton(buttonTitle2, disabled: created) { createBackup(asJSON: false) }
                     .padding(.horizontal)
                     .listRowSeparator(.hidden)
                 restoreHint
