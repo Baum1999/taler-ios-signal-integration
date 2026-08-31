@@ -55,7 +55,7 @@ struct MerchantHeader: View {
                         let merchant = terms.merchant.name
                         Text(merchant)
                             .talerFont(.title3)
-                    }   .foregroundStyle(Color(.primary))
+                    }   .foregroundStyle(Color.primary)
                         .task {
                             if let imageBase64 = terms.merchant.logo {
                                 image = Image(imageBase64: imageBase64)
