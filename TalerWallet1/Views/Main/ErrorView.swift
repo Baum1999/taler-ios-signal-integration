@@ -104,7 +104,7 @@ struct ErrorView: View {
                     case .walletCoreError(let walletBackendResponseError):
                         if let responseError = walletBackendResponseError {
                             let code = responseError.code
-                            if code == 7002 || code == 7005 || code == 7032 || code == 7036 || code == 7049 {
+                            if code == 7002 || code == 7003 || code == 7005 || code == 7032 || code == 7036 || code == 7049 {
                                 self.init(stack,
                                     title: code == 7036 ? userCancelled
                                          : code == 7049 ? transactionError : internetError,
