@@ -33,12 +33,14 @@ struct ExchangeSectionView: View {
     @State private var disabled: Bool = false
     @State private var showAlert: Bool = false
     @State private var global: Bool = false
+    @State private var legacy: Bool = false
 
     @MainActor
     private func viewDidLoad() async {
         if let exc = try? await model.listExchanges(scope: balance.scopeInfo) {
             if let exchange = exc.first {
                 global = exchange.scopeInfo.type == .global
+                legacy = exchange.scopeInfo.type == .exchangeLegacyKeys
             }
             withAnimation { exchanges = exc }
         }
