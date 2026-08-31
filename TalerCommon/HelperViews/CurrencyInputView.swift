@@ -61,6 +61,7 @@ struct CurrencyInputView: View {
     @Binding var amount: Amount         // the `value´
     let amountLastUsed: Amount
     let available: Amount?
+    let insufficient: Bool
     let title: String?
     let a11yTitle: String
     let shortcutAction: ((_ amount: Amount) -> Void)?
@@ -130,7 +131,7 @@ struct CurrencyInputView: View {
 
     func heading() -> (String, String)? {
         if let title {
-            return (title, title)
+            return (title, a11yTitle)
         }
         if let available {
             let formatted = available.formatted(scope, isNegative: false)
@@ -161,11 +162,11 @@ struct CurrencyInputView: View {
                     .padding(.top)
                     .frame(maxWidth: .infinity, alignment: title != nil ? .leading : .trailing)
                     .talerFont(.title2)
+                    .foregroundColor(insufficient ? WalletColors().errorColor : .primary)
                     .accessibilityLabel(heading.1)
                     .padding(.bottom, -6)
             }
             currencyField
-                .accessibilityLabel(a11yTitle)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
 //                .background(WalletColors().fieldBackground)       // problem: white corners

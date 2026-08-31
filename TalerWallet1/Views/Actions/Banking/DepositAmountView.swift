@@ -120,6 +120,7 @@ struct DepositAmountView: View {
                              amount: $amountToTransfer,
                      amountLastUsed: amountLastUsed,
                           available: amountAvailable,       // enable shortcuts if available >= value
+                       insufficient: false,                 // TODO: insufficient
                               title: amountLabel,
                           a11yTitle: a11yLabel,
                      shortcutAction: nil)

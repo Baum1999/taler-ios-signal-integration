@@ -98,25 +98,25 @@ struct AmountInputV: View {
 
     var body: some View {
         let currency = amountToTransfer.currencyStr
+        let coinData = CoinData(coins: numCoins, fee: feeAmount)
+        let flags = checkAvailable(coinData)
+        let hint = String(localized: "enabled when amount is non-zero", comment: "a11y")
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(scope: scope,
                              amount: $amountToTransfer,
                      amountLastUsed: amountLastUsed,
                           available: isIncoming ? nil : amountAvailable,
+                       insufficient: flags.insufficient,
                               title: amountLabel,
                           a11yTitle: a11yLabel,
                      shortcutAction: shortcutAction)
 //                .accessibility(sortPriority: 2)
-
-            let coinData = CoinData(coins: numCoins, fee: feeAmount)
             QuiteSomeCoins(scope: scope,
                         coinData: coinData,
                    shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                    feeIsNegative: isIncoming)
-            let flags = checkAvailable(coinData)
-            let hint = String(localized: "enabled when amount is non-zero", comment: "a11y")
             Button("Next") { buttonAction() }
-                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
+                .buttonStyle(TalerButtonStyle(type: .prominent, ))
                 .disabled(flags.disabled)
                 .accessibilityHint(flags.disabled ? hint : EMPTYSTRING)
                 .padding(.bottom, 333)

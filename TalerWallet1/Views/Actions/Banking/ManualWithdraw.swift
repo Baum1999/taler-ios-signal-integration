@@ -261,6 +261,7 @@ struct ManualWithdrawContent: View {
                                      amount: $amountToTransfer,
                              amountLastUsed: amountLastUsed,
                                   available: nil,               // enable shortcuts always
+                               insufficient: false,                 // TODO: insufficient
                                       title: amountLabel,
                                   a11yTitle: a11yLabel,
                              shortcutAction: nil)

@@ -12,8 +12,10 @@ import SymLog
 func p2pFee(ppCheck: CheckPeerPushDebitResponse) -> Amount? {
     do {
         // Outgoing: fee = effective - raw
-        let fee = try ppCheck.amountEffective - ppCheck.amountRaw
-        return fee
+        if let effective = ppCheck.amountEffective {
+            let fee = try effective - ppCheck.amountRaw
+            return fee
+        }
     } catch {}
     return nil
 }

@@ -54,10 +54,12 @@ struct SendAmountView: View {
         feeStr.isEmpty ? EMPTYSTRING : String(localized: "+ \(feeStr) fee")
     }
 
-    private func fee(raw: Amount, effective: Amount) -> Amount? {
+    private func fee(raw: Amount, effective: Amount?) -> Amount? {
         do {     // Outgoing: fee = effective - raw
-            let fee = try effective - raw
-            return fee
+            if let effective {
+                let fee = try effective - raw
+                return fee
+            }
         } catch {}
         return nil
     }
@@ -84,21 +86,22 @@ struct SendAmountView: View {
             do {
                 let ppCheck = try await model.checkPeerPushDebit(amount, scope: balance.scopeInfo, viewHandles: true)
                 let raw = ppCheck.amountRaw
-                let effective = ppCheck.amountEffective
-                if let fee = fee(raw: raw, effective: effective) {
-                    feeString = fee.formatted(balance.scopeInfo, isNegative: false)
-                    symLog.log("Fee = \(feeString.0)")
-                    let insufficient = (try? effective > amountAvailable) ?? true
+                if let effective = ppCheck.amountEffective {
+                    if let fee = fee(raw: raw, effective: effective) {
+                        feeString = fee.formatted(balance.scopeInfo, isNegative: false)
+                        symLog.log("Fee = \(feeString.0)")
+                        let insufficient = (try? effective > amountAvailable) ?? true
 
-                    peerPushCheck = ppCheck
-                    let feeLabel = (feeLabel(feeString.0), feeLabel(feeString.1))
-//                    announce("\(amountVoiceOver), \(feeLabel)")
-                    return ComputeFeeResult(insufficient: insufficient,
-                                               feeAmount: fee,
-                                                  feeStr: feeLabel,
-                                                numCoins: nil)
-                } else {
-                    peerPushCheck = nil
+                        peerPushCheck = ppCheck
+                        let feeLabel = (feeLabel(feeString.0), feeLabel(feeString.1))
+//                      announce("\(amountVoiceOver), \(feeLabel)")
+                        return ComputeFeeResult(insufficient: insufficient,
+                                                   feeAmount: fee,
+                                                      feeStr: feeLabel,
+                                                    numCoins: nil)
+                    } else {
+                        peerPushCheck = nil
+                    }
                 }
             } catch {
                 // handle cancel, errors
@@ -141,7 +144,7 @@ struct SendAmountView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
-                let availableStr = amountAvailable.formatted(balance.scopeInfo, isNegative: false)
+//                let availableStr = amountAvailable.formatted(balance.scopeInfo, isNegative: false)
 //              let availableA11y = amountAvailable.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
 //              let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
 //              let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
@@ -172,12 +175,12 @@ struct SendAmountView: View {
                     NavLink($buttonSelected) { inputDestination }
                     NavLink($shortcutSelected) { shortcutDestination }
                 }
-                let a11yLabel = String(localized: "Amount to send:", comment: "a11y, no abbreviations")
+//                let a11yLabel = String(localized: "Amount to send:", comment: "a11y, no abbreviations")
                 AmountInputV(stack: stack.push(),
                              scope: balance.scopeInfo,
                    amountAvailable: $amountAvailable,
-                       amountLabel: nil,        // will use "Available for transfer: xxx", trailing
-                         a11yLabel: a11yLabel,
+                       amountLabel: nil,            // will use "Available for transfer: xxx", trailing
+                         a11yLabel: EMPTYSTRING,    // a11yLabel,
                   amountToTransfer: $amountToTransfer,
                     amountLastUsed: amountLastUsed,
                            wireFee: nil,
