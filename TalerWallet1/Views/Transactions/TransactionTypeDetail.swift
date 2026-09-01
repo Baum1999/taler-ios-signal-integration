@@ -146,8 +146,8 @@ struct TransactionTypeDetail: View {
                             let choicesForPayment = choicesTuple.1
                             if choicesTuple.0 != common.transactionId || choicesForPayment == nil {
                                 symLog.log("❗️❗️ task: \(common.txState)")
-                                await controller.loadChoicesForPayment(stack.push(),model,
-                                                                       txId: common.transactionId)
+                                await controller.loadChoicesForPayment(stack.push(),
+                                                                  txId: common.transactionId)
                             } else {
                                 symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
                             }

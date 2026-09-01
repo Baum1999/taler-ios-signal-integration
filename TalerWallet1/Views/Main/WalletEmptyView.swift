@@ -129,13 +129,12 @@ struct ProdSectionView: View {
 struct WalletEmptyHeader: View {
     let stack: CallStack
 
-    @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
 
     func refresh() async {
         controller.hapticNotification(.success)
 //        symLog.log("refreshing balances")
-        await controller.loadBalances(stack.push("refreshing balances"), model)
+        await controller.loadBalances(stack.push("refreshing balances"))
     }
 
     var body: some View {

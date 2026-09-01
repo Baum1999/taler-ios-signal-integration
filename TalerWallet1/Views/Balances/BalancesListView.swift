@@ -38,7 +38,7 @@ struct BalancesListView: View {
     func refresh() async {
         controller.hapticNotification(.success)
         symLog.log("refreshing balances")
-        await controller.loadBalances(stack.push("refreshing balances"), model)
+        await controller.loadBalances(stack.push("refreshing balances"))
     }
 
     @ViewBuilder

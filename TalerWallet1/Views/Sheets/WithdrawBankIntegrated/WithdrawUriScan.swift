@@ -123,7 +123,7 @@ struct WithdrawUriScan: View {
 //            await loadExchange(baseUrl)       <- checkCurrencyInfo now returns the exchange
 //            symLog.log("\(baseUrl.trimURL) loaded")
 
-            if let baseUrl, let someExchange = try? await controller.checkCurrencyInfo(for: baseUrl, model: model) {
+            if let baseUrl, let someExchange = try? await controller.checkCurrencyInfo(for: baseUrl) {
                 symLog.log("Info(for: \(baseUrl.trimURL) loaded")
                 exchange = someExchange
             } else {

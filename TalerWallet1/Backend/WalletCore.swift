@@ -85,7 +85,8 @@ class WalletCore: QuickjsMessageHandler {
         let isInternal: Bool?
         let hintTransactionId: String?
         let event: [String: AnyCodable]?
-
+        let exchangeBaseUrl: String?
+        let newExchangeState: ExchangeState?
         let operation: String?      // indexeddb-to-native-migration
         let phase: String?          // fixup | copy | verify | complete | failed
         let error: TalerErrorDetail?    // only when phase is "failed"
@@ -393,6 +394,10 @@ extension WalletCore {
                     break
                 case Notification.Name.ExchangeStateTransition.rawValue:
                     symLog.log(message)
+                    if let baseUrl = payload.exchangeBaseUrl,
+                       let state = payload.newExchangeState {
+                        Controller.shared.updateExchange(for: baseUrl, state: state)
+                    }
                     break
                 case Notification.Name.RequestProgressError.rawValue:
                     symLog.log(message)

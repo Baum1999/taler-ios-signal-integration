@@ -50,7 +50,7 @@ struct P2pReceiveURIView: View {
         if let ppResponse = try? await model.preparePeerPushCredit(url.trimmedString) {
             let baseUrl = ppResponse.exchangeBaseUrl
             exchange = try? await model.getExchangeByUrl(url: baseUrl)
-            await controller.checkCurrencyInfo(for: baseUrl, model: model)
+            await controller.checkCurrencyInfo(for: baseUrl)
             let oimCurrency = oimCurrency(ppResponse.scopeInfo, oimEuro: oimEuro)
             cash.setCurrency(oimCurrency)
             controller.removeURL(url)       // tx is now saved by wallet-core

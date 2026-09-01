@@ -127,6 +127,7 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var haveProdBalance: Bool = false
+    @Published var exchanges: [Exchange] = []
     @Published var balances: [Balance] = []
     @Published var discounts: [TalerToken] = []
     @Published var subscriptions: [TalerToken] = []
@@ -163,7 +164,6 @@ class Controller: ObservableObject {
     let player = AVQueuePlayer()
     let semaphore = AsyncSemaphore(value: 1)
     private var currencyInfos: [ScopeInfo : CurrencyInfo]
-    var exchanges: [Exchange]
     var messageForSheet: String? = nil
     var isLoadingChoices: String? = nil
 
@@ -347,13 +347,14 @@ class Controller: ObservableObject {
 // MARK: -
     @MainActor
     @discardableResult
-    func loadBalances(_ stack: CallStack,_ model: WalletModel) async -> Int? {
+    func loadBalances(_ stack: CallStack) async -> Int? {
+        let model = WalletModel.shared
         if let response = try? await model.getBalances(stack.push()) {
             let reloaded = response.balances
             if reloaded != balances {
                 for balance in reloaded {
                     let scope = balance.scopeInfo
-                    checkInfo(for: scope, model: model)
+                    checkInfo(for: scope)
                 }
                 self.logger.log("••Got new balances, will redraw")
                 balances = reloaded         // redraw
@@ -377,7 +378,8 @@ class Controller: ObservableObject {
 // MARK: -
     @MainActor
     @discardableResult
-    func loadDiscounts(_ stack: CallStack,_ model: WalletModel) async -> Int? {
+    func loadDiscounts(_ stack: CallStack) async -> Int? {
+        let model = WalletModel.shared
         if let response = try? await model.listDiscounts(stack.push()) {
             let reloaded = response.discounts
             if reloaded != discounts {
@@ -393,7 +395,8 @@ class Controller: ObservableObject {
 // MARK: -
     @MainActor
     @discardableResult
-    func loadSubscriptions(_ stack: CallStack,_ model: WalletModel) async -> Int? {
+    func loadSubscriptions(_ stack: CallStack) async -> Int? {
+        let model = WalletModel.shared
         if let response = try? await model.listSubscriptions(stack.push()) {
             let reloaded = response.subscriptions
             if reloaded != subscriptions {
@@ -410,9 +413,9 @@ class Controller: ObservableObject {
     @MainActor
     @discardableResult
     func loadChoicesForPayment(_ stack: CallStack,
-                               _ model: WalletModel,
                                   txId: String) async -> Bool {
         self.logger.log("getChoicesForPayment: \(txId)")
+        let model = WalletModel.shared
         if isLoadingChoices != txId {
             isLoadingChoices = txId
             if let choiceResponse = try? await model.getChoicesForPayment(txId) {
@@ -429,15 +432,6 @@ class Controller: ObservableObject {
         return false
     }
 // MARK: -
-    func exchange(for baseUrl: String) -> Exchange? {
-        for exchange in exchanges {
-            if exchange.exchangeBaseUrl == baseUrl {
-                return exchange
-            }
-        }
-        return nil
-    }
-
     func info(for scope: ScopeInfo) -> CurrencyInfo? {
 //        return CurrencyInfo.euro()              // Fake EUR instead of the real Currency
 //        return CurrencyInfo.francs()            // Fake CHF instead of the real Currency
@@ -479,11 +473,12 @@ class Controller: ObservableObject {
     }
 
     @MainActor
-    func exchange(for baseUrl: String?, model: WalletModel) async -> Exchange? {
+    func exchange(for baseUrl: String?) async -> Exchange? {
         if let baseUrl {
-            if let exchange1 = exchange(for: baseUrl) {
-                return exchange1
+            if let exchange = exchanges.first(where: {$0.exchangeBaseUrl == baseUrl}) {
+                return exchange
             }
+            let model = WalletModel.shared
             if let exchange2 = try? await model.getExchangeByUrl(url: baseUrl) {
 //                logger.log("  ❗️ will add \(baseUrl)")
                 exchanges.append(exchange2)
@@ -492,21 +487,40 @@ class Controller: ObservableObject {
         }
         return nil
     }
+    @MainActor
+    func updateExchange(for baseUrl: String, state: ExchangeState) {
+        Task {
+            if let exchange = await exchange(for: baseUrl) {
+                if exchange.tosStatus != state.tosStatus {
+                    logger.log("  ❗️updating exchange: \(baseUrl)")
+                    let model = WalletModel.shared
+                    if let exchange2 = try? await model.getExchangeByUrl(url: baseUrl) {
+                        if let index = exchanges.firstIndex(where: {$0.exchangeBaseUrl == baseUrl}) {
+                            exchanges[index] = exchange2
+                        } else {
+                            exchanges.append(exchange2)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @MainActor
-    func updateInfo(_ scope: ScopeInfo, model: WalletModel) async {
+    func updateInfo2(_ scope: ScopeInfo) async {
+        let model = WalletModel.shared
         if let info = try? await model.getCurrencyInfo(scope: scope) {
             await setInfo(info, for: scope)
 //            logger.log("  ❗️info set for \(scope.currency)")
         }
     }
 
-    func checkCurrencyInfo(for baseUrl: String, model: WalletModel) async -> Exchange? {
-        if let exchange = await exchange(for: baseUrl, model: model) {
+    func checkCurrencyInfo(for baseUrl: String) async -> Exchange? {
+        if let exchange = await exchange(for: baseUrl) {
             let scope = exchange.scopeInfo
             if currencyInfos[scope] == nil {
                 logger.log("  ❗️got no info for \(baseUrl.trimURL) \(scope.currency) -> will update")
-                await updateInfo(scope, model: model)
+                await updateInfo2(scope)
             }
             return exchange
         } else {
@@ -516,14 +530,14 @@ class Controller: ObservableObject {
     }
 
     /// called whenever a new currency pops up - will first load the Exchange and then currencyInfos
-    func checkInfo(for scope: ScopeInfo, model: WalletModel) {
+    func checkInfo(for scope: ScopeInfo) {
         if currencyInfos[scope] == nil {
             Task {
-                let exchange = await exchange(for: scope.url, model: model)
+                let exchange = await exchange(for: scope.url)
                 if let scope2 = exchange?.scopeInfo {
                     let exchangeName = scope2.url ?? "UNKNOWN"
                     logger.log("  ❗️got no info for \(scope.currency) -> will update \(exchangeName.trimURL)")
-                    await updateInfo(scope2, model: model)
+                    await updateInfo2(scope2)
                 } else {
                     logger.error("  ❗️got no info for \(scope.currency), and couldn't load the exchange info❗️")
                 }
@@ -553,12 +567,13 @@ class Controller: ObservableObject {
     }
 // MARK: -
     @MainActor
-    func initWalletCore(_ model: WalletModel, setTesting: Bool, delay: TimeInterval)
+    func initWalletCore(setTesting: Bool, delay: TimeInterval)
       async throws {
         if backendState == .instantiated {
             backendState = .initing
             do {
                 let walletCore = WalletCore.shared
+                let model = WalletModel.shared
                 let response = try await model.initWalletCore(setTesting: setTesting)
                 walletCore.versionInfo = response.versionInfo
                 walletCore.nativeDB = (response.databaseBackend == "sqlite")
@@ -603,7 +618,7 @@ class Controller: ObservableObject {
                     // dismiss the launch animation
                     self.backendState = walletCore.nativeDB ? .ready : .update
                 }
-                await loadBalances(CallStack(), model)
+                await loadBalances(CallStack())
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
                 backendState = .error(error.toEquatableError())                 // ❗️Yikes app cannot continue

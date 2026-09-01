@@ -145,9 +145,9 @@ struct DiscountsPassesList: View {
     func refresh() async {
 //        symLog.log("refreshing balances")
         if isPass {
-            await controller.loadSubscriptions(stack.push("refreshing passes"), model)
+            await controller.loadSubscriptions(stack.push("refreshing passes"))
         } else {
-            await controller.loadDiscounts(stack.push("refreshing discounts"), model)
+            await controller.loadDiscounts(stack.push("refreshing discounts"))
         }
     }
 
