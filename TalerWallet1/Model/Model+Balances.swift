@@ -182,7 +182,7 @@ extension WalletModel {
     nonisolated func deleteDiscount(_ tokenID: String, viewHandles: Bool = false) async throws {
         let request = DeleteDiscount(tokenFamilyHash: tokenID)
         logger.notice("deleteDiscount: \(tokenID, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
     /// fetch Subscriptions from Wallet-Core. No networking involved
     nonisolated func listSubscriptions(_ stack: CallStack, viewHandles: Bool = false) async throws -> SubscriptionsResponse {
@@ -194,6 +194,6 @@ extension WalletModel {
     nonisolated func deleteSubscription(_ tokenID: String, viewHandles: Bool = false) async throws {
         let request = DeleteSubscription(tokenFamilyHash: tokenID)
         logger.notice("deleteSubscription: \(tokenID, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

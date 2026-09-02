@@ -89,7 +89,7 @@ extension WalletModel {
                                   merchantAuthToken: MERCHANTAUTHTOKEN,
                                    amountToWithdraw: amountW,
                                       amountToSpend: amountS)
-        let _ = try await sendRequest(request, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 } // runIntegrationTest
   // MARK: -
@@ -114,6 +114,6 @@ extension WalletModel {
     nonisolated func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool, viewHandles: Bool = false)
       async throws {
         let request = InfiniteTransactionLoop(delayMs: delayMs, shouldFetch: shouldFetch)
-        let _ = try await sendRequest(request, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 } // testingInfiniteTransaction

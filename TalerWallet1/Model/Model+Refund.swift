@@ -50,6 +50,6 @@ extension WalletModel {
 
     nonisolated func startRefund4711(transactionId: String, viewHandles: Bool = false) async throws {
         let request = StartRefundQueryRequest(transactionId: transactionId)
-        let _ = try await sendRequest(request, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

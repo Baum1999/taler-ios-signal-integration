@@ -311,12 +311,12 @@ extension WalletModel {
     nonisolated func cancelProgressToken(_ op: String, token: String)
       async throws {
         let request = CancelProgressToken(op: op, token: token)
-        let _ = try await sendRequest(request)
+        _ = try await sendRequest(request)
     }
     nonisolated func retryProgressTokenNow(_ op: String, token: String)
       async throws {
         let request = RetryProgressTokenNow(op: op, token: token)
-        let _ = try await sendRequest(request)
+        _ = try await sendRequest(request)
     }
     /// get the specified transaction from Wallet-Core. No networking involved
     nonisolated func getTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
