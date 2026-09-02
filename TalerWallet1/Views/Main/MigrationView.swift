@@ -38,7 +38,10 @@ struct MigrationView: View {
             Task {
                 let result = try? await model.migrateDatabase()
                 if let migrated = result?.migrated {
-                    isFinished = migrated
+                    withAnimation {
+                        isFinished = migrated
+                        self.progress = 1
+                    }
                 }
             }
         }
@@ -81,13 +84,15 @@ struct MigrationView: View {
                         Text("Faking migration")
                             .talerFont(.title)
                             .task {
-                                for x in 0...100 {
+                                for x in 0...90 {
                                     await Task.sleep(20_000_000)
                                     self.progress = Double(x) / 100
                                 }
                                 withAnimation {
                                     isFinished = true
+                                    self.progress = 1
                                 }
+                                controller.hapticFeedback(.medium)
                             }
                     } else {
                         Text("Updating the database:")
@@ -139,11 +144,8 @@ struct MigrationView: View {
                 if let error = payload.error {
                     self.error2 = WalletBackendError.walletCoreError(error)
                 } else if let percent = payload.completionPercent {
-                    progress = Double(percent) / 100
-                    if percent == 100 {
-                        withAnimation {
-                            isFinished = true
-                        }
+                    withAnimation {
+                        progress = Double(percent) / 100
                     }
                 }
             }
