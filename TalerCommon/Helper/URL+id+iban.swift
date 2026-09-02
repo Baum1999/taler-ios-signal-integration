@@ -96,6 +96,18 @@ extension URL {
         return nil
     }
 
+    static var tempDirUrl: URL? {
+        if #available(iOS 16.4, *) {
+            return URL.temporaryDirectory
+        } else { // iOS 15 doesn't have a temp dir
+            let tmpDirNr: FileManager.SearchPathDirectory = .cachesDirectory
+            if let cachesDir = FileManager.default.urls(for: tmpDirNr, in: .userDomainMask).first {
+                return cachesDir
+            }
+        }
+        return nil
+    }
+
     func path(withSlash: Bool) -> String {
         let path: String
         if #available(iOS 16.4, *) {
