@@ -423,8 +423,13 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
         let features = Features(migrateNativeDb: false, useNativeDb: true)
         let config = Config(testing: testing, builtin: builtin, features: features)
         return Args(persistentStoragePath: persistentStoragePath,
+#if DEBUG
+        let logLevel = "info"       // trace, info, message, warn, error, none
+#else
+        let logLevel = "message"    // less logging for AppStore builds
+#endif
 //                       cryptoWorkerType: "sync",  qtart can ONLY use sync, that's the default anyway
-                                 logLevel: "info",  // trace, info, message, warn, error, none
+                                 logLevel: logLevel,
                                    config: config,
                          useNativeLogging: true)
     }
