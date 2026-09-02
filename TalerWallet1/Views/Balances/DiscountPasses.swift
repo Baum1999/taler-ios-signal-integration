@@ -171,7 +171,7 @@ struct DiscountsPassesList: View {
                             index: index
         ) { deletionID in
             Task { // runs on MainActor
-                let _ = await delete(deletionID)
+                await delete(deletionID)
                 await refresh()
             }
         }

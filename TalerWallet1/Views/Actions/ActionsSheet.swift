@@ -330,7 +330,7 @@ struct DualHeightSheet: View {
                     logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))  supportedDetents = [detent, .height(sheetHeight)]")
                     supportedDetents = [detent, newValue]
 //                    logger.trace("did set supportedDetents to [\(detent), .height(\(sheetHeight))]")
-                    let _ = print("did set supportedDetents to [\(detent), newValue: \(newValue))]")
+                    print("did set supportedDetents to [\(detent), newValue: \(newValue))]")
                 }
             }
             .task {

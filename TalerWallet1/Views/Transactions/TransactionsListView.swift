@@ -201,7 +201,7 @@ struct TransactionsArraySection: View {
                             Button {
                                 symLog?.log("deleteAction")
                                 Task { // runs on MainActor
-                                    let _ = try? await deleteAction(transaction.id, false)
+                                    try? await deleteAction(transaction.id, false)
                                     await reloadAllAction(stack.push())
                                 }
                             } label: {

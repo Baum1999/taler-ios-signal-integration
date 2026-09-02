@@ -201,7 +201,7 @@ struct MainView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 biometricService.authenticationError = nil
                                 if !biometricService.canAuthenticate {
-                                    let _ = print("authentication not available")
+                                    print("authentication not available")
                                     useAuthentication = false           // switch off
                                 }
                             }

@@ -134,7 +134,7 @@ struct PaymentTransactionView: View {
                 }
             }
         }
-        let _ = selectIndex(defaultChoiceIndex, of: choices)
+        _ = selectIndex(defaultChoiceIndex, of: choices)
     }
 
     var body: some View {
