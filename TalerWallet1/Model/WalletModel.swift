@@ -521,28 +521,6 @@ extension WalletModel {
         }
         throw WalletBackendError.initializationError
     }
-
-    private func cachePath() throws -> String {
-        let fileManager = FileManager.default
-        if let cachesURL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first {
-            let cacheURL = cachesURL.appendingPathComponent("cache.json")
-            let cachePath = cacheURL.path
-            logger.debug("cachePath: \(cachePath)")
-
-            if !fileManager.fileExists(atPath: cachePath) {
-                let contents = Data()       /// Initialize an empty `Data`.
-                fileManager.createFile(atPath: cachePath, contents: contents)
-                print("❗️ File \(cachePath) created")
-            } else {
-                print("❗️ File \(cachePath) already exists")
-            }
-
-            return cachePath
-        } else {    // should never happen
-            logger.error("cachePath: No cachesDirectory")
-            throw WalletBackendError.initializationError
-        }
-    }
 }
 // MARK: -
 ///  A request to migrate the Wallet-core DB from indexed to native sqlite.
