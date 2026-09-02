@@ -413,7 +413,8 @@ struct InitResponse: Decodable {
 }
 ///  A request to initialize Wallet-core
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
-    var persistentStoragePath: String
+    var persistentPath: String
+    var temporaryPath: String?       // folder
     var setTesting: Bool
 
     var operation: String { "init" }
@@ -422,12 +423,13 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
         let builtin = Builtin(exchanges: [])
         let features = Features(migrateNativeDb: false, useNativeDb: true)
         let config = Config(testing: testing, builtin: builtin, features: features)
-        return Args(persistentStoragePath: persistentStoragePath,
 #if DEBUG
         let logLevel = "info"       // trace, info, message, warn, error, none
 #else
         let logLevel = "message"    // less logging for AppStore builds
 #endif
+        return Args(persistentStoragePath: persistentPath,  // DB file
+                     temporaryStoragePath: temporaryPath,
 //                       cryptoWorkerType: "sync",  qtart can ONLY use sync, that's the default anyway
                                  logLevel: logLevel,
                                    config: config,
@@ -435,8 +437,8 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
     }
 
     struct Args: Encodable {
-        var persistentStoragePath: String
-//        var cryptoWorkerType: String
+        var persistentStoragePath: String       // DB file
+        var temporaryStoragePath: String?       // folder
         var logLevel: String
         var config: Config
         var useNativeLogging: Bool
@@ -448,8 +450,10 @@ extension WalletModel {
     /// initalize Wallet-Core. Might do networking
     nonisolated func initWalletCore(setTesting: Bool, viewHandles: Bool = false) async throws -> InitResponse {
         let dbPath = try dbPath()
-//        logger.debug("dbPath: \(dbPath)")
-        let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting)
+        let tmpURL = URL.tempDirUrl
+        let request = InitRequest(persistentPath: dbPath,
+                                   temporaryPath: tmpURL?.path(withSlash: true),
+                                      setTesting: setTesting)
         let response = try await sendRequest(request, viewHandles: viewHandles)    // no Delay
         return response
     }
