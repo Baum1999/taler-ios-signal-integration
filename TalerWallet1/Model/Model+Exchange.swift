@@ -68,6 +68,7 @@ struct ExchangeKeyChangeInfo: Codable, Hashable {
     var supersededMasterPub: String
     var supersededCurrency: String
     var sharesDenominations: Bool
+    var firstSeen: Timestamp?
 }
 
 struct ExchangeTransition: Codable {             // Notification
@@ -83,11 +84,30 @@ enum BankDialect: Codable, Hashable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let status = try? container.decode(String.self)
-        switch status {
+        let string = try? container.decode(String.self)
+        switch string {
             case "gls": self = .gls
             default:
-                self = .unknown(value: status ?? "unknown")
+                self = .unknown(value: string ?? "unknown")
+        }
+    }
+}
+
+enum ExchangeSource: Codable, Hashable {
+    case builtin
+    case user
+    case discovered
+    case unknown(value: String)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let string = try? container.decode(String.self)
+        switch string {
+            case "builtin": self = .builtin
+            case "user": self = .user
+            case "discovered": self = .discovered
+            default:
+                self = .unknown(value: string ?? "unknown")
         }
     }
 }
@@ -108,7 +128,9 @@ struct Exchange: Codable, Hashable, Identifiable {
     }
 
     var exchangeBaseUrl: String
+    var source: ExchangeSource?
     var masterPub: String?
+    var legacyMasterPubs: [String]?
     var scopeInfo: ScopeInfo
     var paytoUris: [String]
     var tosStatus: ExchangeTosStatus
@@ -120,8 +142,10 @@ struct Exchange: Codable, Hashable, Identifiable {
     var ageRestrictionOptions: [Int]
     var bankComplianceLanguage: BankDialect?
     var lastUpdateTimestamp: Timestamp?
+    var lastWithdrawal: Timestamp?
     var lastUpdateErrorInfo: OperationErrorInfo?
     var unconfirmedKeyChange: ExchangeKeyChangeInfo?    // if set, withdrawals are refused until confirmed
+    var currencySpec: CurrencySpecification?            // .name = "Swiss Francs"... alt_unit_names":{"0":"Fr.","-2":"Rp."}
 
 //    walletKycStatus?: ExchangeWalletKycStatus;
 //    walletKycReservePub?: string;
@@ -259,7 +283,18 @@ fileprivate struct ConfirmExchangeKeyChange: WalletBackendFormattedRequest {
     }
     struct Response: Decodable {}   // no result - getting no error back means success
 }
+fileprivate struct PurgeExchangeLegacyKeys: WalletBackendFormattedRequest {
+    var operation: String { "purgeExchangeLegacyKeys" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, currentMasterPub: currentMasterPub) }
 
+    var exchangeBaseUrl: String
+    var currentMasterPub: String
+    struct Args: Encodable {
+        var exchangeBaseUrl: String
+        var currentMasterPub: String
+    }
+    struct Response: Decodable {}   // no result - getting no error back means success
+}
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
     var operation: String { "getCurrencySpecification" }
@@ -375,6 +410,13 @@ extension WalletModel {
       async throws {
         let request = ConfirmExchangeKeyChange(exchangeBaseUrl: exchangeBaseUrl, currentMasterPub: currentMasterPub)
         logger.info("confirming exchange key change: \(exchangeBaseUrl, privacy: .public)")
+        _ = try await sendRequest(request, viewHandles: viewHandles)
+    }
+
+    nonisolated func purgeExchangeLegacyKeys(exchangeBaseUrl: String, currentMasterPub: String, viewHandles: Bool = false)
+    async throws {
+        let request = PurgeExchangeLegacyKeys(exchangeBaseUrl: exchangeBaseUrl, currentMasterPub: currentMasterPub)
+        logger.info("purging old exchange keys: \(exchangeBaseUrl, privacy: .public)")
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
