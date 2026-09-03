@@ -107,8 +107,9 @@ extension BalancesSectionView: View {
                                              oimEuro: oimEuro,
                                         transactions: $completedTransactions,
                                      reloadAllAction: loadCompleted)
+        let isLegacy = scopeInfo.type == .exchangeLegacyKeys
         Section {
-            if scopeInfo.type == .exchange {
+            if scopeInfo.type == .exchange || isLegacy {
                 let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment service", comment: "exchange url")
                 Text(baseURL)
                     .talerFont(.subheadline)
@@ -118,6 +119,7 @@ extension BalancesSectionView: View {
             BalanceCellV(stack: stack.push("BalanceCell"),
                          scope: balance.scopeInfo,
                         amount: balance.available,
+                      isLegacy: isLegacy,
                  historyTapped: $historyTapped,
                   balanceIndex: balanceIndex,
                    balanceDest: balanceDest)

@@ -13,6 +13,7 @@ struct BalanceCellV: View {
     let stack: CallStack
     let scope: ScopeInfo
     let amount: Amount
+    let isLegacy: Bool
 //    let sizeCategory: ContentSizeCategory
 //    let rowAction: () -> Void
     @Binding var historyTapped: Int?
@@ -51,7 +52,7 @@ struct BalanceCellV: View {
                               scope: scope,
                              amount: amount,
                          isNegative: nil,           // don't show the + sign
-                      strikethrough: false,
+                      strikethrough: isLegacy,
                               large: true)
             .foregroundColor(.primary)
         let hLayout = HStack {
@@ -97,7 +98,6 @@ struct BalanceCellV: View {
         }
     }
 }
-
 // MARK: -
 #if  false
 struct BalanceCellV_Previews: PreviewProvider {

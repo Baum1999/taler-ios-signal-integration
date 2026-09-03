@@ -39,9 +39,11 @@ struct BarGraphHeader: View {
 
     var body: some View {
         let currencyInfo = controller.info(for: scope, controller.currencyTicker)
+        let isLegacy = scope.type == .exchangeLegacyKeys
         HStack (alignment: .center, spacing: 10) {
             if !minimalistic || currencyInfo.hasSymbol {
                 Text(currencyInfo.name)
+                    .strikethrough(isLegacy, color: WalletColors().attention)
                     .talerFont(.title2)
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
