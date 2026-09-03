@@ -84,8 +84,7 @@ struct DebugSettingsView: View {
                 }
                 if showDevelopItems {
 #if DEBUG
-                    SettingsToggle(name: String("Log Transactions"), value: $logTransactions.onChange({ isLogging in
-                        walletCore.logTransactions = isLogging}),
+                    SettingsToggle(name: String("Log Transactions"), value: $logTransactions,
                                     id1: "logTransactions",
                             description: String("full log with all tx"))
 #endif
@@ -95,7 +94,7 @@ struct DebugSettingsView: View {
                         SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
                             walletCore.isObserving = isObserving}),
                                           id1: "observe",
-                                  description: localConsStr) { isObserving in
+                                  description: localConsStr) { _ in
                             let consoleManager = LCManager.shared
                             consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                             consoleManager.clear()

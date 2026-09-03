@@ -24,6 +24,8 @@ class WalletCore: QuickjsMessageHandler {
     public static let shared = try! WalletCore()          // will (and should) crash on failure
     private let symLog = SymLogC()
 
+    @AppStorage("logTransactions") var logTransactions: Bool = false
+
     private var queue: DispatchQueue
     private var semaphore: DispatchSemaphore
 
@@ -36,7 +38,6 @@ class WalletCore: QuickjsMessageHandler {
     var nativeDB: Bool
     var isObserving: Int
     var isLogging: Bool
-    var logTransactions: Bool
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletCore")
 
     private var expired: [String] = []      // save txID of expired items to not beep twice
@@ -108,7 +109,6 @@ class WalletCore: QuickjsMessageHandler {
         nativeDB = false
         isObserving = 0
         isLogging = false
-        logTransactions = false
 //        logger.trace("init Quickjs")
         requestsMade = 0
         queue = DispatchQueue(label: "net.taler.myQueue", attributes: .concurrent)
