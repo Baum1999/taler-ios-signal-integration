@@ -64,7 +64,11 @@ struct TransactionsListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        if transactions.isEmpty {
+        let isLegacy = scope.type == .exchangeLegacyKeys
+        if isLegacy {
+            UnconfirmedKeyChangeView(baseURL: scope.url ?? "unknown", balance: balance)
+
+        } else if transactions.isEmpty {
             TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
                 .refreshable {
                     controller.hapticNotification(.success)
