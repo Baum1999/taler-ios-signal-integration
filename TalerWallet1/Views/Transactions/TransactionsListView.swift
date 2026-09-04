@@ -66,8 +66,10 @@ struct TransactionsListView: View {
 #endif
         let isLegacy = scope.type == .exchangeLegacyKeys
         if isLegacy {
-            UnconfirmedKeyChangeView(baseURL: scope.url ?? "unknown", balance: balance)
-
+            UnconfirmedKeyChangeView(baseURL: scope.url ?? "unknown", balance: balance, isLegacy: true)
+        } else if let exchange = controller.exchange(for: scope),
+                  let unconfirmedKeyChange = exchange.unconfirmedKeyChange {
+            UnconfirmedKeyChangeView(baseURL: scope.url ?? "unknown", balance: balance, isLegacy: false)
         } else if transactions.isEmpty {
             TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
                 .refreshable {

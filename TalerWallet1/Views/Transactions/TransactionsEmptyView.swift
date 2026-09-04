@@ -36,6 +36,7 @@ struct TransactionsEmptyView: View {
 struct UnconfirmedKeyChangeView: View {
     var baseURL: String
     var balance: Balance
+    var isLegacy: Bool
 
     @Environment(\.dismiss) var dismiss     // pop back once
     @EnvironmentObject private var model: WalletModel
@@ -45,7 +46,7 @@ struct UnconfirmedKeyChangeView: View {
     @State private var exchange: Exchange? = nil
 
     func notValid(_ amountString: String) -> String {
-        String(localized: "Unfortunately this means, that your \(amountString) are not valid anymore, because they were obtained with the old public key.")
+        String(localized: "Unfortunately this means, that your \(amountString) are not valid anymore, because they were obtained with the old security identity.")
     }
 
     func keep(_ amountString: String) -> String {
@@ -56,38 +57,34 @@ struct UnconfirmedKeyChangeView: View {
         String(localized: "Delete the \(amountString)")
     }
 
-    func confirmExchangeKeyChange() {
+    func acceptAction() {
         if let exchange, let masterPub = exchange.masterPub {
             Task {
                 try? await model.confirmExchangeKeyChange(exchangeBaseUrl: baseURL,
                                                          currentMasterPub: masterPub)
                 dismiss()
             }
+        } else {
+            // TODO: Yikes!
         }
     }
 
-    func purgeExchangeLegacyKeys() {
+    func deleteAction() {
         if let exchange, let masterPub = exchange.masterPub {
             Task {
                 try? await model.purgeExchangeLegacyKeys(exchangeBaseUrl: baseURL,
                                                         currentMasterPub: masterPub)
                 dismiss()
             }
+        } else {
+            // TODO: Yikes!
         }
     }
 
     func keepAction() {
         withAnimation {
-
+            dismiss()
         }
-        confirmExchangeKeyChange()
-    }
-
-    func deleteAction() {
-        withAnimation {
-        }
-        confirmExchangeKeyChange()
-        purgeExchangeLegacyKeys()
     }
 
     @MainActor
@@ -96,33 +93,50 @@ struct UnconfirmedKeyChangeView: View {
     }
 
     var body: some View {
+        let scope = balance.scopeInfo
         let available = balance.available
-        let navTitle = String(localized: "Public key changed", comment: "ViewTitle of UnconfirmedKeyChangeView")
+        let formatted = available.formatted(scope, isNegative: false)
+        let navTitle = String(localized: "Payment service ID", comment: "ViewTitle of UnconfirmedKeyChangeView")
+        let warning1 = Text("Only trust the new identity if the payment service has confirmed this change.")
+        let warning2 = Text("Otherwise, wait and try again later...")
         List {
             Section {
-                Text("The exchange \(baseURL.trimURL) has got a new public key.")
+                Text("The security identity of \(baseURL.trimURL) has changed unexpectedly.")
 
-                if !available.isZero {
-                    let scope = balance.scopeInfo
-                    let formatted = available.formatted(scope, isNegative: false)
-                    let sorry = notValid(formatted.0)
-                    let a11y = notValid(formatted.1)
-                    Text(sorry)
-                        .accessibilityLabel(a11y)
+                if isLegacy {
+                    if !available.isZero {
+                        let sorry = notValid(formatted.0)
+                        let a11y = notValid(formatted.1)
+                        Text(sorry)
+                            .accessibilityLabel(a11y)
 
-                    Text("Maybe the exchange has just a configuration problem, and the old public key will be reinstated.")
-                        .talerFont(.body)
-                    Button(keep(formatted.0), action: keepAction)
+                        warning1
+                            .talerFont(.body)
+                        warning2
+                            .bold()
+                            .talerFont(.body)
+
+                        Button(keep(formatted.0), action: keepAction)
+                            .buttonStyle(TalerButtonStyle(type: .bordered))
+                            .padding(.horizontal)
+                            .accessibilityLabel(keep(formatted.1))
+
+                        Text("If you are sure that the old security identity will not be used anymore, you can delete the invalid money.")
+                            .talerFont(.body)
+                        Button(delete(formatted.0), action: deleteAction)
+                            .buttonStyle(TalerButtonStyle(type: .bordered))
+                            .padding(.horizontal)
+                            .accessibilityLabel(delete(formatted.1))
+                    }
+                } else {
+                    warning1
+                    warning2
+                        .bold()
+                    Text("If you are sure that the old security identity will not be used anymore, you can withdraw new money with the new security identity.")
+                    Button("Accept new security identity", action: acceptAction)
                         .buttonStyle(TalerButtonStyle(type: .bordered))
                         .padding(.horizontal)
-                        .accessibilityLabel(keep(formatted.1))
-
-                    Text("If you are sure that the old public key will not be used anymore, you can delete the invalid money.")
-                        .talerFont(.body)
-                    Button(delete(formatted.0), action: deleteAction)
-                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        .padding(.horizontal)
-                        .accessibilityLabel(delete(formatted.1))
+                    Text("Money you obtained with the old security identity will be invalid.")
                 }
             }
             .talerFont(.title2)
@@ -131,6 +145,9 @@ struct UnconfirmedKeyChangeView: View {
         .listStyle(myListStyle.style).anyView
         .background(FullBackground())
         .navigationTitle(navTitle)
+        .task {
+            await viewDidLoad()
+        }
     }
 }
 // MARK: -
