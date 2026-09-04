@@ -639,6 +639,22 @@ fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
         var progressToken: String?
     }
 }
+
+struct UnclaimPaymentResult: Decodable {
+    var talerPayUri: String
+}
+
+fileprivate struct UnclaimPayment: WalletBackendFormattedRequest {
+    typealias Response = UnclaimPaymentResult
+    var operation: String { "unclaimPayment" }
+    func args() -> Args { Args(transactionId: transactionId, progressToken: transactionId) }
+
+    var transactionId: String
+    struct Args: Encodable {
+        var transactionId: String
+        var progressToken: String?
+    }
+}
 // MARK: -
 extension WalletModel {
     /// load payment details. Networking involved
@@ -686,5 +702,15 @@ extension WalletModel {
         controller.progressToken = transactionId
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
+    }
+
+    nonisolated func unclaimPayment(_ transactionId: String, viewHandles: Bool = false)
+      async throws -> String {
+        let request = UnclaimPayment(transactionId: transactionId)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = transactionId
+        let response = try await sendRequest(request, viewHandles: viewHandles)
+        return response.talerPayUri
     }
 }
