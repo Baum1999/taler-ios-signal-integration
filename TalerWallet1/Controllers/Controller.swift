@@ -488,6 +488,15 @@ class Controller: ObservableObject {
         return nil
     }
     @MainActor
+    func exchange(for scope: ScopeInfo) -> Exchange? {
+        if let baseUrl = scope.url {
+            if let exchange = exchanges.first(where: {$0.exchangeBaseUrl == baseUrl}) {
+                return exchange
+            }
+        }
+        return nil
+    }
+    @MainActor
     func updateExchange(for baseUrl: String, state: ExchangeState) {
         Task {
             if let exchange = await exchange(for: baseUrl) {
@@ -537,7 +546,7 @@ class Controller: ObservableObject {
                 if let scope2 = exchange?.scopeInfo {
                     let exchangeName = scope2.url ?? "UNKNOWN"
                     logger.log("  ❗️got no info for \(scope.currency) -> will update \(exchangeName.trimURL)")
-                    await updateInfo2(scope2)
+                    await updateInfo2(scope)
                 } else {
                     logger.error("  ❗️got no info for \(scope.currency), and couldn't load the exchange info❗️")
                 }
