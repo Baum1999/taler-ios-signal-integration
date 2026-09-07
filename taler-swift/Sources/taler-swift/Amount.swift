@@ -184,12 +184,14 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The string representation of the value, formatted as "`integer``fraction`",
     /// no group separator, no decimalSeparator, #inputDigits digits from fraction, padded with trailing zeroes
     public func plainString(inputDigits: UInt) -> String {
-        let base = fractionalBase()
-        var frac = fraction
+        let normalized = (try? normalizedCopy()) ?? self
+        let integer = normalized.integer
+        let base = UInt64(fractionalBase())
+        var frac = UInt64(normalized.fraction)
         var fracStr = ""
-        var i = inputDigits
+        var i = min(inputDigits, Self.fractionalBaseDigits)
 
-        var nextchar: UInt32 {
+        var nextchar: UInt64 {
             let fracChar = frac / (base / 10)
             frac = (frac * 10) % base
             return fracChar
@@ -378,46 +380,24 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         self.fraction = remainder / 10
     }
 
-    /// Multiplies by ten, then adds digit
+    /// Multiplies by ten, then adds a digit at the input precision.
+    /// An unrepresentable edit leaves the entire amount unchanged.
     public func shiftLeft(add digit: UInt8, _ inputDigits: UInt) {
-        if inputDigits > 0 {
-            // how many digits to shift right (e.g. inputD=2 ==> shift:=6)
-            let digits = min(inputDigits, Self.fractionalBaseDigits)
-            let shift = Self.fractionalBaseDigits - digits
-            // mask to zero out fractions smaller than inputDigits
-            let shiftMask = fractionalBase(shift)
-
-            let carryMask = fractionalBase(Self.fractionalBaseDigits - 1)
-            // get biggest fractional digit
-            let carry = fraction / carryMask
-            var remainder = fraction % carryMask
-//            print("fraction: \(fraction) = \(carry) + \(remainder)")
-
-            let shiftedInt = integer * 10 + UInt64(carry)
-            if shiftedInt < Self.maxValue {
-                self.integer = shiftedInt
-//                print("remainder: \(remainder) / shiftMask \(shiftMask) = \(remainder / shiftMask)")
-                remainder = (remainder / shiftMask) * 10
-            } else { // will get too big
-                     // Just swap the last significant digit for the one the user typed last
-                if shiftMask >= 10 {
-                    remainder = (remainder / (shiftMask / 10)) * 10
-                } else {
-                    remainder = (remainder / 10) * 10
-                }
-            }
-            let sum = remainder + UInt32(digit)
-            self.fraction = sum * shiftMask
-   //        print("(remainder: \(remainder) + \(digit)) * base(shift) \(shiftMask) = fraction \(fraction)")
-        } else {
-            let shiftedInt = integer * 10 + UInt64(digit)
-            if shiftedInt < Self.maxValue {
-                self.integer = shiftedInt
-            } else {
-                self.integer = Self.maxValue
-            }
-            self.fraction = 0
-        }
+        guard digit < 10, let amount = try? normalizedCopy() else { return }
+        // how many digits to shift (e.g. inputD=2 ==> shift:=6)
+        let digits = min(inputDigits, Self.fractionalBaseDigits)
+        let base = UInt64(fractionalBase())
+        let mask = UInt64(fractionalBase(Self.fractionalBaseDigits - digits))
+        let baseDiv10 = base / 10
+        let carry = digits == 0 ? UInt64(digit) : UInt64(amount.fraction) / baseDiv10
+        let (product, overflow) = amount.integer.multipliedReportingOverflow(by: 10)
+        let (nextInteger, additionOverflow) = product.addingReportingOverflow(carry)
+        guard !overflow, !additionOverflow, nextInteger <= Self.maxValue else { return }
+        let nextFraction = digits == 0 ? 0
+                                       : ((UInt64(amount.fraction) % baseDiv10) / mask * 10 + UInt64(digit)) * mask
+        guard nextFraction < base else { return }
+        integer = nextInteger
+        fraction = UInt32(nextFraction)
     }
 
     /// Sets all fractional digits after inputDigits to 0

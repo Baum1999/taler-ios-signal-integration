@@ -146,3 +146,51 @@ class AmountTests: XCTestCase {
         XCTAssertThrowsError(try Amount(fromString: "EUR:0.5") < Amount(fromString: "USD:0.50000001"))
     }
 }
+
+// REL-001: the currency field formats after every digit, including rejected edits.
+extension AmountTests {
+    func testDigitEntryRemainsRepresentableAtEveryPrecision() throws {
+        for digits in UInt(0)...8 {
+            let amount = Amount.zero(currency: "EUR")
+            for _ in 0..<40 {
+                amount.shiftLeft(add: 9, digits)
+                XCTAssertLessThanOrEqual(amount.integer, 4_503_599_627_370_496)
+                XCTAssertLessThan(amount.fraction, 100_000_000)
+                _ = amount.plainString(inputDigits: digits)
+                XCTAssertEqual(try Amount(fromString: amount.description), amount)
+            }
+            let before = amount.copy()
+            amount.shiftLeft(add: 9, digits)
+            XCTAssertEqual(amount, before)
+            amount.shiftRight()
+            XCTAssertTrue(try amount < before)
+            amount.shiftLeft(add: 1, digits)
+            _ = amount.plainString(inputDigits: digits)
+        }
+    }
+
+    func testEighteenthDigitIsRejectedAtomically() throws {
+        let amount = Amount.zero(currency: "EUR")
+        for _ in 0..<17 { amount.shiftLeft(add: 9, 2) }
+        XCTAssertEqual(amount.description, "EUR:999999999999999.99")
+        amount.shiftLeft(add: 9, 2)
+        XCTAssertEqual(amount.plainString(inputDigits: 2), "99999999999999999")
+    }
+
+    func testMaximumAmountEditPreservesValue() throws {
+        for digits in UInt(0)...8 {
+            let amount = try Amount(fromString: "EUR:4503599627370496.99999999")
+            let before = amount.copy()
+            amount.shiftLeft(add: 0, digits)
+            XCTAssertEqual(amount, before)
+        }
+        let amount = try Amount(fromString: "EUR:450359962737049")
+        amount.shiftLeft(add: 6, 0)
+        XCTAssertEqual(amount.integer, 4_503_599_627_370_496)
+    }
+
+    func testPlainStringNormalizesWideFractionWithoutOverflow() {
+        let amount = Amount(currency: "EUR", integer: 0, fraction: 909_000_000)
+        XCTAssertEqual(amount.plainString(inputDigits: 2), "909")
+    }
+}
