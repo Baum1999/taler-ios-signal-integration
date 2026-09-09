@@ -392,7 +392,7 @@ struct TransactionCommon: Decodable, Sendable {
     var isAbSuspended   : Bool { txState.major == .suspendedAborting }
     var isFailed        : Bool { txState.major == .failed }
     var isExpired       : Bool { txState.major == .expired }
-
+    var isRepurchase    : Bool { txState.minor == .repurchase }
     var isAbortable     : Bool { txActions.contains(.abort) }
     var isFailable      : Bool { txActions.contains(.fail) }
     var isDeleteable    : Bool { txActions.contains(.delete) }

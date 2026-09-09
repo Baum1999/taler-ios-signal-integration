@@ -259,9 +259,11 @@ struct TransactionSummaryList: View {
 
     var navTitleStr: String {
         let isPaying = talerTX.isPayment && talerTX.isDialog
+        let isRepurchase = talerTX.common.isRepurchase
         return talerTX.isDone ? talerTX.localizedTypePast
             : isPaying ? (effective != nil ? String(localized: "Confirm Payment", comment:"pay merchant navTitle")
                                            : String(localized: "Payment not possible", comment:"pay merchant navTitle"))
+            : isRepurchase ? String(localized: "Already paid", comment:"repurchase merchant navTitle")
             : talerTX.localizedType
     }
 
