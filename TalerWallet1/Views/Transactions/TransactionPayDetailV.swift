@@ -50,7 +50,7 @@ struct TransactionPayDetailV: View {
                 Text(info.orderId)
                     .talerFont(.body)
 
-                if let fulfillmentUrl = info.fulfillmentUrl {
+                if let fulfillmentUrl = info.fulfillmentUrl, common.isDone {
                     // per api-common.rst's WebURL definition, fulfillment_url must be http(s) -
                     // reject any other scheme (tel:, sms:, a third-party app's custom scheme, ...)
                     if let destination = URL(string: fulfillmentUrl),
