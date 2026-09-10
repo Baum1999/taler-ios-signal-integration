@@ -84,6 +84,9 @@ struct PaymentScan: View, Sendable {
 //                controller.updateAmount(raw, forSaved: url)       // TODO: update scanned URL
             }
         }
+        if let txId {
+            try? await model.waitTransactionState(txId, token: txId)
+        }
     }
 
     var body: some View {
