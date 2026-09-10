@@ -318,7 +318,10 @@ extension WalletCore {
                         case .aborting, .aborted:
                             logger.log("handleStateTransition: Aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
-                        case .expired, .deleted:
+                        case .deleted:
+                            logger.warning("handleStateTransition: Deleted: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            postNotification(.TransactionDeleted, userInfo: [TRANSACTIONTRANSITION: decoded])
+                        case .expired:
                             logger.warning("handleStateTransition: Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             if let index = expired.firstIndex(of: components[2]) {
                                 expired.remove(at: index)                       // don't beep twice

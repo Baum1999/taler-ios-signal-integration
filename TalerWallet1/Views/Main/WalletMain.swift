@@ -347,6 +347,10 @@ struct WalletMain: View {
 //            }
             shouldReloadBalances += 1
         }
+        .onNotification(.TransactionDeleted) { notification in
+            logger.info(".onNotification(.TransactionDeleted) ==> reload balances")
+            shouldReloadTransactions += 1
+        }
         .onNotification(.TransactionExpired) { notification in
             logger.info(".onNotification(.TransactionExpired) ==> reload balances")
             shouldReloadTransactions += 1
