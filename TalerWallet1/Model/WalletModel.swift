@@ -250,6 +250,22 @@ extension WalletModel {
 }
 // MARK: -
 /// A request to cancel a wallet transaction by token.
+fileprivate struct WaitTransactionState: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    var operation: String { "waitTransactionState" }
+    func args() -> Args { Args(transactionId: txId, txState: txState, progressToken: token) }
+    var txId: String
+    var txState: TransactionState
+    var token: String
+
+    struct Args: Encodable {
+        var transactionId: String
+        var txState: TransactionState
+        var progressToken: String
+    }
+}
+// MARK: -
+/// A request to cancel a wallet transaction by token.
 fileprivate struct CancelProgressToken: WalletBackendFormattedRequest {
     struct Response: Decodable {}
     var operation: String { "cancelProgressToken" }
@@ -308,6 +324,15 @@ fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
 }
 
 extension WalletModel {
+    nonisolated func waitTransactionState(_ txId: String, token: String)
+      async throws {
+        let txState = TransactionState(major: .dialog, minor: nil, working: nil)
+        let request = WaitTransactionState(txId: txId, txState: txState, token: token)
+          let controller = Controller.shared
+          controller.progressOperation = request.operation
+          controller.progressToken = txId
+        _ = try await sendRequest(request)
+    }
     nonisolated func cancelProgressToken(_ op: String, token: String)
       async throws {
         let request = CancelProgressToken(op: op, token: token)
