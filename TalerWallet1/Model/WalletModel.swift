@@ -326,11 +326,11 @@ fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
 extension WalletModel {
     nonisolated func waitTransactionState(_ txId: String, token: String)
       async throws {
-        let txState = TransactionState(major: .dialog, minor: nil, working: nil)
+        let txState = TransactionState(major: .dialog, minor: .any, working: nil)
         let request = WaitTransactionState(txId: txId, txState: txState, token: token)
-          let controller = Controller.shared
-          controller.progressOperation = request.operation
-          controller.progressToken = txId
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = txId
         _ = try await sendRequest(request)
     }
     nonisolated func cancelProgressToken(_ op: String, token: String)

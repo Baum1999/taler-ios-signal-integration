@@ -50,6 +50,7 @@ enum TransactionMinorState: String, Codable {
     case submitPayment = "submit-payment"
     case track                                                  // finalizing deposit - late KYC / failure
     case withdraw
+    case any = "*"
     // Placeholder until D37 is fully implemented
     case unknown
 
