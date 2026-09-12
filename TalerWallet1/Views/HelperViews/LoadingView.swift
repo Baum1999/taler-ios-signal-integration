@@ -8,6 +8,90 @@
 import SwiftUI
 import SymLog
 
+struct StalledView: View {
+
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
+
+    @State private var isFinished: Bool? = false
+
+    @ViewBuilder
+    func retryButton(disabled: Bool) -> some View {
+        Button("Retry now") {
+            if let token = controller.progressToken {
+                if let operation = controller.progressOperation {
+                    controller.lastProgressError = nil
+                    Task {
+                        try await model.retryProgressTokenNow(operation, token: token)
+                    }
+                }
+            }
+        }
+        .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
+        .padding(.horizontal)
+    }
+
+    fileprivate func toJSON(_ lastError: RequestProgressError?) -> String? {
+        if let lastError {
+            do {
+                let jsonData = try JSONEncoder().encode(lastError)
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    return jsonString
+                }
+            } catch {        // JSON encoding of error failed / should never happen
+                return "Couldn't encode error"
+            }
+        }
+        return nil
+    }
+
+    var body: some View {
+        Group {
+            let lastError = controller.lastProgressError
+            let fallback = String(localized: "It seems that there is a problem with the network.")
+            Text("Couldn't establish a connection")
+                .talerFont(.title2)
+                .padding(.vertical)
+            let hint = lastError?.error.hint
+            ?? lastError?.error.errorResponse?.hint
+            Text(hint ?? fallback)
+                .talerFont(.body)
+            if let jsonString = toJSON(lastError) {
+                CopyButton(jsonString, title: "Copy Details")
+                    .padding(.vertical)
+            }
+            Spacer()
+            if let lastPhase = controller.lastProgressPhase {
+                if lastPhase.phase == .stalled {
+                    if let lastError, let delay = lastError.nextRetryDelay {
+                        if isFinished == false {
+                            TimeView("Next retry in:", seconds: Int(delay.toSeconds()), isFinished: $isFinished)
+                                .talerFont(.title3)
+                                .padding(.vertical)
+                        } else if isFinished == true {
+                            Text("Retrying…")
+                                .talerFont(.title3)
+                        } else {
+                            Text("Waiting for response…")
+                                .talerFont(.title3)
+                        }
+                    }
+                    //                        Spacer()
+                    retryButton(disabled: isFinished ?? false)
+                }
+            }
+        }
+        .listRowSeparator(.hidden)
+        .onChange(of: controller.errorConnection) { isError in
+            if isError {
+//                print("❗️❗️❗️ error arrived, idle waiting starts")
+                isFinished = false
+                controller.errorConnection = false
+            }
+        }
+    }
+}
+
 struct LoadingView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -26,13 +110,10 @@ struct LoadingView: View {
 #endif
 
     @State private var rotationEnabled = true
-    @State private var showAlert: Bool = false
     @State private var disabled: Bool = false
-    @State private var isFinished: Bool? = false
 
     private var dismissButton: some View {
         Button("Cancel", role: .cancel) {
-            showAlert = false
             if let token = controller.progressToken {
                 controller.progressToken = nil
                 if let operation = controller.progressOperation {
@@ -56,75 +137,11 @@ struct LoadingView: View {
             .padding(.horizontal)
     }
 
-    @ViewBuilder
-    func retryButton(disabled: Bool) -> some View {
-        Button("Retry now") {
-            withAnimation {
-                showAlert = false
-            }
-            if let token = controller.progressToken {
-                if let operation = controller.progressOperation {
-                    controller.lastProgressError = nil
-                    Task {
-                        try await model.retryProgressTokenNow(operation, token: token)
-                    }
-                }
-            }
-        }
-            .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
-            .padding(.horizontal)
-    }
-
-    fileprivate func toJSON(_ lastError: RequestProgressError?) -> String? {
-        if let lastError {
-            do {
-                let jsonData = try JSONEncoder().encode(lastError)
-                if let jsonString = String(data: jsonData, encoding: .utf8) {
-                    return jsonString
-                }
-            } catch {        // JSON encoding of error failed / should never happen
-                return "Couldn't encode error"
-            }
-        }
-        return nil
-    }
 
     var body: some View {
         let view = VStack(alignment: .center) {
-            if showAlert {
-                let lastError = controller.lastProgressError
-                let fallback = String(localized: "It seems that there is a problem with the network.")
-                Text("Couldn't establish a connection")
-                    .talerFont(.title2)
-                    .padding(.vertical)
-                let hint = lastError?.error.hint
-                        ?? lastError?.error.errorResponse?.hint
-                Text(hint ?? fallback)
-                    .talerFont(.body)
-                if let jsonString = toJSON(lastError) {
-                    CopyButton(jsonString, title: "Copy Details")
-                        .padding(.vertical)
-                }
-                Spacer()
-                if let lastPhase = controller.lastProgressPhase {
-                    if lastPhase.phase == .stalled {
-                        if let lastError, let delay = lastError.nextRetryDelay {
-                            if isFinished == false {
-                                TimeView("Next retry in:", seconds: Int(delay.toSeconds()), isFinished: $isFinished)
-                                    .talerFont(.title3)
-                                    .padding(.vertical)
-                            } else if isFinished == true {
-                                Text("Retrying…")
-                                    .talerFont(.title3)
-                            } else {
-                                Text("Waiting for response…")
-                                    .talerFont(.title3)
-                            }
-                        }
-//                        Spacer()
-                        retryButton(disabled: isFinished ?? false)
-                    }
-                }
+            if controller.stalledConnection {
+                StalledView()
             } else {
                 Spacer()
                 RotatingTaler(size: 100,
@@ -156,16 +173,6 @@ struct LoadingView: View {
         .talerFont(.title)
         .navigationTitle(navTitle)
         .background(FullBackground())
-        .onChange(of: controller.stalledConnection) { isStalled in
-            showAlert = isStalled
-        }
-        .onChange(of: controller.errorConnection) { isError in
-            if isError {
-//                print("❗️❗️❗️ error arrived, idle waiting starts")
-                isFinished = false
-                controller.errorConnection = false
-            }
-        }
 
         if #available(iOS 17.0, *) {
             view.toolbarTitleDisplayMode(.inlineLarge)

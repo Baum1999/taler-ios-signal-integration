@@ -43,7 +43,7 @@ public let ICONLEADING = CGFloat(-8)
 public let HSPACING = CGFloat(10)                  // space between items in HStack
 
 public let LAUNCHDURATION: Double = 1.60
-public let BANNERDURATION: Double = 0.666
+public let BANNERDURATION: Double = 0.5
 
 public let ONEDAY: UInt = 1         // 1..3
 public let SEVENDAYS: UInt = 7      // 3..9
