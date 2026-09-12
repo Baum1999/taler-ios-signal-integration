@@ -18,7 +18,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
 //        @AppStorage("pushNotifications") var pushNotifications: Bool = false
 
-        symLog.log("App has launched successfully!")
+//        symLog.log("App has launched successfully!")
         return true
     }
 

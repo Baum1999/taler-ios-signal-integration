@@ -18,7 +18,7 @@ struct TalerWallet1App: App {
 #if TALER_NIGHTLY
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 #endif
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(-1, Bundle.main.bundleName)
     @Environment(\.scenePhase) private var phase
     @AppStorage("pasteAutomatically") var pasteAutomatically: Bool = false
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0

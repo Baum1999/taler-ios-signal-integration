@@ -124,12 +124,14 @@ struct MigrationView: View {
                         .buttonStyle(TalerButtonStyle(type: .bordered, disabled: isMigrating))
                         .disabled(isMigrating)
                         .padding()
+#if TALER_NIGHTLY || GNU_TALER
                     if developerMode {
-                        Button("Fake update", action: fakeAction)
+                        Button("Simulate update", action: fakeAction)
                             .buttonStyle(TalerButtonStyle(type: .bordered, disabled: isMigrating))
                             .disabled(isMigrating)
                             .padding()
                     }
+#endif
                     Button("Update later", action: finishAction)
                         .buttonStyle(TalerButtonStyle(type: .bordered))
                         .padding()

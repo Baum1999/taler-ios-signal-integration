@@ -34,7 +34,7 @@ struct TransactionSummaryList: View {
     let hasDone: Bool                       // false: just old tx, true: the conclusion of an transaction
     let showDone: TalerButtonStyleType?
     let url: URL?                           // the scanned talerURL from PaymentView
-    let withActions: Bool
+    let withActions: Bool                   // true if called from pending or history, or refund
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel

@@ -414,7 +414,6 @@ class Controller: ObservableObject {
     @discardableResult
     func loadChoicesForPayment(_ stack: CallStack,
                                   txId: String) async -> Bool {
-        self.logger.log("getChoicesForPayment: \(txId)")
         let model = WalletModel.shared
         if isLoadingChoices != txId {
             isLoadingChoices = txId
