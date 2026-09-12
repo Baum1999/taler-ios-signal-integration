@@ -54,16 +54,16 @@ struct DiscountsPassesItem: View {
     var body: some View {
         let isValid = token.validityStart < .now()
         let isExpired = token.validityEnd < .now()
-        let primary = WalletColors().primary(colorSchemeContrast)
-        let secondary = WalletColors().secondary(colorScheme, colorSchemeContrast)
+        let primary2 = WalletColors().primary2(colorScheme, colorSchemeContrast)
+        let secondary = WalletColors().secondary2(colorScheme, colorSchemeContrast)
         let primaryAccent = WalletColors().primaryAccent
 
         let name = Text(token.name)
             .talerFont(.title)
-            .foregroundColor(primary)
+            .foregroundColor(primary2)
         let desc = Text(token.description)
             .talerFont(.body)
-            .foregroundColor(primary)
+            .foregroundColor(primary2)
 
         Section {
             let swipe = Button {
@@ -235,7 +235,7 @@ struct DiscountPassesSection: View {
         let discText = String(localized: "Discounts")
         let passText = String(localized: "Passes")
         let activeColor = WalletColors().primaryAccent
-        let inactiveColor = WalletColors().secondary(colorScheme, colorSchemeContrast)
+        let inactiveColor = WalletColors().secondary2(colorScheme, colorSchemeContrast)
         let discCount = controller.discounts.count
         let passCount = controller.subscriptions.count
         if discCount > 0 || passCount > 0 {

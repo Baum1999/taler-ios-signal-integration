@@ -109,7 +109,7 @@ struct ProdSectionView: View {
                     .talerFont(.badge)
 //                    .foregroundColor(.primary)
                 /// YIKES! when not specifying this color, the Text in the BarGraphHeader vanishes!!!
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
 //                    .listRowInsets(EdgeInsets())  // << here !!
             }
         }

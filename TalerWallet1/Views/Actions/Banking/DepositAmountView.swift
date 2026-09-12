@@ -129,7 +129,7 @@ struct DepositAmountView: View {
                               : feeLabel(feeStr))
                 .talerFont(.body)
                 .foregroundColor(insufficient ? WalletColors().attention
-                                              : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
+                                              : (feeAmount?.isZero ?? true) ? WalletColors().secondary2(colorScheme, colorSchemeContrast)
                                                                             : WalletColors().negative)
                 .padding(4)
             let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount",

@@ -238,7 +238,7 @@ struct ThreeAmountsSection: View {
             if let header {
                 Text(header)
                     .talerFont(.title3)
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
             }
         }
         .task { await viewDidLoad() }

@@ -184,7 +184,7 @@ struct TransactionSummaryList: View {
         Text(dateString)
             .talerFont(.body)
             .accessibilityLabel(a11yDate)
-            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
             .id(topID)
         let state = localizedState(common.txState)
         let statusT = Text(state)

@@ -204,11 +204,11 @@ struct ExpiresView: View  {
             Text("Expires: \(dateString)")
                 .talerFont(.body)
                 .accessibilityLabel(a11yLabel)
-                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
         } else { // should never happen
             Text("Unknown Expiration")
                 .talerFont(.body)
-                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
         }
     }
 }

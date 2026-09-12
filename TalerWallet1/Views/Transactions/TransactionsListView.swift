@@ -176,7 +176,7 @@ struct TransactionsArraySection: View {
     func headerView(_ header: String) -> some View {
         Text(header)
             .talerFont(.title3)
-            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
     }
 
     var body: some View {

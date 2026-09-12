@@ -45,7 +45,7 @@ struct BarGraphHeader: View {
                 Text(currencyInfo.name)
                     .strikethrough(isLegacy, color: WalletColors().attention)
                     .talerFont(.title2)
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
             }
             BarGraph(transactions: $completedTransactions,
                           maxBars: MAXBARS, barHeight: barHeight)

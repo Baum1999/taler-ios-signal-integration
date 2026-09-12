@@ -84,12 +84,12 @@ public struct WalletColors {
            : pressed ? gray4 : gray5
     }
 
-    func primary(_ contrast: ColorSchemeContrast = .standard) -> Color {
-        return contrast == .increased ? .primary
-                                      : Color("Primary")
+    func primary2(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast = .standard) -> Color {
+        return contrast == .increased ? (scheme == .dark ? Color.white : Color.black)
+                                      : .primary
     }
 
-    func secondary(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast = .standard) -> Color {
+    func secondary2(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast = .standard) -> Color {
         return contrast == .increased ? .primary            // WCAG AAA for any scheme
                        : minimalistic ? .secondary          // not enough contrast
                     : scheme == .dark ? .secondary          // WCAG AA for dark scheme

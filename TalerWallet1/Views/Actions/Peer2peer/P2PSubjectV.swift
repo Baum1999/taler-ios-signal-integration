@@ -114,7 +114,7 @@ struct P2PSubjectV: View {
                     Text(label.0)
                         .accessibilityLabel(label.1)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                        .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
                         .talerFont(.body)
                 }
             }
