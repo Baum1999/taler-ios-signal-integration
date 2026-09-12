@@ -236,11 +236,13 @@ struct MainView: View {
             }
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
 
-        VStack {
+        VStack(spacing: 0) {
             if controller.networkUnavailable {
                 ErrorBanner(.networkUnavailable)        // red bar on top
             } else if controller.slowConnection {
-                ErrorBanner(.warning5sec)               // yellow bar on top
+                if !showScanner && !showUrlSheet {
+                    ErrorBanner(.warning5sec)               // yellow bar on top
+                }
             }
             mainGroup
                 .environmentObject(tabBarModel)
@@ -349,7 +351,7 @@ struct MainView: View {
                         }
                     case .stalled:
                         withAnimation(.easeIn(duration: BANNERDURATION)) {
-                            controller.slowConnection = false
+                            controller.slowConnection = true
                             controller.stalledConnection = true
                         }
                     default:

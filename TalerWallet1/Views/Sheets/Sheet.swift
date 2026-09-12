@@ -67,7 +67,7 @@ struct Sheet: View {
     var body: some View {
         let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID)
                                               : EMPTYSTRING      // show nothing if 0
-        VStack {
+        VStack(spacing: 0) {
             if controller.networkUnavailable {
                 ErrorBanner(.networkUnavailable)    // red bar on top
             } else if controller.slowConnection {

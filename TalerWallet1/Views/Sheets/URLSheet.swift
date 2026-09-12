@@ -53,12 +53,6 @@ struct URLSheet: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog(urlToOpen?.absoluteString)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        VStack {
-            if controller.networkUnavailable {
-                ErrorBanner(.networkUnavailable)        // red bar on top
-            } else if controller.slowConnection {
-                ErrorBanner(.warning5sec) // yellow bar on top
-            }
             if let urlCommand, let passedURL {
                 switch urlCommand {
                     case .addExchange:      // TODO: just check the ToS
@@ -101,7 +95,6 @@ struct URLSheet: View {
                         passUrlOnce()
                     }
             }
-        }
     }
 }
 // MARK: -
