@@ -66,60 +66,67 @@ struct DiscountsPassesItem: View {
             .foregroundColor(primary2)
 
         Section {
-            let swipe = Button {
-                    symLog.log("delete \(token.id)")
-                    deleteAction(token.id)
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }.tint(WalletColors().negative)
-            let row = HStack(alignment: .top) {
-                name
-                Spacer()
-                if let available = token.tokensAvailable {
-                    // Discount
-                    Text("x\(available)")
-                        .foregroundColor(primaryAccent)
-                } else {
-                    // Pass
-                    if isValid {
-                        Text("active")
+            VStack(alignment: .leading, spacing: 2) {
+                let row = HStack(alignment: .top) {
+                    name
+                    Spacer()
+                    if let available = token.tokensAvailable {
+                        // Discount
+                        Text("x\(available)")
                             .foregroundColor(primaryAccent)
+                    } else {
+                        // Pass
+                        if isValid {
+                            Text("active")
+                                .foregroundColor(primaryAccent)
+                        }
                     }
                 }
-            }
-            if isValid {
-                row
-            } else {
-                row.swipeActions(edge: .trailing) { swipe }
-            }
-
-            let merchant = token.merchantInfo?.name ?? "Unknown"
-            if isExpired {
-                Text(isPass ? "Provided by: \(merchant)"
-                  : isValid ? "Was redeemable at: \(merchant)"
-                            : "Redeemed at: \(merchant)")
-                    .talerFont(.footnote)
-                    .foregroundColor(secondary)
-
-            } else {
-                Text(isPass ? "Provided by: \(merchant)"
-                            : "Redeemable at: \(merchant)")
-                    .talerFont(.footnote)
-                    .foregroundColor(secondary)
-            }
-            let dateStrings = validDate(isValid, isExpired: isExpired)
-            VStack {
-                Text(dateStrings.0)
-                    .accessibilityLabel(dateStrings.1)
+                    .padding(.horizontal)
+                    .padding(.top, 6)
+                if isValid {
+                    row
+                } else {
+                    let swipe = Button {
+                        symLog.log("delete \(token.id)")
+                        deleteAction(token.id)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }.tint(WalletColors().negative)
+                    row.swipeActions(edge: .trailing) { swipe }
+                }
+                Divider()
+                desc
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
+                Divider()
+                let merchant = token.merchantInfo?.name ?? "Unknown"
+                Text(isPass    ? "Provided by: \(merchant)"
+                  : !isExpired ? "Redeemable at: \(merchant)"
+                     : isValid ? "Was redeemable at: \(merchant)"
+                               : "Redeemed at: \(merchant)")
                     .talerFont(.body)
-            }.frame(maxWidth: .infinity)
-                .background(primaryAccent.opacity(isValid ? 0.1 : 0))
+                    .foregroundColor(secondary)
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
+            }
+
+            ContainerRelativeShape()
+                .fill(isValid ? primaryAccent.opacity(0.1) : .clear)
+                .overlay {
+                    let dateStrings = validDate(isValid, isExpired: isExpired)
+                    Text(dateStrings.0)
+                        .accessibilityLabel(dateStrings.1)
+                        .talerFont(.body)
+                }
                 .onTapGesture {
                     if !isExpired {
                         dateToggled.toggle()
                     }
                 }
         }
+        .listRowSeparator(.hidden)
+        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
 // MARK: -
