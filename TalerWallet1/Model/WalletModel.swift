@@ -249,9 +249,14 @@ extension WalletModel {
     }
 }
 // MARK: -
-/// A request to cancel a wallet transaction by token.
+struct WaitTransactionResult: Decodable, Sendable {
+    var matched: String?
+    var txState: TransactionState?
+}
+
+/// A request to wait for a background wallet transaction.
 fileprivate struct WaitTransactionState: WalletBackendFormattedRequest {
-    struct Response: Decodable {}
+    typealias Response = WaitTransactionResult
     var operation: String { "waitTransactionState" }
     func args() -> Args { Args(transactionId: txId, txState: txState, progressToken: token) }
     var txId: String
@@ -325,13 +330,14 @@ fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
 
 extension WalletModel {
     nonisolated func waitTransactionState(_ txId: String, token: String)
-      async throws {
+      async throws -> WaitTransactionResult {
         let txState = TransactionState(major: .dialog, minor: .any, working: nil)
         let request = WaitTransactionState(txId: txId, txState: txState, token: token)
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = txId
-        _ = try await sendRequest(request)
+        let result = try await sendRequest(request)
+        return result
     }
     nonisolated func cancelProgressToken(_ op: String, token: String)
       async throws {
