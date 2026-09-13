@@ -45,15 +45,51 @@ struct ErrorBanner: View {
     }
 
     var body: some View {
-        Text(errorText)
+        let text = Text(errorText)
             .foregroundStyle(.white)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 15)
+            .talerFont(.title2)
+        Group {
+            if #available(iOS 26.0, *) {
+                ContainerRelativeShape()
                     .fill(errorColor)
+                    .frame(height: 80)
+                    .overlay {
+                        ZStack {
+                            VStack(spacing: 0) {
+                                Color.clear
+                                Rectangle()
+                                    .fill(errorColor)
+                            }
+                            text
+                        }
+                    }
+            } else {
+                text
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(height: 80)
+                    .background {
+                        let radius = 12.0
+                        if #available(iOS 16.4, *) {
+                            let radii = RectangleCornerRadii(topLeading: radius,
+                                                          bottomLeading: 0,
+                                                         bottomTrailing: 0,
+                                                            topTrailing: radius)
+                            UnevenRoundedRectangle(cornerRadii: radii, style: .continuous)
+                                .fill(errorColor)
+                        } else {
+                            RoundedRectangle(cornerRadius: radius)
+                                .fill(errorColor)
+                                .overlay {
+                                    VStack(spacing: 0) {
+                                        Color.clear
+                                        Rectangle()
+                                            .fill(errorColor)
+                                    }
+                                }
+                        }
+                    }
             }
-            .padding(.horizontal)
+        }
             .transition(.asymmetric(
                 insertion: .move(edge: .top),
                 removal: .move(edge: .top)
