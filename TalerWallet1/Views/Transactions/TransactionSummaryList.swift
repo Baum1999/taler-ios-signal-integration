@@ -294,20 +294,24 @@ struct TransactionSummaryList: View {
                         }
                     }
                 }
-                TransactionTypeDetail(stack: stack.push(),
-                                transaction: $talerTX,
-                                     payNow: $payNow,
-                             selectedChoice: $selectedChoice,
-                                      scope: $scope,
-                                  effective: $effective,    // return amount for "Pay <amount> now"
-                                    hasDone: hasDone)
+                if controller.stalledConnection {
+                    StalledView()
+                } else {
+                    TransactionTypeDetail(stack: stack.push(),
+                                    transaction: $talerTX,
+                                         payNow: $payNow,
+                                 selectedChoice: $selectedChoice,
+                                          scope: $scope,
+                                      effective: $effective,    // return amount for "Pay <amount> now"
+                                        hasDone: hasDone)
 
-                // TODO: Retry Countdown, Retry Now button
-//                if talerTX.isRetryable, let retryAction {
-//                    TransactionButton(transactionId: common.transactionId, command: .retry,
-//                                      warning: nil, action: abortAction)
-//                } // Retry button
-                if withActions { abortFailDelete(common) }
+                    // TODO: Retry Countdown, Retry Now button
+//                    if talerTX.isRetryable, let retryAction {
+//                        TransactionButton(transactionId: common.transactionId, command: .retry,
+//                                          warning: nil, action: abortAction)
+//                    } // Retry button
+                    if withActions { abortFailDelete(common) }
+                }
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
             .background(FullBackground())
