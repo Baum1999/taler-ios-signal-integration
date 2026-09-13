@@ -115,7 +115,7 @@ struct MigrationView: View {
                             .talerFont(.body)
                     }
                 } else {
-                    Text("The \(controller.localizedAppName) database needs to be updated.")
+                    Text("Good news: the \(controller.localizedAppName) database can be updated and will then be faster.")
                         .talerFont(.title)
                     Text("This might take from a few seconds to a minute or two, depending on how many transactions you made.")
                         .talerFont(.body)
