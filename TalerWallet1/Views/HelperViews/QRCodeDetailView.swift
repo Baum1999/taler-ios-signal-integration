@@ -11,7 +11,6 @@ import AVFoundation
 
 struct QRCodeDetailView: View {
     let talerURI: String
-    let talerCopyShare: String
     let incoming: Bool
     let amount: Amount
     let scope: ScopeInfo?
@@ -59,6 +58,13 @@ struct QRCodeDetailView: View {
                      : String(localized: "(payee) 1",
                            defaultValue: "Scan this to receive \(amountS)",
                                 comment: "e.g. '$ 7.41'")
+    }
+    private var talerCopyShare: String {
+        if talerURI.hasPrefix("taler://") {
+            let httpString = String("https://wallet.taler.net/link#\(talerURI.dropFirst(8))")
+            return talerURI + LINEFEED + httpString
+        }
+        return talerURI
     }
 
     var body: some View {
@@ -116,7 +122,7 @@ struct QRCodeDetailView: View {
 //    var body: some View {
 //        let amount = Amount(currency: LONGCURRENCY, cent: 123)
 //        List {
-//            QRCodeDetailView(talerURI: previewURI, talerCopyShare: previewURI, incoming: false, amount: amount)
+//            QRCodeDetailView(talerURI: previewURI, incoming: false, amount: amount)
 //        }
 //    }
 //}

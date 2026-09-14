@@ -474,7 +474,6 @@ struct TransactionSummaryList: View {
                 if let talerURI = details[TALERURI] {
                     if talerURI.count > 10 {
                         QRCodeDetailView(talerURI: talerURI,
-                                   talerCopyShare: talerURI,
                                          incoming: transaction.isP2pIncoming,
                                            amount: transaction.common.amountRaw,
                                             scope: transaction.common.scopes.first)
