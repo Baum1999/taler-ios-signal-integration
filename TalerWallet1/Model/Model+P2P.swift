@@ -195,11 +195,12 @@ struct PreparePeerPushCreditResponse: Codable {
 fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPushCreditResponse
     var operation: String { "preparePeerPushCredit" }
-    func args() -> Args { Args(talerUri: talerUri) }
+    func args() -> Args { Args(talerUri: talerUri, progressToken: talerUri) }
 
     var talerUri: String
     struct Args: Encodable {
         var talerUri: String
+        var progressToken: String?
     }
 }
 extension WalletModel {
