@@ -294,6 +294,11 @@ struct ManualWithdrawContent: View {
                 .task(id: amountToTransfer.currencyStr) {
                     await getWithdrawalDetailsForAmount(amountToTransfer, true)
                 }
+                .onChange(of: controller.exchanges) { _ in
+                    Task {
+                        await reloadExchange(detailsForAmount.exchangeBaseUrl)
+                    }
+                }
         } else if let loadError {
             // "OK" clears the error, which brings back the LoadingView and thus retries
             ErrorView(stack.push(), error: loadError, devMode: developerMode) {
