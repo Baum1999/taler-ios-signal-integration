@@ -9,6 +9,7 @@ import SwiftUI
 import SymLog
 import os.log
 
+#if TALER_NIGHTLY
 enum SheetType: Equatable, Identifiable, Hashable {
     case action
     case scanner
@@ -38,7 +39,8 @@ enum SheetType: Equatable, Identifiable, Hashable {
         }
     }
 }
-
+#endif
+// MARK: -
 struct Sheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

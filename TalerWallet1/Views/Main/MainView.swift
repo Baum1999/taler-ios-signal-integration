@@ -33,10 +33,13 @@ struct MainView: View {
     @StateObject private var tabBarModel = TabBarModel()
     @State private var selectedBalance: Balance? = nil      // for sheets, gets set in TransactionsListView
     @State private var urlToOpen: URL? = nil
+#if TALER_NIGHTLY
     @State private var sheetType: SheetType?
+#else
     @State private var showUrlSheet = false
     @State private var showActionSheet = false              // Action button tapped
     @State private var showScanner = false
+#endif
 //    @State private var showCameraAlert: Bool = false
     @State private var scannedCode: Bool = false
     @State private var innerHeight: CGFloat = .zero
@@ -52,8 +55,12 @@ struct MainView: View {
 
     private func dismissSheet() {
         logger.info("dismissSheet")
+#if TALER_NIGHTLY
+        sheetType = nil
+#else
         showScanner = false
         showActionSheet = false
+#endif
         scannedCode = false
         controller.userAction += 1                      // make Action button jump
         // TODO: wallet-core could notify us when it creates a dialog tx
@@ -62,7 +69,11 @@ struct MainView: View {
 
     private func dismissActionSheet() {
         logger.info("dismissActionSheet")
+#if TALER_NIGHTLY
+        sheetType = nil
+#else
         showActionSheet = false
+#endif
         controller.userAction += 1                      // make Action button jump
     }
 
@@ -154,6 +165,11 @@ struct MainView: View {
         } // iOS 15
     }
 
+#if TALER_NIGHTLY
+    var showScanner: Bool { sheetType == .scanner }
+    var showUrlSheet: Bool { sheetType != nil && sheetType != .scanner && sheetType != .action }
+
+#endif
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -161,6 +177,16 @@ struct MainView: View {
 #endif
         let locked = useAuthentication && !biometricService.isAuthenticated
         let mainContent = ZStack {
+#if TALER_NIGHTLY
+            WalletMain(logger: logger, stack: stack.push("Content"),
+              selectedBalance: $selectedBalance,
+               talerFontIndex: $talerFontIndex,
+                    sheetType: $sheetType)
+            .environmentObject(NamespaceWrapper(namespace))
+            .overlay(alignment: .top) {
+                DebugViewV()
+            }     // Show the viewID on top of the app's NavigationView
+#else
             WalletMain(logger: logger, stack: stack.push("Content"),
               selectedBalance: $selectedBalance,
                talerFontIndex: $talerFontIndex,
@@ -170,6 +196,7 @@ struct MainView: View {
             .overlay(alignment: .top) {
                 DebugViewV()
             }     // Show the viewID on top of the app's NavigationView
+#endif
 
             if (!showScanner && urlToOpen == nil) {
                 if let error2 = model.error2 {
@@ -247,6 +274,7 @@ struct MainView: View {
             mainGroup
                 .environmentObject(tabBarModel)
 //              .animation(.default, value: model.error2 == nil)
+#if TALER_NIGHTLY
                 .sheet(item: unlocked($sheetType, locked),
                   onDismiss: sheetDismissed) { sheet in
                     switch sheet {
@@ -264,6 +292,7 @@ struct MainView: View {
                                 .environmentObject(tabBarModel)
                     }
                 }
+#else
                 .sheet(isPresented: unlocked($showUrlSheet, locked),
                          onDismiss: sheetDismissed) {
                     let sheet = URLSheet(stack.push(),
@@ -279,31 +308,47 @@ struct MainView: View {
                         .environmentObject(tabBarModel)
                 }   // QR Scanner
                 .sheet(isPresented: unlocked($showActionSheet, locked),
-                         onDismiss: dismissActionSheet
-                ) {
+                         onDismiss: dismissActionSheet) {
                     actionSheet()
                         .environmentObject(tabBarModel)
                 }   // ActionSheet
+#endif
         }   // VStack { networkUnavailable + mainGroup }
 #if OIM
         // set controller.oimModeActive
         .onRotate { newOrientation in
+  #if TALER_NIGHTLY
+            let isSheetActive = sheetType != nil
+  #else
             let isSheetActive = showActionSheet || showScanner || showUrlSheet
+  #endif
             controller.setOIMmode(for: newOrientation, isSheetActive)
             tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
         }
+  #if TALER_NIGHTLY
+        .onChange(of: sheetType) { newSheetType in
+            let isSheetActive = sheetType != nil
+            controller.setOIMmode(for: UIDevice.current.orientation, isSheetActive)
+            tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
+        }
+  #else
         .onChange(of: showScanner) { newShowScan in
             let isSheetActive = showActionSheet || showScanner || showUrlSheet
             controller.setOIMmode(for: UIDevice.current.orientation, isSheetActive)
             tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
         }
+  #endif
 #endif
         .onNotification(.QrScanAction) {
             let delay = if #available(iOS 16.4, *) { 0.3 } else { 0.01 }
             logger.info("QrScanAction notification: showScanner = true")
             withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
+#if TALER_NIGHTLY
+                sheetType = .scanner
+#else
                 showActionSheet = false
                 showScanner = true      // switch to qrSheet => camera on
+#endif
         }   }
 
         .onNotification(.PasteAction) { notification in
@@ -311,7 +356,11 @@ struct MainView: View {
                 symLog.log(".PasteAction: \(notifData)")
                 urlToOpen = notifData.pastedURL
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+#if TALER_NIGHTLY
+                    sheetType = .url(notifData.pastedURL)
+#else
                     showUrlSheet = true     // raise sheet
+#endif
         }   }   }
 
         .onOpenURL { url in
@@ -321,15 +370,23 @@ struct MainView: View {
             // or when launching the app from iOS Camera.app scanning a QR code
             urlToOpen = url
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+#if TALER_NIGHTLY
+                sheetType = .url(url)
+#else
                 showUrlSheet = true     // raise sheet
+#endif
         }   }
 
         .onChange(of: controller.talerURI) { url in
-            if url != nil {
+            if let url {
                 urlToOpen = url
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                     controller.talerURI = nil
+#if TALER_NIGHTLY
+                    sheetType = .url(url)
+#else
                     showUrlSheet = true     // raise sheet
+#endif
         }   }   }
 
         .onNotification(.RequestProgressError) { notification in
@@ -374,7 +431,11 @@ struct MainView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
             logger.log("❗️App Will Resign")
             backgrounded = Date.now
+#if TALER_NIGHTLY
+            sheetType = nil
+#else
             showScanner = false
+#endif
         }   // App Will Resign
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
             logger.log("❗️App Will Enter Foreground")
@@ -384,9 +445,12 @@ struct MainView: View {
                     // TODO: add another toggle with snail/hare for 60 sec / 10 sec
                     biometricService.isAuthenticated = false
                     if useAuthentication {      // we lock now: a sheet which was open before
+#if TALER_NIGHTLY
                         sheetType = nil         // must not come back after authentication
+#else
                         showUrlSheet = false    // (showScanner is already off, see Resign)
                         showActionSheet = false
+#endif
                     }
                 }
                 if interval.seconds > 30 {

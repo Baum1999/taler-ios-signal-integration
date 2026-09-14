@@ -23,9 +23,12 @@ struct WalletMain: View {
     let stack: CallStack
     @Binding var selectedBalance: Balance?
     @Binding var talerFontIndex: Int
+#if TALER_NIGHTLY
+    @Binding var sheetType: SheetType?
+#else
     @Binding var showActionSheet: Bool
     @Binding var showScanner: Bool
-
+#endif
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var tabBarModel: TabBarModel
@@ -254,9 +257,18 @@ struct WalletMain: View {
     func onActionTab() {
         logger.log("onActionTab: showActionSheet = true")
         controller.removeURLs(after: 60*60)         // TODO: specify time after which scanned URLs are deleted
-        showActionSheet = true
+        withAnimation {
+#if TALER_NIGHTLY
+            sheetType = .action
+#else
+            showActionSheet = true
+#endif
+        }
     }
 
+#if TALER_NIGHTLY
+    var showScanner: Bool { sheetType == .scanner }
+#endif
     func onActionDrag(_ stack: CallStack) {
         if !showScanner {                           // gets called multiple times - log only once
 #if DEBUG
@@ -264,7 +276,13 @@ struct WalletMain: View {
                 logger.log("showScanner = true (onActionDrag: \(caller.file):\(caller.function))")
             }
 #endif
-            showScanner = true
+            withAnimation {
+#if TALER_NIGHTLY
+                sheetType = .scanner
+#else
+                showScanner = true
+#endif
+            }
         }
     }
 
