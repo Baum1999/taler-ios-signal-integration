@@ -57,6 +57,7 @@ struct DiscountsPassesItem: View {
         let primary2 = WalletColors().primary2(colorScheme, colorSchemeContrast)
         let secondary = WalletColors().secondary2(colorScheme, colorSchemeContrast)
         let primaryAccent = WalletColors().primaryAccent
+        let onPrimary = WalletColors().onPrimary
 
         let name = Text(token.name)
             .talerFont(.title)
@@ -73,12 +74,18 @@ struct DiscountsPassesItem: View {
                     if let available = token.tokensAvailable {
                         // Discount
                         Text("x\(available)")
-                            .foregroundColor(primaryAccent)
+                            .foregroundColor(isValid ? onPrimary : primaryAccent)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Capsule().fill(isValid ? primaryAccent : .clear))
                     } else {
                         // Pass
                         if isValid {
                             Text("active")
-                                .foregroundColor(primaryAccent)
+                                .foregroundColor(onPrimary)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Capsule().fill(primaryAccent))
                         }
                     }
                 }
@@ -95,11 +102,11 @@ struct DiscountsPassesItem: View {
                     }.tint(WalletColors().negative)
                     row.swipeActions(edge: .trailing) { swipe }
                 }
-                Divider()
+//                Divider()
                 desc
                     .padding(.horizontal)
                     .padding(.vertical, 4)
-                Divider()
+//                Divider()
                 let merchant = token.merchantInfo?.name ?? "Unknown"
                 Text(isPass    ? "Provided by: \(merchant)"
                   : !isExpired ? "Redeemable at: \(merchant)"

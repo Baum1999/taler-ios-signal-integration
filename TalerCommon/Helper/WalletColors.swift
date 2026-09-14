@@ -143,6 +143,10 @@ public struct WalletColors {
         Color("Taler")
     }
 
+    var onPrimary: Color {
+        Color("OnPrimary")
+    }
+
     func pendingColor(_ incoming: Bool) -> Color {
         incoming ? primaryAccent    // Color("PendingIncoming")
                  : .primary         // Color("PendingOutgoing")
