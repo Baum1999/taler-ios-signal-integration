@@ -640,8 +640,8 @@ class Controller: ObservableObject {
 
 // MARK: -
 extension Controller {
-    func urlCommand(_ url: URL, stack: CallStack) -> UrlCommand {
-        guard let scheme = url.scheme else {return UrlCommand.unknown}
+    func urlCommand(_ url: URL, stack: CallStack) -> (UrlCommand, URL) {
+        guard let scheme = url.scheme else {return (UrlCommand.unknown, url) }
 #if DEBUG
         symLog.log(url)
 #else
@@ -649,21 +649,49 @@ extension Controller {
         self.logger.trace("urlCommand(\(scheme)\(host)")
 #endif
         var urlCommand = UrlCommand.unknown
+        var talerURI: URL = url
         switch scheme.lowercased() {
-            case "taler":
-                urlCommand = talerScheme(url)
+            case "https":
+                (urlCommand, talerURI) = httpsScheme(url)
 //            case "payto":
 //                messageForSheet = url.absoluteString
 //                return paytoScheme(url)
+            case "taler":
+                urlCommand = talerScheme(url)
             default:
                 self.logger.error("unknown scheme: <\(scheme)>")       // should never happen
         }
-        saveURL(url, urlCommand: urlCommand)
-        return urlCommand
+        saveURL(talerURI, urlCommand: urlCommand)
+        return (urlCommand, talerURI)
     }
 }
 // MARK: -
 extension Controller {
+    func httpsScheme(_ url: URL) -> (UrlCommand, URL) {
+        // https://wallet.taler.net/#taler://${action}/${rest}
+        // https://wallet.taler.net/#/${action}/${rest}
+        // https://wallet.taler.net/#${action}/${rest}
+        // are all mapped to taler://${action}/${rest}
+        if let host = url.host, host == "wallet.taler.net" {
+            if url.path == "/link" {
+                if let fragment = url.fragment {
+                    var split = fragment.split(separator: "/")
+                    if split.first == "taler:" {
+                        split.removeFirst()
+                    }
+                    if let action = split.first {
+                        let joined = split.joined(separator: "/")
+                        if let talerURI = URL(string: "taler://\(joined)") {
+                            return (command(String(action)), talerURI)
+                        }
+                    }
+                }
+            }
+        }
+        self.logger.error("❗️unknown url:\(url.absoluteString)")
+        return (.unknown, url)
+    }
+
 //    func paytoScheme(_ url:URL) -> UrlCommand {
 //        let logItem = "scheme payto:// is not yet implemented"
 //        // TODO: write logItem to somewhere in Debug section of SettingsView
@@ -671,8 +699,7 @@ extension Controller {
 //        return UrlCommand.unknown
 //    }
     
-    func talerScheme(_ url:URL) -> UrlCommand {
-      if let command = url.host {
+    func command(_ command:String) -> UrlCommand {
         switch command.lowercased() {
             case "withdraw":            return .withdraw
             case "withdraw-exchange":   return .withdrawExchange
@@ -689,9 +716,15 @@ extension Controller {
                 self.logger.error("❗️unknown command taler://\(command)")
         }
         messageForSheet = command.lowercased()
-      } else {
-          self.logger.error("❗️No taler command")
-      }
-      return .unknown
+        return .unknown
+    }
+
+    func talerScheme(_ url:URL) -> UrlCommand {
+        if let command = url.host {
+            return self.command(command)
+        } else {
+            self.logger.error("❗️No taler command")
+        }
+        return .unknown
     }
 }

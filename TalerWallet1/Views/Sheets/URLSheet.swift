@@ -38,13 +38,11 @@ struct URLSheet: View {
 //  don't need  @MainActor  here
     private func passUrlOnce() {
         if let url = urlToOpen {
-            passedURL = url
-            symLog.log("❗️ passed urlToOpen:  \(String(describing: urlToOpen?.absoluteString))")
-            urlCommand = controller.urlCommand(urlToOpen!, stack: stack.push())
+            symLog.log("❗️ passed urlToOpen:  \(url.absoluteString)")
+            (urlCommand, passedURL) = controller.urlCommand(url, stack: stack.push())
             urlToOpen = nil     // make sure we don't get this a second time
         } else if let sheetURL {
-            passedURL = sheetURL
-            urlCommand = controller.urlCommand(sheetURL, stack: stack.push())
+            (urlCommand, passedURL) = controller.urlCommand(sheetURL, stack: stack.push())
         }
     }
 
