@@ -54,7 +54,7 @@ struct TypeButton: View {
 #endif
 
         let vLayout = VStack {
-            let fragments = title.components(separatedBy: "\n")
+            let fragments = title.components(separatedBy: LINEFEED)
             let fragCount = fragments.count
             if fragCount > 1 {
                 Text(fragments[0])

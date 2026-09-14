@@ -150,7 +150,7 @@ struct BorderWithNFC<Content: View>: View {
 
     var totpData: Data {
         var data = MAGIC_HEADER                     // 0x42 = "B"
-        let totpArray = totpString.components(separatedBy: "\n")
+        let totpArray = totpString.components(separatedBy: LINEFEED)
         for totpCode in totpArray {
             if let totpInt = UInt32(totpCode) {
                 let intData = totpInt.data

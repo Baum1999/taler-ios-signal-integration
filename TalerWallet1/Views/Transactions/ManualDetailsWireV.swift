@@ -279,10 +279,10 @@ struct ManualDetailsWireV: View {
         let bePatient = String(localized: "Depending on your bank the transfer can take from minutes to two working days, please be patient.")
         if let debitIBAN {
             return minimalistic ? String(localized: "Transfer \(amountNBS) from \(debitIBAN).")
-                                : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website to verify your bank account \(debitIBAN).") + "\n" + bePatient
+                                : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website to verify your bank account \(debitIBAN).") + LINEFEED + bePatient
         }
         return minimalistic ? String(localized: "Transfer \(amountNBS).")
-                            : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + "\n" + bePatient
+                            : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + LINEFEED + bePatient
     }
 
     /// The subject of the wire transfer

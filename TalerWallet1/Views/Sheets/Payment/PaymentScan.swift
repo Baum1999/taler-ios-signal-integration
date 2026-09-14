@@ -51,8 +51,8 @@ struct PaymentScan: View, Sendable {
 
     /// the parameters an already instantiated template order belongs to
     private var templateKey: String {
-        url.trimmedString + "\n"
-          + (amountIsEditable ? amountToTransfer.description : EMPTYSTRING) + "\n"
+        url.trimmedString + LINEFEED
+          + (amountIsEditable ? amountToTransfer.description : EMPTYSTRING) + LINEFEED
           + (summaryIsEditable ? summary : EMPTYSTRING)
     }
 

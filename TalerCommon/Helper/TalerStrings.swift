@@ -90,7 +90,7 @@ extension String {
     func tabbed(oneLine: Bool) -> String {
         let fragments = self.components(separatedBy: "\t")
         if fragments.count > 1 {
-            let separator = oneLine ? SPACE : "\n"
+            let separator = oneLine ? SPACE : LINEFEED
             return fragments.joined(separator: separator)
         }
         return self

@@ -19,7 +19,7 @@ struct QRcodeCopyShare: View {
             if let receiverStr = payto.receiver {
                 if let amountStr = payto.amountStr {
                     if let messageStr = option.qrReferenceNumber ?? payto.messageStr {
-                        return String(receiverStr + "\n" + amountStr + "\n" + messageStr)
+                        return String(receiverStr + LINEFEED + amountStr + LINEFEED + messageStr)
                     }
                 }
             }

@@ -59,7 +59,7 @@ struct TransactionTypeDetail: View {
     func errorHintStack(_ hint: String?, _ stack: String?) -> String? {
         if let hint, !hint.isEmpty {
             if let stack, !stack.isEmpty {
-                return hint + "\n" + stack
+                return hint + LINEFEED + stack
             }
             return hint
         }

@@ -137,7 +137,7 @@ struct P2PSubjectV: View {
                 .focused($isFocused)
                 .onChange(of: summary) { newValue in
                     guard isFocused else { return }
-                    guard newValue.contains("\n") else { return }
+                    guard newValue.contains(LINEFEED) else { return }
                     isFocused = false
                     summary = newValue.replacingOccurrences(of: LINEFEED, with: EMPTYSTRING)
                 }
