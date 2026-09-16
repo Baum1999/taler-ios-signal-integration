@@ -272,6 +272,7 @@ struct TransactionSummaryList: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
         let common = talerTX.common
 //        let scope = common.scopes.first                                     // might be nil if scopes == []
         let locale = TalerDater.shared.locale
@@ -332,21 +333,16 @@ struct TransactionSummaryList: View {
                         } else {
                             Button("Cancel") { dismissTop(stack.push()) }
                                 .buttonStyle(TalerButtonStyle(type: .bordered))
-                                .padding()
+                                .padding(is26 ? .horizontal : .all)
                         } // Cancel
                     } else if let showDone {
                         Button("Done") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: showDone))
-                            .padding()
+                            .padding(is26 ? .horizontal : .all)
                     }
                 }
-                if #available(iOS 26.0, *) {
-                    bottomButton
-                        .padding(.horizontal)
-                } else {
-                    bottomButton
-                        .padding()
-                }
+                bottomButton
+                    .padding(is26 ? .horizontal : .all)
             }
             .navigationTitle(navTitle ?? navTitleStr)
             .onChange(of: payNow) { payNow2 in
