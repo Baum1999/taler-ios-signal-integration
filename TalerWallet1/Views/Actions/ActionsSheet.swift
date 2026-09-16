@@ -321,6 +321,7 @@ struct DualHeightSheet: View {
             }
             .presentationDetents(supportedDetents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
+                guard newValue != .height(0) else { return }
                 let detent = minimalistic ? halfDetent : fullDetent
                 if newValue == detent {    // user swiped the sheet up to activate QR scanner
                     logger.trace("onChange❗️selectedDetent == (detent) ==> updateDetentsWithDelay()")
