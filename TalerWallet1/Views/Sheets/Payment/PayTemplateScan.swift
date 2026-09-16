@@ -76,7 +76,7 @@ struct PayTemplateScan: View {
             if let amount = contract.amount {
                 controller.updateAmount(amount, forSaved: url)
             }
-            if contract.templateType == "paivana" {
+            if contract.templateType == .paivana {
                 // TODO: ???
                 isPaivana = true
             } else {

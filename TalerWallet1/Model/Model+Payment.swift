@@ -480,6 +480,12 @@ fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
+enum TemplateType: String, Codable {
+    case fixedOrder = "fixed-order"
+    case inventoryCart = "inventory-cart"
+    case paivana
+}
+
 struct TemplateContractDetails: Codable {
     let summary: String?                // Human-readable short summary of the contract. Editable if nil
     let currency: String?               // specify currency when amount is nil - unspecified if nil
@@ -488,14 +494,17 @@ struct TemplateContractDetails: Codable {
     let minimumAge: Int?
     let payDuration: Duration?
     let maxPickupDuration: Duration?
+    let requestTip: Bool?
+
+    let templateType: TemplateType?
     let websiteRegex: String?
     let choices: [OrderChoice]?
-    let templateType: String?
 
     enum CodingKeys: String, CodingKey {
         case summary, currency, amount
         case scopeInfo, choices
         case minimumAge = "minimum_age"
+        case requestTip = "request_tip"
         case payDuration = "pay_duration"
         case maxPickupDuration = "max_pickup_duration"
         case websiteRegex = "website_regex"
