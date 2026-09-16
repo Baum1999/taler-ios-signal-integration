@@ -51,6 +51,11 @@ struct AmountInputV: View {
     @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State private var feeAmount: Amount? = nil
     @State private var feeStr = (EMPTYSTRING, EMPTYSTRING)
@@ -63,7 +68,7 @@ struct AmountInputV: View {
     }
 
     func checkAvailable(_ coinData: CoinData) -> Flags {
-        let isZero = amountToTransfer.isZero
+        let isZero = amountToTransfer.isZero && !developerMode
         // wallet-core's verdict is authoritative and comes first: it accounts for fees,
         // age restrictions, per-exchange limits and pending refreshes, none of which a
         // local `amountToTransfer > amountAvailable` can see.
@@ -82,7 +87,8 @@ struct AmountInputV: View {
 //                } else {
                     insufficient = try amountToTransfer > amountAvailable
 //                }
-                let disabled = insufficient || isZero || coinData.invalid || coinData.tooMany
+                let invalid = coinData.invalid  && !developerMode  // P2P ==> zero not supported
+                let disabled = insufficient || isZero || invalid || coinData.tooMany
                 return Flags(insufficient: insufficient, disabled: disabled)
             } catch {
                 // TODO: error Amounts don't match
@@ -116,7 +122,7 @@ struct AmountInputV: View {
                    shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                    feeIsNegative: isIncoming)
             Button("Next") { buttonAction() }
-                .buttonStyle(TalerButtonStyle(type: .prominent, ))
+                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
                 .accessibilityHint(flags.disabled ? hint : EMPTYSTRING)
                 .padding(.bottom, 333)
