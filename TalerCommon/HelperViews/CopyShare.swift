@@ -160,14 +160,19 @@ struct ShareType: Hashable {
     let image: UIImage?
 }
 // MARK: -
+/// The Share function can NOT be called from a sheet.
+///  Thus we need to know whether we were called from the .sheet view hierarchy
+///  If yes, then we must first dismiss the sheet before posting the .ShareAction notification
+extension EnvironmentValues {
+    @Entry var fromSheet: Bool = false
+}
+// MARK: -
 @MainActor
 struct ShareButton: View {
     private let symLog = SymLogV(0)
     let textToShare: String
     let image: UIImage?
     let title: String
-
-    @State private var scale: CGFloat = 1.0
 
     init(_ textToShare: String, image: UIImage? = nil) {
         self.textToShare = textToShare
@@ -180,12 +185,17 @@ struct ShareButton: View {
         self.title = title
     }
 
+    @Environment(\.fromSheet) private var fromSheet
     @Environment(\.isEnabled) private var isEnabled: Bool
     @EnvironmentObject private var controller: Controller
 
+    @State private var scale: CGFloat = 1.0
+
     @MainActor
     func dismissAndPost() {
-        dismissTop()
+        if fromSheet {
+            dismissTop()
+        }
         let shareType = ShareType(textToShare: textToShare, image: image)
         let userInfo = [NOTIFICATIONSHARE: shareType]
         NotificationCenter.default.post(name: .ShareAction, object: nil, userInfo: userInfo)                // will trigger NavigationLink

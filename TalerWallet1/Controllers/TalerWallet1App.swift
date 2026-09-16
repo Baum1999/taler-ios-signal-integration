@@ -114,6 +114,7 @@ struct TalerWallet1App: App {
                 .environmentObject(controller)
                 .environmentObject(model)
                 .environmentObject(biometricService)
+                .environment(\.fromSheet, false)
                 .addKeyboardVisibilityToEnvironment()
                     /// external events are taler:// (or in the future payto://) URLs passed to this app
                     /// we handle them in .onOpenURL in MainView.swift
