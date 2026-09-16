@@ -79,7 +79,7 @@ public struct WalletColors {
     func buttonBackColor(pressed: Bool,
                         disabled: Bool,
                        prominent: Bool = false) -> Color {
-            disabled ? gray7
+            disabled ? gray5
          : prominent ? primaryAccent    // == Taler
            : pressed ? gray4 : gray5
     }
