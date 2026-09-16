@@ -193,6 +193,9 @@ class Controller: ObservableObject {
     }
 #endif
 
+    var isIpad : Bool { UIDevice.current.userInterfaceIdiom == .pad }
+    var isIphone : Bool { UIDevice.current.userInterfaceIdiom == .phone }
+
     var localizedAppName: String {
 #if TALER_WALLET
         let appName = "Taler Wallet"

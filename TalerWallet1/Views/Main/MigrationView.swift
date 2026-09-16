@@ -115,7 +115,9 @@ struct MigrationView: View {
                             .talerFont(.body)
                     }
                 } else {
-                    Text("Good news: the \(controller.localizedAppName) database can be updated and will then be faster.")
+                    let device = controller.isIpad ? Text("this iPad", comment: "device")
+                                                   : Text("this iPhone", comment: "device")
+                    Text("The \(controller.localizedAppName) database on \(device) can be updated and will then be faster.", comment: "appName, device")
                         .talerFont(.title)
                     Text("This might take from a few seconds to a minute or two, depending on how many transactions you made.")
                         .talerFont(.body)
@@ -170,11 +172,5 @@ struct MigrationView: View {
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(FullBackground())
         }.navigationViewStyle(.stack)
-    }
-}
-// MARK: -
-struct MigrationView_Previews: PreviewProvider {
-    static var previews: some View {
-        MigrationView()
     }
 }
