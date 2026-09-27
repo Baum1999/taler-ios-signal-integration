@@ -29,7 +29,13 @@ struct MigrationView: View {
     @State private var isCancelled: Bool = false
     @State private var progress: Double = 0
     @State private var error2: Error? = nil
+    @State private var showTechHint: Bool = false
 
+    func chevronAction() {
+        withAnimation {
+            showTechHint.toggle()
+        }
+    }
     func buttonAction() {
         if !isMigrating {
             withAnimation {
@@ -81,7 +87,7 @@ struct MigrationView: View {
             Section(header: Text("Update database")) {
                 if isMigrating || isFinished || isCancelled {
                     if fakeMigration {
-                        Text("Faking migration")
+                        Text("Simulating migration:")
                             .talerFont(.title)
                             .task {
                                 for x in 0...90 {
@@ -137,6 +143,25 @@ struct MigrationView: View {
                     Button("Update later", action: finishAction)
                         .buttonStyle(TalerButtonStyle(type: .bordered))
                         .padding()
+
+                    Button(action: chevronAction) {
+                        let chevron = Image(systemName: CHEVRON_UP)     // 􀆇
+                        HStack(alignment: .firstTextBaseline) {
+                                Text("Technical information")
+                                    .talerFont(.body)
+                            Spacer()
+                            chevron.rotationEffect(.degrees((showTechHint ?  -180 : 0)))
+                                .accessibilityHidden(true)
+                        }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityHint(Text(showTechHint ? "Hide Technical information"
+                                                             : "Show Technical information"))
+                        .contentShape(.rect)    // can tap in background also
+                    }   .buttonStyle(.plain)
+                    if showTechHint {
+                        Text("The database, which holds your money and your transactions, is updated from \"indexed\" to \"sqlite3\" format.\nThe app cannot be used during that time.")
+                            .talerFont(.body)
+                    }
                 }
             }
             .listRowSeparator(.hidden)
