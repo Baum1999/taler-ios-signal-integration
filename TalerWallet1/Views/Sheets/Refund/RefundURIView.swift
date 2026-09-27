@@ -17,8 +17,8 @@ struct RefundURIView: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
 
-    @State var refundTransactionId: String? = nil
-//    @State var transaction: Transaction?
+    @State private var refundTransactionId: String? = nil
+//    @State private var transaction: Transaction?
 //    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 

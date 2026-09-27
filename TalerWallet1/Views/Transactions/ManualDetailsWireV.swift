@@ -99,7 +99,7 @@ struct RestrictionsV: View {
 // MARK: -
 struct PayeeZip: View {
     let receiverZip: String
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -121,7 +121,7 @@ struct PayeeZip: View {
 // MARK: -
 struct PayeeReceiver: View {
     let receiverStr: String
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -143,7 +143,7 @@ struct PayeeReceiver: View {
 // MARK: -
 struct PayeeTown: View {
     let receiverTown: String
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -167,7 +167,7 @@ struct Cryptocode: View {
     let cryptoString: String
     let chQRr: String?
 
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         let isChQRr = chQRr != nil
         HStack {
@@ -187,7 +187,7 @@ struct Cryptocode: View {
 // MARK: -
 struct IbanCode: View {
     let iban: String
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -210,7 +210,7 @@ struct IbanCode: View {
 struct AmountCode: View {
     let amountStr: (String, String)
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -234,7 +234,7 @@ struct AmountCode: View {
 // MARK: -
 struct XTalerCode: View {
     let xTaler: String
-    @State var isCopied: Bool? = false
+    @State private var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -269,8 +269,8 @@ struct ManualDetailsWireV: View {
     let debitIBAN: String?              // only for deposit auth
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @State var isCopied1: Bool? = false
-    @State var isCopied2: Bool? = false
+    @State private var isCopied1: Bool? = false
+    @State private var isCopied2: Bool? = false
 
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer instructions")
 

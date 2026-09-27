@@ -153,8 +153,8 @@ struct ManualWithdrawContent: View {
 
     @State private var detailsForAmount: WithdrawalDetailsForAmount? = nil
     @State private var loadError: Error? = nil
-//    @State var ageMenuList: [Int] = []
-//    @State var selectedAge = 0
+//    @State private var ageMenuList: [Int] = []
+//    @State private var selectedAge = 0
     @State private var tosAccepted = false
 
     @MainActor

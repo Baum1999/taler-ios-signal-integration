@@ -67,7 +67,7 @@ struct EqualIconWidthLabelStyle: LabelStyle {
 
 struct EqualIconWidthDomain<Content: View>: View {
     let content: Content
-    @State var iconWidth: CGFloat? = nil
+    @State private var iconWidth: CGFloat? = nil
 
     init(@ViewBuilder _ content: () -> Content) {
         self.content = content()

@@ -26,7 +26,7 @@ struct SendAmountView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
+    @State private var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays = SEVENDAYS
     @State private var insufficient = false
 //    @State private var feeAmount: Amount? = nil

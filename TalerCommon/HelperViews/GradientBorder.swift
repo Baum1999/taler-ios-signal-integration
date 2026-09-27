@@ -244,7 +244,7 @@ struct GradientBorder<Content: View>: View {
     let background: Color
     var content: () -> Content
 
-    @State var rotation: CGFloat = 0
+    @State private var rotation: CGFloat = 0
 
     var body: some View {
         HStack {

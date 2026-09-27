@@ -53,8 +53,8 @@ struct TransactionSummaryList: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
-    @State var jsonTransaction: String = EMPTYSTRING
-    @State var viewId = UUID()
+    @State private var jsonTransaction: String = EMPTYSTRING
+    @State private var viewId = UUID()
     @State private var selectedChoice: Int? = nil
     @State private var effective: Amount? = nil
     @State private var scope: ScopeInfo? = nil

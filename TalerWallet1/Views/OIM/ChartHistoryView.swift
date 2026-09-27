@@ -239,7 +239,7 @@ struct ChartOverlayV: View {
     let effective: Amount
 
     @StateObject private var cash: OIMcash
-    @State var amountVal: UInt64 = 0
+    @State private var amountVal: UInt64 = 0
     @Namespace var namespace
 
     init(stack: CallStack,

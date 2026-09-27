@@ -27,7 +27,7 @@ struct DepositAmountView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State var checkDepositResult: CheckDepositResponse? = nil
+    @State private var checkDepositResult: CheckDepositResponse? = nil
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
     @State private var exchange: Exchange? = nil                                // wg. noFees

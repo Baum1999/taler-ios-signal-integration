@@ -20,7 +20,7 @@ struct WithdrawTOSView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State var exchangeTOS: ExchangeTermsOfService?
+    @State private var exchangeTOS: ExchangeTermsOfService?
 
     let navTitle = String(localized: "Terms of Service")
 

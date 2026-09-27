@@ -117,7 +117,7 @@ struct QRCodeDetailView: View {
 // MARK: -
 #if DEBUG
 //fileprivate struct ContentView: View {
-//    @State var previewURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
+//    @State private var previewURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
 //
 //    var body: some View {
 //        let amount = Amount(currency: LONGCURRENCY, cent: 123)

@@ -182,7 +182,7 @@ extension BalancesSectionView: View {
 #if false   // model crashes
 struct BalancesSectionView_Previews: PreviewProvider {
 fileprivate struct BindingViewContainer: View {
-    @State var amountToTransfer: UInt64 = 333
+    @State private var amountToTransfer: UInt64 = 333
     @State private var summary: String = "bla-bla"
 
     var body: some View {
