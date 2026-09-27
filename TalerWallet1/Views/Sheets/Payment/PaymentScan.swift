@@ -85,7 +85,11 @@ struct PaymentScan: View, Sendable {
             }
         }
         if let txId {
-            _ = try? await model.waitTransactionState(txId, token: txId)
+            if let finalResult = try? await model.waitTransactionState(txId, token: txId, major: .dialog) {
+                if let matched = finalResult.matched {
+                    print(matched)
+                }
+            }
         }
     }
 

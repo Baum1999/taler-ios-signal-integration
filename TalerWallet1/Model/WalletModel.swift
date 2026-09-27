@@ -259,7 +259,7 @@ struct WaitTransactionResult: Decodable, Sendable {
 fileprivate struct WaitTransactionState: WalletBackendFormattedRequest {
     typealias Response = WaitTransactionResult
     var operation: String { "waitTransactionState" }
-    func args() -> Args { Args(transactionId: txId, txState: txState, progressToken: token) }
+    func args() -> Args { Args(transactionId: txId, txState: txState, bailStates: "final", progressToken: token) }
     var txId: String
     var txState: TransactionState
     var token: String
@@ -267,6 +267,7 @@ fileprivate struct WaitTransactionState: WalletBackendFormattedRequest {
     struct Args: Encodable {
         var transactionId: String
         var txState: TransactionState
+        var bailStates: String
         var progressToken: String
     }
 }
@@ -330,9 +331,10 @@ fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
 }
 
 extension WalletModel {
-    nonisolated func waitTransactionState(_ txId: String, token: String)
+    nonisolated func waitTransactionState(_ txId: String, token: String,
+                                           major: TransactionMajorState)
       async throws -> WaitTransactionResult {
-        let txState = TransactionState(major: .dialog, minor: .any, working: nil)
+        let txState = TransactionState(major: major, minor: .any, working: nil)
         let request = WaitTransactionState(txId: txId, txState: txState, token: token)
         let controller = Controller.shared
         controller.progressOperation = request.operation

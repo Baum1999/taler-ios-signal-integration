@@ -97,6 +97,12 @@ struct TransactionSummaryList: View {
                     controller.removeURL(url)    // TODO: pending might fail - in which case we might want to try again
                 }
             }
+            let txId = confirmPayResult.transactionId
+            if let finalResult = try? await model.waitTransactionState(txId, token: txId, major: .done) {
+                if let matched = finalResult.matched {
+                    print(matched)
+                }
+            }
         }
     }
 
