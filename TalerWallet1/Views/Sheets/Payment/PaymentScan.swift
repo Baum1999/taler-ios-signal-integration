@@ -85,7 +85,7 @@ struct PaymentScan: View, Sendable {
             }
         }
         if let txId {
-            try? await model.waitTransactionState(txId, token: txId)
+            _ = try? await model.waitTransactionState(txId, token: txId)
         }
     }
 

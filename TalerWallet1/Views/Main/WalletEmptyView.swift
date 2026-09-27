@@ -275,7 +275,9 @@ struct WalletEmptyView: View {
                 list
             }
             if withDrawStarted {
-                RotatingTaler(size: 150, progress: true, once: false, rotationEnabled: $withDrawStarted)
+                RotatingTaler(size: 150, progress: true, once: false,
+                        background: nil,
+                   rotationEnabled: $withDrawStarted)
             }
         }
         .onAppear() {

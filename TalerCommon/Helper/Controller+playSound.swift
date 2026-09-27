@@ -38,7 +38,7 @@ extension Controller {
     }
 
     /// 0 = failure, 1 = received, 2 = sent
-    @MainActor func playSound(_ number: Int) {
+    @MainActor func playSound(_ number: Int, useSystem: Bool = false) {
         let sysVolume = AVAudioSession.sharedInstance().outputVolume
         let volume = sysVolume < 0.16 ? 2.5     // too bad we cannot make it louder
                    : sysVolume < 0.21 ? 1.5     // nope, doesn't work
@@ -83,6 +83,8 @@ extension Controller {
             } else {
                 AudioServicesPlaySystemSound(soundID);
             }
+        } else if useSystem {
+            AudioServicesPlaySystemSound(soundID);
         }
         hapticNotification(number == 0 ? .error : .success)
     }

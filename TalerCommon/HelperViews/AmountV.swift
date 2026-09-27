@@ -32,6 +32,7 @@ struct AmountV: View {
 
     private func currencyTickerChanged() async {
         if let scope {
+//            print("currencyTickerChanged: \(amount.readableDescription)")
             currencyInfo = controller.info(for: scope)                          // might be nil!
         }
     }

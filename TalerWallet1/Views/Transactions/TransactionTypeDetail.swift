@@ -83,9 +83,13 @@ struct TransactionTypeDetail: View {
                     let title = EMPTYSTRING
                     Text(title)
                         .talerFont(.body)
-                    RotatingTaler(size: 100, progress: true, once: false, rotationEnabled: $rotationEnabled)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        // has its own accessibilityLabel
+                    if common.isWorking {
+                        RotatingTaler(size: 100, progress: true, once: false,
+                                background: developerMode ? .orange : nil,
+                           rotationEnabled: $rotationEnabled)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            // has its own accessibilityLabel
+                    }
                 }
                 case .withdrawal(let withdrawalTransaction): Group {
                     let details = withdrawalTransaction.details

@@ -160,9 +160,9 @@ extension WalletCore {
         if let walletError = decoded.error {            // wallet-core sent an error message
             do {
                 let jsonData = try JSONEncoder().encode(walletError)
-                let responseCode = walletError.code
-                logger.error("wallet-core sent back error \(walletError.code, privacy: .public), \(responseCode, privacy: .public) for request \(requestId, privacy: .public)")
-                symLog.log("id:\(requestId)  \(walletError)")
+#if !DEBUG
+                logger.error("wallet-core sent back error \(walletError.code, privacy: .public) for request \(requestId, privacy: .public)")
+#endif
                 completion(requestId, timeSent, message, jsonData, walletError)
             } catch {        // JSON encoding of response.result failed / should never happen
                 symLog.log(decoded)
@@ -580,25 +580,26 @@ extension WalletCore {
     
     private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, String?, Data?, TalerErrorDetail?) -> Void) {
         // Encode the request and send it to the backend.
+        let operation = request.operation
         queue.async {
             let requestId = self.reserveRequestId()
             let sendTime = Date.now
             do {
-                let full = FullRequest(operation: request.operation, id: requestId, args: request.args)
+                let full = FullRequest(operation: operation, id: requestId, args: request.args)
 //          symLog.log(full)
                 let encoded = try JSONEncoder().encode(full)
                 guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
                     let args = try JSONEncoder().encode(request.args)
                     if let jsonArgs = String(data: args, encoding: .utf8) {
-                        if request.operation == "getTransactionsV2" {
+                        if operation == "getTransactionsV2" {
                             if self.logTransactions {
-                                self.logger.trace("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public)\(jsonArgs, privacy: .auto)")
+                                self.logger.trace("🔴\"id\":\(requestId, privacy: .public) \(operation, privacy: .public)\(jsonArgs, privacy: .auto)")
                             }
                         } else {
-                            self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public)\(jsonArgs, privacy: .auto)")
+                            self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(operation, privacy: .public)\(jsonArgs, privacy: .auto)")
                         }
                     } else {    // should NEVER happen since the whole request was already successfully encoded and stringified
-                        self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public) 🔴 Error: jsonArgs")
+                        self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(operation, privacy: .public) 🔴 Error: jsonArgs")
                     }
                 // register only after everything which can throw did succeed, but before
                 // sending - the answer may arrive before sendMessage() even returns

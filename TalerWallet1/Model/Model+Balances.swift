@@ -167,15 +167,15 @@ struct DeleteSubscription: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
-    nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> BalancesResponse {
+    nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> (BalancesResponse, UInt) {
         let request = Balances()
-        let response = try await sendRequest(request, viewHandles: viewHandles)
-        return response
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        return (response, id)
     }
     /// fetch Discounts from Wallet-Core. No networking involved
     nonisolated func listDiscounts(_ stack: CallStack, viewHandles: Bool = false) async throws -> DiscountsResponse {
         let request = ListDiscounts()
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
     /// delete a discount. No networking involved
@@ -187,7 +187,7 @@ extension WalletModel {
     /// fetch Subscriptions from Wallet-Core. No networking involved
     nonisolated func listSubscriptions(_ stack: CallStack, viewHandles: Bool = false) async throws -> SubscriptionsResponse {
         let request = ListSubscriptions()
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
     /// delete a subscription. No networking involved

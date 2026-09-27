@@ -290,6 +290,7 @@ struct TransactionSummaryList: View {
                         }.overlay {
                             if common.isWorking {
                                 RotatingTaler(size: 80, progress: true, once: false,
+                                        background: developerMode ? .red : nil,
                                    rotationEnabled: Binding.constant(true))
                             }
                         }

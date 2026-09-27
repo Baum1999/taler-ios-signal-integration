@@ -41,6 +41,7 @@ struct AboutView: View {
         let rotatingTaler = RotatingTaler(size: size,
                                       progress: false,
                                           once: true,
+                                    background: nil,
                                rotationEnabled: $rotationEnabled)
             .accessibilityHidden(true)   // has its own accessibilityLabel
             .frame(maxWidth: .infinity, alignment: .center)

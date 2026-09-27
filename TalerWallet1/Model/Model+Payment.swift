@@ -673,7 +673,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = talerPayTemplateUri
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -684,21 +684,21 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = talerPayTemplateUri
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
     nonisolated func getChoicesForPayment(_ transactionId: String, viewHandles: Bool = false)
       async throws -> ChoicesForPayment {
         let request = GetChoicesForPayment(transactionId: transactionId, forcedCoinSel: nil)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
     nonisolated func preparePayForUri(_ talerPayUri: String, viewHandles: Bool = false)
       async throws -> PreparePayResult2 {
         let request = PreparePayForUri(talerPayUri: talerPayUri)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -709,7 +709,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = transactionId
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -719,7 +719,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = transactionId
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.talerPayUri
     }
 }

@@ -44,7 +44,7 @@ struct StartRefundQueryRequest: WalletBackendFormattedRequest {
 extension WalletModel {
     nonisolated func startRefundForUri(url: String, viewHandles: Bool = false) async throws -> String {
         let request = StartRefundURIRequest(talerRefundUri: url)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.transactionId
     }
 

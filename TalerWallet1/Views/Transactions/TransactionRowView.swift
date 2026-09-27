@@ -277,6 +277,7 @@ struct TransactionRowView: View {
             row
             if isWorking {
                 RotatingTaler(size: 80, progress: true, once: false,
+                        background: developerMode ? .green : nil,
                    rotationEnabled: Binding.constant(true))
             }
         }

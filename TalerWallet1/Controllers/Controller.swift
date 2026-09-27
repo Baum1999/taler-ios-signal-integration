@@ -167,6 +167,7 @@ class Controller: ObservableObject {
     var messageForSheet: String? = nil
     var isLoadingChoices: String? = nil
 
+    var lastNewBalances: UInt = 0
     var lastProgressError: RequestProgressError? = nil
     var lastProgressPhase: RequestProgressPhase? = nil
     var progressOperation: String? = nil
@@ -352,17 +353,22 @@ class Controller: ObservableObject {
     @discardableResult
     func loadBalances(_ stack: CallStack) async -> Int? {
         let model = WalletModel.shared
-        if let response = try? await model.getBalances(stack.push()) {
+        if let (response, id) = try? await model.getBalances(stack.push()) {
             let reloaded = response.balances
             if reloaded != balances {
                 for balance in reloaded {
                     let scope = balance.scopeInfo
                     checkInfo(for: scope)
                 }
-                self.logger.log("••Got new balances, will redraw")
+#if DEBUG
+                self.logger.log("\(id) ••Got new balances, will redraw")
+#endif
+                lastNewBalances = id
                 balances = reloaded         // redraw
             } else {
-                self.logger.log("••Same balances, no redraw")
+#if DEBUG
+                self.logger.log("\(id) ••Same balances as \(self.lastNewBalances), no redraw")
+#endif
             }
             haveProdBalance = response.haveProdBalance
             return reloaded.count
@@ -586,6 +592,7 @@ class Controller: ObservableObject {
                 let walletCore = WalletCore.shared
                 let model = WalletModel.shared
                 let response = try await model.initWalletCore(setTesting: setTesting)
+//  throw WalletBackendError.initializationError      // check how the app behaves if initWalletCore throws
                 walletCore.versionInfo = response.versionInfo
                 walletCore.nativeDB = (response.databaseBackend == "sqlite")
                 if developerMode {
@@ -633,7 +640,7 @@ class Controller: ObservableObject {
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
                 backendState = .error(error.toEquatableError())                 // ❗️Yikes app cannot continue
-                throw error
+//                throw error         // will not be catched by MainView.task anyway
             }
         } else {
             self.logger.fault("Yikes❗️ wallet-core already initialized")

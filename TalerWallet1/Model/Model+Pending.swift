@@ -47,7 +47,7 @@ extension WalletModel {
     nonisolated func getPendingOperations4711(viewHandles: Bool = false)
       async throws -> [PendingOperation] {   // M for MainActor
         let request = GetPendingOperations()
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.pendingOperations
     }
 }

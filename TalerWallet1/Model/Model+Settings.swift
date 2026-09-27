@@ -42,7 +42,7 @@ extension WalletModel {
                                                        : test == 1 ? TESTBANK : DEMOBANK,
                                         exchangeBaseUrl: test == 2 ? HEADEXCHANGE
                                                        : test == 1 ? TESTEXCHANGE : DEMOEXCHANGE)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 } // loadTestKudos
 // MARK: -

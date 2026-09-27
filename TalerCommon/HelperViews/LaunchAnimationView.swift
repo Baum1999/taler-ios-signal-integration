@@ -15,6 +15,7 @@ struct LaunchAnimationView: View {
             RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250,
                       progress: true,
                           once: true,
+                    background: nil,
                rotationEnabled: $rotationEnabled)
                 .accessibilityLabel(Text("Progress indicator", comment: "a11y"))
         }
@@ -25,6 +26,7 @@ struct RotatingTaler: View {
     let size: CGFloat
     let progress: Bool
     let once: Bool
+    let background: Color?
 
     @Binding var rotationEnabled: Bool
     @State private var rotationDirection = false
@@ -66,7 +68,7 @@ struct RotatingTaler: View {
             image
                 .background {
                     Capsule()
-                        .fill(Color(.systemGray6).opacity(0.7))
+                        .fill((background ?? Color(.systemGray6)).opacity(0.3))
                 }
 //        }
     }

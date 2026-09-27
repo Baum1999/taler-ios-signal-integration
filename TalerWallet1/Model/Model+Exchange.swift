@@ -349,7 +349,7 @@ extension WalletModel {
             let request = ListExchanges(scope: scope,
                                  filterByType: filterByType,        // .demo, .prod
                                filterByStatus: filterByStatus)      // .used, .preset
-            let response = try await sendRequest(request, viewHandles: viewHandles)
+            let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
             return response.exchanges
         } catch {
             return []               // empty, but not nil
@@ -361,7 +361,7 @@ extension WalletModel {
       async -> [DefaultExchange] {     // M for MainActor
         do {
             let request = DefaultExchanges()
-            let response = try await sendRequest(request, viewHandles: viewHandles)
+            let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
             return response.candidates
         } catch {
             return []               // empty, but not nil
@@ -373,7 +373,7 @@ extension WalletModel {
       async throws -> Exchange {
         let request = GetExchangeByUrl(exchangeBaseUrl: url)
 //            logger.info("query for exchange: \(url, privacy: .public)")
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -423,7 +423,7 @@ extension WalletModel {
     nonisolated func getCurrencyInfo(scope: ScopeInfo, viewHandles: Bool = false)
       async throws -> CurrencyInfo {
         let request = GetCurrencySpecification(scope: scope)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return CurrencyInfo(specs: response.currencySpecification,
                         formatter: CurrencyFormatter.formatter(currency: scope.currency,
                                                                   specs: response.currencySpecification))

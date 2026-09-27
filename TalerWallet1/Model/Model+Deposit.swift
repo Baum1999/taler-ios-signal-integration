@@ -38,7 +38,7 @@ extension WalletModel {
     nonisolated func validateIban(_ iban: String, viewHandles: Bool = false)
       async throws -> Bool {
         let request = ValidateIban(iban: iban)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.valid
     }
 }
@@ -93,13 +93,13 @@ extension WalletModel {
     nonisolated func convertIbanAccountFieldToPayto(_ value: String, currency: String, viewHandles: Bool = false)
       async throws -> IbanAccountFieldToPaytoResponse {
         let request = IbanAccountFieldToPayto(value: value, currency: currency)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
     nonisolated func convertIbanPaytoToAccountField(_ paytoUri: String, viewHandles: Bool = false)
       async throws -> IbanPaytoToAccountFieldResponse {
         let request = IbanPaytoToAccountField(paytoUri: paytoUri)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -135,7 +135,7 @@ extension WalletModel {
     nonisolated func depositWireTypes(_ currency: String?, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
       async throws -> [WireTypeDetails] {
         let request = DepositWireTypes(currency: currency, scopeInfo: scopeInfo)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.wireTypeDetails
     }
 }
@@ -161,7 +161,7 @@ extension WalletModel {
     nonisolated func getMaxDepositAmount(_ scope: ScopeInfo, viewHandles: Bool = false)
       async throws -> Amount {
         let request = GetMaxDepositAmount(scope: scope)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.rawAmount
     }
 } // getMaxDepositAmount
@@ -202,7 +202,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = depositPaytoUri
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -237,7 +237,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = depositPaytoUri
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -280,7 +280,7 @@ extension WalletModel {
     nonisolated func listBankAccounts(_ currency: String? = nil, viewHandles: Bool = false)
       async throws -> [BankAccountsInfo] {
         let request = ListBankAccounts(currency: currency)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.accounts
     }
 }
@@ -300,7 +300,7 @@ extension WalletModel {
     nonisolated func getBankAccountById(_ bankAccountId: String, viewHandles: Bool = false)
       async throws -> BankAccountsInfo {
         let request = GetBankAccountById(bankAccountId: bankAccountId)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -332,7 +332,7 @@ extension WalletModel {
                               viewHandles: Bool = false)
       async throws -> String {
         let request = AddBankAccount(uri: uri, label: label, replace: replace)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response.bankAccountId
     }
 }

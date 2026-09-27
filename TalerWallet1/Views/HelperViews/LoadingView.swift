@@ -147,6 +147,7 @@ struct LoadingView: View {
                 RotatingTaler(size: 100,
                           progress: true,                 // VoiceOver "In progress"
                               once: false,
+                        background: developerMode ? .blue : nil,
                    rotationEnabled: $rotationEnabled)
                     .onTapGesture(count: 1) {
                         rotationEnabled.toggle()

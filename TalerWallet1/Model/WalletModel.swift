@@ -187,7 +187,7 @@ final class WalletModel: ObservableObject, Sendable {
     }
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, viewHandles: Bool = false, asJSON: Bool = false)
-      async throws -> T.Response {    // T for any Thread
+      async throws -> (T.Response, UInt) {    // T for any Thread
 #if !DEBUG
         logger.log("sending: \(request.operation, privacy: .public)")
 #endif
@@ -198,7 +198,7 @@ final class WalletModel: ObservableObject, Sendable {
             let timeUsed = Date.now - sendTime
             logger.log("received: \(request.operation, privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
 #endif
-            return response
+            return (response, id)
         } catch {       // rethrows
             let timeUsed = Date.now - sendTime
             logger.error("\(request.operation, privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error, privacy: .public)")
@@ -245,7 +245,8 @@ extension WalletModel {
     func hintApplicationResumedT() async throws -> DbStatus {
         // T for any Thread
         let request = ApplicationResumedRequest()
-        return try await sendRequest(request)
+        let (response, id) = try await sendRequest(request)
+        return response
     }
 }
 // MARK: -
@@ -336,8 +337,8 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = txId
-        let result = try await sendRequest(request)
-        return result
+        let (response, id) = try await sendRequest(request)
+        return response
     }
     nonisolated func cancelProgressToken(_ op: String, token: String)
       async throws {
@@ -353,12 +354,14 @@ extension WalletModel {
     nonisolated func getTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> TalerTransaction {
         let request = GetTransactionById(txId: transactionId, inclTerms: includeContractTerms)
-        return try await sendRequest(request, viewHandles: viewHandles)
+          let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+          return response
     }
     nonisolated func jsonTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> String {
         let request = JSONTransactionById(transactionId: transactionId, includeContractTerms: includeContractTerms)
-        return try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        return response
     }
 }
 // MARK: -
@@ -433,7 +436,7 @@ extension WalletModel {
     @discardableResult
     nonisolated func setConfig(setTesting: Bool) async throws -> VersionInfo {
         let request = ConfigRequest(setTesting: setTesting)
-        let response = try await sendRequest(request)
+        let (response, id) = try await sendRequest(request)
         return response.versionInfo
     }
 }
@@ -485,7 +488,7 @@ extension WalletModel {
         let request = InitRequest(persistentPath: dbPath,
                                    temporaryPath: tmpURL?.path(withSlash: true),
                                       setTesting: setTesting)
-        let response = try await sendRequest(request, viewHandles: viewHandles)    // no Delay
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -582,8 +585,8 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = request.operation
-        let result = try await sendRequest(request, viewHandles: viewHandles)
-        return result
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        return response
     }
 }
 // MARK: -
@@ -654,7 +657,7 @@ extension WalletModel {
             let dbPath = docDirUrl.path(withSlash: false)
             let request = ExportDbToFile(directory: dbPath, stem: stem, asJSON: asJSON)
     print(dbPath, stem)
-            let response = try await sendRequest(request, viewHandles: viewHandles)
+            let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
             return response.path
         } else {
             return nil
@@ -668,13 +671,13 @@ extension WalletModel {
     nonisolated func getDiagnostics(viewHandles: Bool = false)
       async throws -> String {
         let request = GetDiagnostics()
-        let response = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
         return response
     }
     nonisolated func getPerformanceStats(viewHandles: Bool = false)
     async throws -> String {
         let request = GetPerformanceStats()
-        let response = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        let (response, id) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
         return response
     }
 }
