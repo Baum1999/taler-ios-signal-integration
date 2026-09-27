@@ -127,7 +127,7 @@ struct TalerWallet1App: App {
                     let testing = false
                     let delay: TimeInterval = 2.25
 #endif
-                    try! await controller.initWalletCore(setTesting: testing, delay: delay)     // will (and should) crash on failure
+                    try? await controller.initWalletCore(setTesting: testing, delay: delay)
                 }
         if #available(iOS 16.4, *) {
             return WindowGroup {
