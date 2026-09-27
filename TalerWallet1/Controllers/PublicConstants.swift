@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -188,6 +188,7 @@ public let HEADEXCHANGE = HTTPS + EXCHANGE + HEAD + "/"
 
 public let ARS_AGE_EXCHANGE = HTTPS + "exchange-age.taler.ar/"
 public let ARS_EXP_EXCHANGE = HTTPS + "exchange-expensive.taler.ar/"
+public let DEMOAMOUNT = UInt64(2500)
 public let DEMOCURRENCY = "KUDOS"
 public let TESTCURRENCY = "TESTKUDOS"
 //public let LONGCURRENCY = "gold-pressed Latinum"                // 20 characters, with dash and space

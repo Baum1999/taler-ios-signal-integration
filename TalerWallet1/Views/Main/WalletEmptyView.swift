@@ -243,7 +243,7 @@ struct WalletEmptyView: View {
                 Button(title) {
                     withDrawStarted = true    // don't run twice
                     Task { // runs on MainActor
-                        let amount = Amount(currency:  DEMOCURRENCY, cent: 2500)
+                        let amount = Amount(currency:  DEMOCURRENCY, cent: DEMOAMOUNT)
                         symLog.log("Withdraw 25 KUDOS")
                         try? await model.loadTestKudos(0, amount: amount)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
