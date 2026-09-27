@@ -393,6 +393,7 @@ struct TransactionCommon: Decodable, Sendable {
     var isAbSuspended   : Bool { txState.major == .suspendedAborting }
     var isFailed        : Bool { txState.major == .failed }
     var isExpired       : Bool { txState.major == .expired }
+    var isClaiming      : Bool { txState.minor == .claimProposal }
     var isRepurchase    : Bool { txState.minor == .repurchase }
     var isAbortable     : Bool { txActions.contains(.abort) }
     var isFailable      : Bool { txActions.contains(.fail) }
@@ -465,6 +466,7 @@ struct WithdrawalDetails: Codable {
     var exchangeCreditAccountDetails: [ExchangeAccountDetails]?
 
   /// Details for manual withdrawals:
+  /// How long does the exchange wait to transfer back funds from a reserve?
     var reserveClosingDelay: Duration?
 
   /// Details for bank-integrated withdrawals:
@@ -510,6 +512,7 @@ struct RefundInfo: Decodable {
 }
 struct PaymentTransactionDetails: Decodable {
     var info: OrderShortInfo?           // only if wallet-core already has it
+    var merchantBaseUrl: String?        // base URL used to claim the order
     var totalRefundRaw: Amount
     var totalRefundEffective: Amount
     var refundPending: Amount?

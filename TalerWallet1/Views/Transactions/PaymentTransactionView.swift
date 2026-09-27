@@ -137,6 +137,9 @@ struct PaymentTransactionView: View {
         _ = selectIndex(defaultChoiceIndex, of: choices)
     }
 
+    var isNotClaiming: Bool {
+        !common.isClaiming
+    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -205,7 +208,7 @@ struct PaymentTransactionView: View {
                     // TODO: purge and reload
                 }
             }
-        } else { // show finished payment
+        } else if isNotClaiming { // show finished payment
             TransactionPayDetailV(stack: stack.push(),
                               paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
             ThreeAmountsSheet(stack: stack.push(),
