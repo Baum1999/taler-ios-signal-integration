@@ -273,7 +273,7 @@ struct MainView: View {
             }
             mainGroup
                 .environmentObject(tabBarModel)
-//              .animation(.default, value: model.error2 == nil)
+                .animation(.default, value: model.error2 == nil)
 #if TALER_NIGHTLY
                 .sheet(item: unlocked($sheetType, locked),
                   onDismiss: sheetDismissed) { sheet in

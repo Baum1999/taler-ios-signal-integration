@@ -25,10 +25,14 @@ struct TimeView: View {
         if remaining <= 0 {
             if isFinished != nil {
                 DispatchQueue.main.async {
-                    isFinished = true
+                    withAnimation {
+                        isFinished = true
+                    }
 //                    print("❗️❗️❗️ retrying…")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                        isFinished = nil
+                        withAnimation {
+                            isFinished = nil
+                        }
 //                        print("❗️❗️❗️ waiting for response…")
                     }
                 }

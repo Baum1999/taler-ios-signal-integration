@@ -27,7 +27,7 @@ struct StalledView: View {
                 }
             }
         }
-        .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
+        .buttonStyle(TalerButtonStyle(type: .bordered, disabled: disabled))
         .padding(.horizontal)
     }
 
@@ -60,24 +60,23 @@ struct StalledView: View {
                 CopyButton(jsonString, title: "Copy Details")
                     .padding(.vertical)
             }
-            Spacer()
             if let lastPhase = controller.lastProgressPhase {
                 if lastPhase.phase == .stalled {
                     if let lastError, let delay = lastError.nextRetryDelay {
-                        if isFinished == false {
+                        ZStack {
                             TimeView("Next retry in:", seconds: Int(delay.toSeconds()), isFinished: $isFinished)
                                 .talerFont(.title3)
                                 .padding(.vertical)
-                        } else if isFinished == true {
+                                .opacity(isFinished == false ? 1 : 0)
                             Text("Retrying…")
                                 .talerFont(.title3)
-                        } else {
+                                .opacity(isFinished == true ? 1 : 0)
                             Text("Waiting for response…")
                                 .talerFont(.title3)
+                                .opacity(isFinished == nil ? 1 : 0)
                         }
+                        retryButton(disabled: isFinished ?? false)
                     }
-                    //                        Spacer()
-                    retryButton(disabled: isFinished ?? false)
                 }
             }
         }
@@ -85,7 +84,9 @@ struct StalledView: View {
         .onChange(of: controller.errorConnection) { isError in
             if isError {
 //                print("❗️❗️❗️ error arrived, idle waiting starts")
-                isFinished = false
+                withAnimation {
+                    isFinished = false
+                }
                 controller.errorConnection = false
             }
         }
