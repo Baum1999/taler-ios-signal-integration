@@ -63,10 +63,10 @@ struct RefundURIView: View {
 }
 
 // MARK: -
-struct RefundURIView_Previews: PreviewProvider {
-    static var previews: some View {
-        let transactionId = "txn:refund:12345"
-        let url = URL(string: "taler://refund/txId")!
-        RefundURIView(stack: CallStack("Preview"), url: url, refundTransactionId: transactionId)
-    }
-}
+//struct RefundURIView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let transactionId = "txn:refund:12345"
+//        let url = URL(string: "taler://refund/txId")!
+//        RefundURIView(stack: CallStack("Preview"), url: url)
+//    }
+//}
