@@ -284,10 +284,10 @@ struct GradientBorder<Content: View>: View {
     }
 }
 extension GradientBorder {
-    init(size: CGFloat, radius: CGFloat = 20.0, lineWidth: CGFloat = 4.0, color: Color, background: Color, content: @escaping () -> Content) {
+    init(size: CGFloat, color: Color, background: Color, content: @escaping () -> Content) {
         self.size = size
-        self.radius = radius
-        self.lineWidth = lineWidth
+        self.radius = 20.0
+        self.lineWidth = 4.0
         self.color = color
         self.background = background
         self.content = content
