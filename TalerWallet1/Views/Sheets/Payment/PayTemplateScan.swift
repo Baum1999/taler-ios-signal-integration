@@ -84,9 +84,17 @@ struct PayTemplateScan: View {
                 summaryIsEditable = contract.summary == nil
             }
 
-            let prepCurrency = contract.currency ?? defaults?.currency ?? supportedCurrencies.first ?? UNKNOWN
-            let zeroAmount = Amount(currency: prepCurrency, cent: 0)
             let prepAmount = contract.amount ?? defaults?.amount        // might be nil
+            var prepCurrency: String
+            if let scope = contract.scopeInfo {
+                if let balance = controller.balance(for: scope) {
+                    amountAvailable = balance.available
+                }
+                prepCurrency = scope.currency
+            } else {
+                prepCurrency = contract.currency ?? defaults?.currency ?? supportedCurrencies.first ?? UNKNOWN
+            }
+            let zeroAmount = Amount(currency: prepCurrency, cent: 0)
             let prepSummary = contract.summary ?? defaults?.summary     // might be nil
 //          symLog.log("LoadingView.task preparePayForTemplate")
             /// preparePayForTemplate will make a network call to the merchant and create a TX
@@ -110,7 +118,6 @@ struct PayTemplateScan: View {
 //              symLog.log("preparePayForTemplateM failed")
 //          }
         }
-
     }
     var body: some View {
         if let templateContract {       // preparePayResult
