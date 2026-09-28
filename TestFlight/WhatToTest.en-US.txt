@@ -1,3 +1,9 @@
+Version 1.6.15 (wallet-core 1.6.47)
+
+• can accept https links for talerURIs (DD103)
+• Warning if the master key changed
+
+
 Version 1.6.14 (wallet-core 1.6.42)
 
 - fix: Restore sqlite backups
