@@ -57,8 +57,10 @@ struct TransactionSummaryList: View {
     @State private var viewId = UUID()
     @State private var selectedChoice: Int? = nil
     @State private var effective: Amount? = nil
+    @State private var paymentPossible: Bool? = nil
     @State private var scope: ScopeInfo? = nil
     @State private var payNow: Bool = false
+    @State private var isWorking: Bool = false
     @Namespace var topID
 
     func loadTransaction() async {
@@ -67,11 +69,11 @@ struct TransactionSummaryList: View {
             symLog.log("reloaded \(reloadedTransaction.localizedType): \(reloadedTransaction.common.txState.major)")
             withAnimation {
                 talerTX = reloadedTransaction;
+                isWorking = reloadedTransaction.common.isWorking
 #if DEBUG
 //                controller.playSound(1104, useSystem: true)
 #endif
                 scope = reloadedTransaction.common.scopes.first
-                viewId = UUID()      // redraw
             }
             if developerMode {
                 if let json = try? await model.jsonTransactionById(transactionId,
@@ -82,7 +84,11 @@ struct TransactionSummaryList: View {
                 }
             }
         } else {
-            withAnimation{ talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+            withAnimation{
+                talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY);
+                isWorking = false
+                viewId = UUID()
+            }
             jsonTransaction = EMPTYSTRING
         }
     }
@@ -158,7 +164,11 @@ struct TransactionSummaryList: View {
                 } else {
                     Task { // runs on MainActor
                            // flush the screen first, then reload
-                        withAnimation { talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                        withAnimation {
+                            talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY);
+                            isWorking = false
+                            viewId = UUID()
+                        }
                         if newMajor != .none {              // don't reload after delete
                             symLog.log("newState: \(newMajor), reloading transaction, for: \(message)")
                             await loadTransaction()
@@ -266,14 +276,20 @@ struct TransactionSummaryList: View {
         } // Delete button
     }
 
+    var possibleStr: String {
+        if let possible = paymentPossible {
+            return possible ? String(localized: "Confirm Payment", comment:"pay merchant navTitle")
+                            : String(localized: "Payment not possible", comment:"pay merchant navTitle")
+        }
+        return String(localized: "Payment", comment:"pay merchant navTitle")
+    }
     var navTitleStr: String {
         let isPaying = talerTX.isPayment && talerTX.isDialog
         let isRepurchase = talerTX.common.isRepurchase
         return talerTX.isDone ? talerTX.localizedTypePast
-            : isPaying ? (effective != nil ? String(localized: "Confirm Payment", comment:"pay merchant navTitle")
-                                           : String(localized: "Payment not possible", comment:"pay merchant navTitle"))
-            : isRepurchase ? String(localized: "Already paid", comment:"repurchase merchant navTitle")
-            : talerTX.localizedType
+                   : isPaying ? possibleStr
+               : isRepurchase ? String(localized: "Already paid", comment:"repurchase merchant navTitle")
+                              : talerTX.localizedType
     }
 
     var body: some View {
@@ -292,12 +308,13 @@ struct TransactionSummaryList: View {
                 if developerMode && withActions { suspendResume(common) }
                 if !isPaying {
                     Section {
-                        VStack(alignment: .leading) {
-                            dateAndStatus(common)
-                                .listRowSeparator(.hidden)
-                                .talerFont(.title)
-                        }.overlay {
-                            if common.isWorking {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                dateAndStatus(common)
+                                    .listRowSeparator(.hidden)
+                                    .talerFont(.title)
+                            }
+                            if isWorking {
 #if DEBUG
                                 let background = developerMode ? Color.red : nil
 #else
@@ -306,12 +323,13 @@ struct TransactionSummaryList: View {
                                 RotatingTaler(size: 80, progress: true, once: false,
                                         background: background,
                                    rotationEnabled: Binding.constant(true))
+                                .transition(.opacity.combined(with: .scale))
                             }
                         }
                     }
                 }
                 if controller.stalledConnection {
-                    StalledView()
+//                    StalledView()         => show this in the safeArea
                 } else {
                     TransactionTypeDetail(stack: stack.push(),
                                     transaction: $talerTX,
@@ -319,6 +337,7 @@ struct TransactionSummaryList: View {
                                  selectedChoice: $selectedChoice,
                                           scope: $scope,
                                       effective: $effective,    // return amount for "Pay <amount> now"
+                                       possible: $paymentPossible,
                                         hasDone: hasDone)
 
                     // TODO: Retry Countdown, Retry Now button
@@ -334,6 +353,9 @@ struct TransactionSummaryList: View {
             .navigationBarBackButtonHidden(hasDone)
             .interactiveDismissDisabled(hasDone && !isPaying)     // can only use "Done" button to dismiss
             .safeAreaInset(edge: .bottom) {
+                let cancelButton = Button("Cancel") { dismissTop(stack.push()) }
+                    .buttonStyle(TalerButtonStyle(type: .bordered))
+                    .padding(is26 ? .horizontal : .all)
                 let bottomButton = ZStack {
                     if isPaying, case .payment(let paymentTransaction) = talerTX {
                         let details = paymentTransaction.details
@@ -346,9 +368,7 @@ struct TransactionSummaryList: View {
                                     amountA11y: formatted.1,
                                         payNow: $payNow)
                         } else {
-                            Button("Cancel") { dismissTop(stack.push()) }
-                                .buttonStyle(TalerButtonStyle(type: .bordered))
-                                .padding(is26 ? .horizontal : .all)
+                            cancelButton
                         } // Cancel
                     } else if let showDone {
                         Button("Done") { dismissTop(stack.push()) }
@@ -356,8 +376,22 @@ struct TransactionSummaryList: View {
                             .padding(is26 ? .horizontal : .all)
                     }
                 }
-                bottomButton
-                    .padding(is26 ? .horizontal : .all)
+                if controller.stalledConnection {
+                    VStack {
+                        StalledView()
+                        cancelButton
+                            .padding(.bottom)
+                    }
+                        .background {
+                            SelectedBackground(useColor: false)
+                        }
+                        .padding(is26 ? .horizontal : .all)
+                        .transition(.move(edge: .bottom))
+                } else {
+                    bottomButton
+                        .padding(is26 ? .horizontal : .all)
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
             .navigationTitle(navTitle ?? navTitleStr)
             .onChange(of: payNow) { payNow2 in

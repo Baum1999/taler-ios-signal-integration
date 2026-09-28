@@ -18,6 +18,7 @@ struct TransactionTypeDetail: View {
     @Binding var selectedChoice: Int?
     @Binding var scope: ScopeInfo?
     @Binding var effective: Amount?
+    @Binding var possible: Bool?
     let hasDone: Bool
 
     @EnvironmentObject private var controller: Controller
@@ -146,6 +147,7 @@ struct TransactionTypeDetail: View {
                               paymentTransaction: paymentTransaction,
                                            scope: $scope,
                                        effective: $effective,
+                                        possible: $possible,
                                           payNow: $payNow,
                                   selectedChoice: $selectedChoice)
                     .task(id: common.txState.hashValue) {

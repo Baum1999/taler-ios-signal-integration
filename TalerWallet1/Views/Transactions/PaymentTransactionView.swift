@@ -75,6 +75,7 @@ struct PaymentTransactionView: View {
     let paymentTransaction: PaymentTransaction
     @Binding var scope: ScopeInfo?
     @Binding var effective: Amount?
+    @Binding var possible: Bool?
     @Binding var payNow: Bool
     @Binding var selectedChoice: Int?
 
@@ -105,7 +106,10 @@ struct PaymentTransactionView: View {
         if selectionDetail.status == .paymentPossible {
             selectedChoice = select
             effective = selectionDetail.amountEffective
+            possible = true
             return select
+        } else {
+            possible = false
         }
         return nil
     }
@@ -167,9 +171,11 @@ struct PaymentTransactionView: View {
                             if let newValue, newValue < choices.count {
                                 let newChoice = choices[newValue]
                                 effective = newChoice.0.amountEffective
+                                possible = newChoice.0.status == .paymentPossible
                                 scope = newChoice.0.scopeInfo
                             } else {
                                 effective = nil
+                                possible = nil
                                 scope = nil
                             }
                         }
