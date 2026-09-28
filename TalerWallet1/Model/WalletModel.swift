@@ -339,6 +339,8 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = txId
+        controller.lastProgressError = nil
+        controller.lastProgressPhase = nil
         let (response, id) = try await sendRequest(request)
         return response
     }
