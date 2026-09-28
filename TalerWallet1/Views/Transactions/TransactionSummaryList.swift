@@ -67,6 +67,9 @@ struct TransactionSummaryList: View {
             symLog.log("reloaded \(reloadedTransaction.localizedType): \(reloadedTransaction.common.txState.major)")
             withAnimation {
                 talerTX = reloadedTransaction;
+#if DEBUG
+//                controller.playSound(1104, useSystem: true)
+#endif
                 scope = reloadedTransaction.common.scopes.first
                 viewId = UUID()      // redraw
             }
@@ -295,8 +298,13 @@ struct TransactionSummaryList: View {
                                 .talerFont(.title)
                         }.overlay {
                             if common.isWorking {
+#if DEBUG
+                                let background = developerMode ? Color.red : nil
+#else
+                                let background = nil
+#endif
                                 RotatingTaler(size: 80, progress: true, once: false,
-                                        background: developerMode ? .red : nil,
+                                        background: background,
                                    rotationEnabled: Binding.constant(true))
                             }
                         }

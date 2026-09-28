@@ -276,8 +276,13 @@ struct TransactionRowView: View {
         ZStack {
             row
             if isWorking {
+#if DEBUG
+                let background = developerMode ? Color.green : nil
+#else
+                let background = nil
+#endif
                 RotatingTaler(size: 80, progress: true, once: false,
-                        background: developerMode ? .green : nil,
+                        background: background,
                    rotationEnabled: Binding.constant(true))
             }
         }

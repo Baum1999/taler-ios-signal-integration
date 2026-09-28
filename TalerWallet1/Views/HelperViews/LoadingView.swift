@@ -145,10 +145,15 @@ struct LoadingView: View {
                 StalledView()
             } else {
                 Spacer()
+#if DEBUG
+                let background = developerMode ? Color.blue : nil
+#else
+                let background = nil
+#endif
                 RotatingTaler(size: 100,
                           progress: true,                 // VoiceOver "In progress"
                               once: false,
-                        background: developerMode ? .blue : nil,
+                        background: background,
                    rotationEnabled: $rotationEnabled)
                     .onTapGesture(count: 1) {
                         rotationEnabled.toggle()

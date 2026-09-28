@@ -84,8 +84,13 @@ struct TransactionTypeDetail: View {
                     Text(title)
                         .talerFont(.body)
                     if common.isWorking {
+#if DEBUG
+                        let background = developerMode ? Color.orange : nil
+#else
+                        let background = nil
+#endif
                         RotatingTaler(size: 100, progress: true, once: false,
-                                background: developerMode ? .orange : nil,
+                                background: background,
                            rotationEnabled: $rotationEnabled)
                             .frame(maxWidth: .infinity, alignment: .center)
                             // has its own accessibilityLabel
