@@ -8,15 +8,10 @@
 import SwiftUI
 import taler_swift
 
-struct ChoicesView: View, Sendable {
-    let stack: CallStack
-    let choiceTriple: [ChoiceTriple]
-    let showHeader: Bool
-    let automaticIndex: Int?
-    @Binding var selectedChoice: Int?
+struct SelectedBackground: View, Sendable {
+    let useColor: Bool
 
-    @ViewBuilder
-    func selectedBackground(_ useColor: Bool) -> some View {
+    var body: some View {
         let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
         let color: Color = useColor ? WalletColors().primaryAccent
                                     : .secondary
@@ -30,6 +25,14 @@ struct ChoicesView: View, Sendable {
                 .foregroundColor(Color.clear)
         }
     }
+}
+
+struct ChoicesView: View, Sendable {
+    let stack: CallStack
+    let choiceTriple: [ChoiceTriple]
+    let showHeader: Bool
+    let automaticIndex: Int?
+    @Binding var selectedChoice: Int?
 
     var body: some View {
         ForEach(choiceTriple, id: \.1) { choice in
@@ -62,7 +65,7 @@ struct ChoicesView: View, Sendable {
                     }
                     if index == selectedChoice {
                         amountV.listRowBackground (
-                            selectedBackground(isPaymentPossible)
+                            SelectedBackground(useColor: isPaymentPossible)
 //                          .padding(.top, n == 1 ? 0 : -15)
 //                          .padding(.bottom, n == 10 ? 0 : -15)
                         )
