@@ -87,7 +87,7 @@ struct MigrationView: View {
             Section(header: Text("Update database")) {
                 if isMigrating || isFinished || isCancelled {
                     if fakeMigration {
-                        Text("Simulating migration:")
+                        Text("Simulating update:")
                             .talerFont(.title)
                             .task {
                                 for x in 0...90 {

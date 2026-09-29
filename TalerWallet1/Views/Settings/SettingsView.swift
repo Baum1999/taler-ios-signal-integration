@@ -176,7 +176,7 @@ struct SettingsView: View {
 
                 SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning,
                                 id1: "warnings",
-                          imageName: "exclamationmark.triangle", // 􀇾
+                          imageName: WARNING,           // 􀇾
                         description: String(localized: "For Delete, Abandon & Abort buttons"))
 
               /// Report
