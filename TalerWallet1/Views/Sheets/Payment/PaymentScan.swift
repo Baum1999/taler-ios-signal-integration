@@ -243,32 +243,16 @@ struct PaySafeArea: View, Sendable {
     let terms: MerchantContractTerms
     let amountString: String
     let amountA11y: String
+    @Binding var isFinished: Bool?
     @Binding var payNow: Bool
 
     @EnvironmentObject private var controller: Controller
 
     @State private var wasTapped: Bool = false
-
-    func timeToPay(_ terms: MerchantContractTerms) -> Int {
-        if let milliseconds = try? terms.payDeadline.milliseconds() {
-            let date = Date(milliseconds: milliseconds)
-            let now = Date.now
-            let timeInterval = now.timeIntervalSince(date)
-            if timeInterval < 0 {
-                symLog?.log("\(timeInterval) seconds left to pay")
-                return Int(-timeInterval)
-            } else {
-                symLog?.log("\(date) - \(now) = \(timeInterval)")
-            }
-        } else {
-            symLog?.log("no milliseconds")
-        }
-        return 0
-    }
+    @State private var timeToPay: Int?
 
     var body: some View {
-        let timeToPay = timeToPay(terms)
-        let showTime = timeToPay > 0 && timeToPay < 300
+        let fiveMinutes = 5 * 60
         let button = Button("Pay \(amountString) now") {
             if !wasTapped {
                 wasTapped = true
@@ -282,7 +266,7 @@ struct PaySafeArea: View, Sendable {
                 payNow = true
 #endif
             }
-        }
+        }.id("payNow")
             .accessibilityLabel(Text("Pay \(amountA11y) now", comment: "a11y"))
             .buttonStyle(TalerButtonStyle(type: .prominent, disabled: wasTapped))
             .disabled(wasTapped)
@@ -290,22 +274,41 @@ struct PaySafeArea: View, Sendable {
                 if !newValue { wasTapped = false }  // this attempt finished (success or failure) - allow retry
             }
             .padding(.horizontal)
+            .task {
+                timeToPay = terms.timeToPay(true)
+                if let timeToPay {
+                    if timeToPay >= fiveMinutes {
+                        let nextCheck = timeToPay - fiveMinutes
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(nextCheck)) {
+                            self.timeToPay = terms.timeToPay(true)
+                        }
+                    } else if timeToPay < 2 {
+                        isFinished = true
+                    }
+                }
+            }
 
-        if showTime {
-            let view = VStack {
-                TimeView(String(localized: "Time to pay:"),
-                                  seconds: timeToPay)
-                    .padding(.top)
+        if let timeToPay {
+            if timeToPay < fiveMinutes {
+                let view = VStack {
+                    TimeView(String(localized: "Time to pay:"),
+                                      seconds: timeToPay,
+                                   isFinished: $isFinished)
+                        .padding(.top)
+                    button
+                }
+                if #available(iOS 26.0, *) {
+                    view
+                        .glassEffect(in: .rect(cornerRadius: 16.0))
+                } else {
+                    view
+                }
+            } else {
+                let _ = symLog?.log("timeToPay \(timeToPay) seconds not shown")
                 button
             }
-            if #available(iOS 26.0, *) {
-                view
-                    .glassEffect(in: .rect(cornerRadius: 16.0))
-            } else {
-                view
-            }
         } else {
-            let _ = symLog?.log("\(timeToPay) not shown")
+            let _ = symLog?.log("no timeToPay")
             button
         }
     }

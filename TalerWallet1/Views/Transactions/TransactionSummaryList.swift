@@ -59,6 +59,7 @@ struct TransactionSummaryList: View {
     @State private var effective: Amount? = nil
     @State private var paymentPossible: Bool? = nil
     @State private var scope: ScopeInfo? = nil
+    @State private var isFinished: Bool? = false
     @State private var payNow: Bool = false
     @State private var isWorking: Bool = false
     @Namespace var topID
@@ -359,13 +360,14 @@ struct TransactionSummaryList: View {
                 let bottomButton = ZStack {
                     if isPaying, case .payment(let paymentTransaction) = talerTX {
                         let details = paymentTransaction.details
-                        if let effective, let terms = details.contractTerms {
+                        if let effective, let terms = details.contractTerms, isFinished != true {
                             let formatted = effective.formatted(currencyInfo)
                             PaySafeArea(symLog: symLog,
                                          stack: stack.push(),
                                          terms: terms,
                                   amountString: formatted.0,
                                     amountA11y: formatted.1,
+                                    isFinished: $isFinished,
                                         payNow: $payNow)
                         } else {
                             cancelButton
