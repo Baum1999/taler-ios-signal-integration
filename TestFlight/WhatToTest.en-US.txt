@@ -1,3 +1,9 @@
+Version 1.6.16 (wallet-core 1.6.48)
+
+• fix error handling
+• fix Request money
+
+
 Version 1.6.15 (wallet-core 1.6.47)
 
 • can accept https links for talerURIs (DD103)
