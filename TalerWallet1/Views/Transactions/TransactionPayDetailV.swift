@@ -89,7 +89,7 @@ struct TransactionPayDetailV: View {
                     if let choices = contractTerms.choices,
                        choices.indices.contains(choiceIndex) {
                         let choice = choices[choiceIndex]
-                        Text(choice.descI18n ?? "Index: \(choiceIndex)")   // should never happen
+                        Text(choice.locDescription ?? "Index: \(choiceIndex)")   // fallback should never happen
                             .talerFont(.body)
                     }
                 }

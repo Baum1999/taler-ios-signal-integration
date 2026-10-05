@@ -66,7 +66,7 @@ struct TransferRestrictionsV: View {
 }
 // MARK: -
 struct RestrictionsV: View {
-    let hintsI18n: HintDict
+    let hintsI18n: I18nDict
     var human_hint: String?
 
     @State private var selectedLanguage = Locale.preferredLanguageCode

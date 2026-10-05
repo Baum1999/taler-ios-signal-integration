@@ -198,20 +198,8 @@ struct ContractChoice: Codable, Hashable {
         case inputs, outputs
     }
 
-    var descI18n: String? {
-        if let i18nDict = self.descriptionI18n {
-            if !i18nDict.isEmpty {
-                for code in Locale.preferredLanguageCodes {
-                    if let descI18n = i18nDict[code] {
-                        return descI18n
-                    }
-                }
-            }
-        }
-        if let desc = self.description {
-            return desc
-        }
-        return nil
+    var locDescription: String? {
+        self.descriptionI18n?.localized ?? self.description
     }
 }
 
@@ -293,6 +281,10 @@ struct MerchantContractTerms: Codable {
 //        case auditors
         case choices
         case tokenFamilies = "token_families"
+    }
+
+    var locSummary: String {
+        self.summaryI18n?.localized ?? self.summary
     }
 }
 // MARK: - Auditor

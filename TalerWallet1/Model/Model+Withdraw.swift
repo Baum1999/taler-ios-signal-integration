@@ -14,13 +14,11 @@ enum AccountRestrictionType: String, Codable {
     case regex
 }
 
-typealias HintDict = [String:String]
-
 struct AccountRestriction: Codable, Hashable {
     var type: AccountRestrictionType
     var payto_regex: String?
     var human_hint: String?
-    var human_hint_i18n: HintDict?
+    var human_hint_i18n: I18nDict?
 }
 extension AccountRestriction: Identifiable {
     var id: AccountRestriction {self}

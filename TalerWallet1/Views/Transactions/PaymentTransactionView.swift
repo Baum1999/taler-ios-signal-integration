@@ -15,23 +15,10 @@ struct MerchantHeader: View {
 
     @State private var image: Image? = nil
 
-    func summary(_ terms: MerchantContractTerms) -> String {
-        if let i18nDict = terms.summaryI18n {
-            if !i18nDict.isEmpty {
-                for code in Locale.preferredLanguageCodes {
-                    if let descI18n = i18nDict[code] {
-                        return descI18n
-                    }
-                }
-            }
-        }
-        return terms.summary
-    }
-
     var body: some View {
         if let terms {
             Section {
-                Text(summary(terms))
+                Text(terms.locSummary)
                     .talerFont(.title3)
             } header: {
                 HStack {
@@ -81,22 +68,6 @@ struct PaymentTransactionView: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-
-    func summary(_ info: OrderShortInfo?) -> String? {
-        if let i18nDict = info?.summary_i18n {
-            if !i18nDict.isEmpty {
-                for code in Locale.preferredLanguageCodes {
-                    if let i18n = i18nDict[code] {
-                        return i18n
-                    }
-                }
-            }
-        }
-        if let summary = info?.summary {
-            return summary
-        }
-        return String(localized: "No summary", comment: "OrderShortInfo.summary")
-    }
 
     func selectIndex(_ index: Int?, of choices: [ChoiceTriple]) -> Int? {
         let index1 = index ?? 0
@@ -180,6 +151,8 @@ struct PaymentTransactionView: View {
                             }
                         }
 
+                        let summary = details.info?.locSummary ??
+                            String(localized: "No summary", comment: "OrderShortInfo.summary")
                         if let selectedChoice {
                             let choice = choices[selectedChoice]
                             let selectionDetail: ChoiceSelectionDetail = choice.0
@@ -191,7 +164,7 @@ struct PaymentTransactionView: View {
                                      effective: effective,
                                     firstScope: scope,
                                        baseURL: nil,
-                                       summary: summary(details.info),
+                                       summary: summary,
                                       products: details.info?.products ?? [],
                                 balanceDetails: selectionDetail.balanceDetails)
                         } else if let choice = choices.first {
@@ -203,7 +176,7 @@ struct PaymentTransactionView: View {
                                      effective: nil,
                                     firstScope: scope,
                                        baseURL: nil,
-                                       summary: summary(details.info),
+                                       summary: summary,
                                       products: details.info?.products ?? [],
                                 balanceDetails: selectionDetail.balanceDetails)
                         }
@@ -226,7 +199,7 @@ struct PaymentTransactionView: View {
                              noFees: nil,               // TODO: noFees
                       feeIsNegative: false,
                               large: true,
-                            summary: details.info?.summary ?? EMPTYSTRING)
+                            summary: details.info?.locSummary ?? EMPTYSTRING)
         } // show finished payment
     } // body
 } // PaymentTransactionView

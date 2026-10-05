@@ -828,7 +828,7 @@ enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
             case .deposit(let depositTransaction):
                 result[EXCHANGEBASEURL] = depositTransaction.details.depositGroupId
             case .payment(let paymentTransaction):
-                result["summary"] = paymentTransaction.details.info?.summary ?? EMPTYSTRING
+                result["summary"] = paymentTransaction.details.info?.locSummary ?? EMPTYSTRING
             case .refund(let refundTransaction):
                 if let info = refundTransaction.details.paymentInfo {
                     result["summary"] = info.summary

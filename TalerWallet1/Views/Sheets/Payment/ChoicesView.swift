@@ -74,7 +74,7 @@ struct ChoicesView: View, Sendable {
                     }
                 } header: {
                     if showHeader {
-                        if let description = contractChoice.descI18n {
+                        if let description = contractChoice.locDescription {
                             Text(description)
                 }   }   }
             }

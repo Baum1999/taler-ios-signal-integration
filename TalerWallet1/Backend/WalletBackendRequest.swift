@@ -164,6 +164,10 @@ struct OrderShortInfo: Codable {
     var fulfillmentMessage: String?
     var fulfillmentMessage_i18n: I18nDict?
     var contractTermsHash: String?
+
+    var locSummary: String {
+        self.summary_i18n?.localized ?? self.summary
+    }
 }
 // MARK: -
 /// A request to force update an exchange.
