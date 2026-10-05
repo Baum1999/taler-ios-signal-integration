@@ -16,6 +16,7 @@ struct BalancesListView: View {
     let stack: CallStack
     let title: String
     @Binding var selectedBalance: Balance?                      // set in TransactionsListView
+    @Binding var showRealCashHint: Bool
     @Binding var reloadTransactions: Int
 
     @EnvironmentObject private var model: WalletModel
@@ -28,7 +29,6 @@ struct BalancesListView: View {
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
-    @State private var showRealCashHint = true
 
     @State private var historyTapped: Int? = nil
     @Namespace var namespace

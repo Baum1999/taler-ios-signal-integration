@@ -55,6 +55,7 @@ struct WalletMain: View {
     @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary: String = EMPTYSTRING
     @State private var iconID: String? = nil
+    @State private var showRealCashHint = true
 
     private var openKycButton: some View {
         Button("Legitimization") {
@@ -175,7 +176,7 @@ struct WalletMain: View {
         let balancesStack = NavigationView {
             ZStack(alignment: .trailing) {
                 if controller.balances.isEmpty {
-                    WalletEmptyHeader(stack: stack.push())
+                    WalletEmptyHeader(stack: stack.push(), showRealCashHint: $showRealCashHint)
                 } else {
 //                    if #available(iOS 17.0, *) {
 //                        CarouselView(stack: stack.push(balancesTitle),
@@ -185,6 +186,7 @@ struct WalletMain: View {
                     BalancesListView(stack: stack.push(balancesTitle),
                                      title: balancesTitle,
                            selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
+                          showRealCashHint: $showRealCashHint,
                         reloadTransactions: $shouldReloadTransactions)
                     .accessibilitySortPriority(1) // Reads third
 //                    } iOS 15 + 16

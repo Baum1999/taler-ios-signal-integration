@@ -128,6 +128,7 @@ struct ProdSectionView: View {
 /// It is the very first thing the user sees after installing the app
 struct WalletEmptyHeader: View {
     let stack: CallStack
+    @Binding var showRealCashHint: Bool
 
     @EnvironmentObject private var controller: Controller
 
@@ -138,7 +139,8 @@ struct WalletEmptyHeader: View {
     }
 
     var body: some View {
-        let emptyView =  WalletEmptyView(stack: stack.push("isEmpty"))
+        let emptyView =  WalletEmptyView(stack: stack.push("isEmpty"),
+                              showRealCashHint: $showRealCashHint)
 //                  .navigationTitle("Taler Wallet")
             .refreshable {
                 await refresh()
@@ -204,6 +206,7 @@ struct WalletHeader<Content: View> : View {
 struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    @Binding var showRealCashHint: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -211,7 +214,6 @@ struct WalletEmptyView: View {
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @State private var withDrawStarted = false
     @State private var urlToOpen: URL? = nil
-    @State private var showRealCashHint = true
 
     var body: some View {
         let list = List {
@@ -288,6 +290,7 @@ struct WalletEmptyView: View {
 // MARK: -
 struct WalletEmptyView_Previews: PreviewProvider {
     static var previews: some View {
-        WalletEmptyView(stack: CallStack("Preview"))
+        WalletEmptyView(stack: CallStack("Preview"),
+             showRealCashHint: Binding.constant(true))
     }
 }
