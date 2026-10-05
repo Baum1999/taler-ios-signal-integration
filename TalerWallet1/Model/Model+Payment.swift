@@ -11,6 +11,18 @@ import AnyCodable
 //import SymLog
 
 typealias I18nDict = [String: String]           // two-char language code, e.g. "de", "en"
+extension I18nDict {
+    var localized: String? {
+        if !self.isEmpty {
+            for code in Locale.preferredLanguageCodes {
+                if let i18n = self[code] {
+                    return i18n
+                }
+            }
+        }
+        return nil
+    }
+}
 // MARK: - ContractTerms
 
 struct TokenIssuePublicKey: Codable {
