@@ -248,11 +248,12 @@ struct PreparePeerPullDebitResponse: Codable {
 fileprivate struct PreparePeerPullDebit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPullDebitResponse
     var operation: String { "preparePeerPullDebit" }
-    func args() -> Args { Args(talerUri: talerUri) }
+    func args() -> Args { Args(talerUri: talerUri, progressToken: talerUri) }
 
     var talerUri: String
     struct Args: Encodable {
         var talerUri: String
+        var progressToken: String
     }
 }
 extension WalletModel {
@@ -260,6 +261,9 @@ extension WalletModel {
                                          viewHandles: Bool = false)
       async throws -> PreparePeerPullDebitResponse {
         let request = PreparePeerPullDebit(talerUri: talerUri)
+          let controller = Controller.shared
+          controller.progressOperation = request.operation
+          controller.progressToken = talerUri
         let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }

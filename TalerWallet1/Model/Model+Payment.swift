@@ -347,7 +347,7 @@ struct PreparePayResult2: Codable {
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
     var operation: String { "preparePayForUriV2" }
-    func args() -> Args { Args(talerPayUri: talerPayUri) }  // No progressToken!
+    func args() -> Args { Args(talerPayUri: talerPayUri) }  // No progressToken! use waitTransactionState
 
     var talerPayUri: String
     struct Args: Encodable {
