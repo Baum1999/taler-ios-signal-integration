@@ -283,6 +283,30 @@ struct MerchantContractTerms: Codable {
         case tokenFamilies = "token_families"
     }
 
+    func timeToPay(_ debug: Bool) -> Int? {
+        if let milliseconds = try? self.payDeadline.milliseconds() {
+            let date = Date(milliseconds: milliseconds)
+            let now = Date.now
+            let timeInterval = now.timeIntervalSince(date)
+            if timeInterval < 0 {
+                let result = Int(-timeInterval)
+                if debug {
+//                  symLog?.log("\(timeInterval) seconds left to pay")
+                    print("\(result) seconds left to pay")
+                }
+                return result
+            } else if debug {
+//              symLog?.log("\(date) - \(now) = \(timeInterval)")
+                print("\(date) - \(now) = \(timeInterval)")
+            }
+            return 0
+        } else if debug {
+//            symLog?.log("no milliseconds")
+            print("no milliseconds in payDeadline")
+        }
+        return nil
+    }
+
     var locSummary: String {
         self.summaryI18n?.localized ?? self.summary
     }
