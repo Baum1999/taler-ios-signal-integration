@@ -369,6 +369,19 @@ struct MainView: View {
 #endif
         }   }   }
 
+        .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+            guard let url = userActivity.webpageURL else { return }
+            symLog.log(".onContinueUserActivity: \(url)")
+            // will be called on https://wallet.taler.net/link#
+            urlToOpen = url
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+#if TALER_NIGHTLY
+                sheetType = .url(url)
+#else
+                showUrlSheet = true     // raise sheet
+#endif
+        }   }
+
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
             // will be called on a taler:// scheme either
