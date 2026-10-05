@@ -139,19 +139,50 @@ struct Tax: Codable {
 
 /// A product being purchased from a merchant.
 /// https://docs.taler.net/core/api-merchant.html#the-contract-terms
-struct Product: Codable, Identifiable {
-    var product_id: String?
-    var description: String
-//    var description_i18n:   ?
-    var quantity: Int?
-    var unit: String?
-    var price: Amount?
-    var image: String? // product image 128x128 encoded
-    var taxes: [Tax]?
-    var delivery_date: Timestamp?
+struct ProductSold: Codable, Identifiable {
+    let productId: String?
+    let productName: String?
+//    let productGroupId: Int?
+    let description: String
+    let descriptionI18n: I18nDict?
+    let quantity: Int?
+    let unitQuantity: String?       // float with max 6 fractional digits
+    let unit: String?               // name of merchantUnit
+    let price: Amount?              // deprecated - use prices
+    let prices: [Amount]?
+    let pricesAreNet: Bool?
+    let image: String?              // product image 128x128 encoded
+    let taxes: [Tax]?
+    let deliveryDate: Timestamp?
+    let productMoneyPot: Int?
 
-    var id: String { product_id ?? "unknown" }
+    var id: String { productId ?? "unknown" }
+
+    var locDescription: String {
+        self.descriptionI18n?.localized ?? self.description
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case productId = "product_id"
+        case productName = "product_name"
+//        case productGroupId = "product_group_id"
+        case description
+        case descriptionI18n = "description_i18n"
+        case quantity
+        case unitQuantity = "unit_quantity"
+//        case unitAllowFraction = "unit_allow_fraction"
+        case unit
+        case price
+//        case unitPrice = "unit_price"
+        case prices
+        case pricesAreNet = "prices_are_net"
+        case image
+        case taxes
+        case deliveryDate = "delivery_date"
+        case productMoneyPot = "product_money_pot"
+    }
 }
+
 
 /// Brief information about an order.
 struct OrderShortInfo: Codable {
@@ -159,7 +190,7 @@ struct OrderShortInfo: Codable {
     var merchant: MerchantInfo
     var summary: String
     var summary_i18n: I18nDict?
-    var products: [Product]?
+//    var products: [Product]?      // MerchantContractTerms has [ProductSold]
     var fulfillmentUrl: String?
     var fulfillmentMessage: String?
     var fulfillmentMessage_i18n: I18nDict?

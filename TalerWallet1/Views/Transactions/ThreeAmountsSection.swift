@@ -107,7 +107,7 @@ struct ThreeAmountsSection: View {
     let baseURL: String?
     let txStateLcl: String?                 // localizedState
     let summary: String?
-    let products: [Product]?
+    let products: [ProductSold]?
 
     @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
@@ -123,7 +123,9 @@ struct ThreeAmountsSection: View {
         if let products {
             for product in products {
                 if let imageBase64 = product.image {
-                    let productImage = ProductImage(imageBase64, product.description, product.price)
+                    // TODO: choose price for scope
+                    let price = product.prices?.first ?? product.price
+                    let productImage = ProductImage(imageBase64, product.description, price)
                     temp.append(productImage)
                 }
             }

@@ -126,6 +126,7 @@ struct PaymentTransactionView: View {
 
             let choicesTuple = controller.choicesTuple
             if let txId = choicesTuple.0, let choicesForPayment = choicesTuple.1 {
+                let terms = choicesForPayment.contractTerms
                 if txId == common.transactionId {
                     if let (choices, showHeader) = choicesForPayment.choiceTriple() {
                         let hasAutomatic = choicesForPayment.automaticExecution ?? false
@@ -165,7 +166,7 @@ struct PaymentTransactionView: View {
                                     firstScope: scope,
                                        baseURL: nil,
                                        summary: summary,
-                                      products: details.info?.products ?? [],
+                                      products: terms.products ?? [],
                                 balanceDetails: selectionDetail.balanceDetails)
                         } else if let choice = choices.first {
                             let selectionDetail: ChoiceSelectionDetail = choice.0
@@ -177,7 +178,7 @@ struct PaymentTransactionView: View {
                                     firstScope: scope,
                                        baseURL: nil,
                                        summary: summary,
-                                      products: details.info?.products ?? [],
+                                      products: terms.products ?? [],
                                 balanceDetails: selectionDetail.balanceDetails)
                         }
                     } else { // should never happen...

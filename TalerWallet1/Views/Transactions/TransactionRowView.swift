@@ -449,7 +449,8 @@ extension TalerTransaction {             // for PreViews
             let info = OrderShortInfo(orderId: "some order ID",
                                      merchant: merchant,
                                       summary: "some product summary",
-                                     products: [])
+//                                     products: []
+                       )
             let pDetails = PaymentTransactionDetails(info: info,
                                            totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
                                      totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280),

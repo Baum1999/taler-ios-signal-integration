@@ -22,6 +22,7 @@ struct TransactionPayDetailV: View {
     var body: some View {
         let common = paymentTx.common
         let details = paymentTx.details
+        let terms = details.contractTerms
         let info = details.info
         Section {
             if let posConfirmation = details.posConfirmation {
@@ -95,12 +96,16 @@ struct TransactionPayDetailV: View {
                 }
             }
         }
-        if let products = info?.products {
+        if let products = terms?.products {
             ForEach(products) { product in
-                if let product_id = product.product_id {
+                if let productId = product.productId {
                     Section {
-                        Text(product_id)
+                        Text(productId)
                             .talerFont(.body)
+                        if let productName = product.productName {
+                            Text(productName)
+                                .talerFont(.body)
+                        }
                     }
                 }
             }
