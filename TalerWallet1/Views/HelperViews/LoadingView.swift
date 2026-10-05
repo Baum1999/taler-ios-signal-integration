@@ -140,25 +140,24 @@ struct LoadingView: View {
 
 
     var body: some View {
+#if DEBUG2
+        let background = developerMode ? Color.blue : nil
+#else
+        let background: Color? = nil
+#endif
+        let rotatingTaler = RotatingTaler(size: 100,
+                                      progress: true,                 // VoiceOver "In progress"
+                                          once: false,
+                                    background: background,
+                               rotationEnabled: $rotationEnabled)
+            .id("rotatingTaler")
         let view = VStack(alignment: .center) {
+            Spacer()
+            rotatingTaler
+            Spacer()
             if controller.stalledConnection {
                 StalledView()
             } else {
-                Spacer()
-#if DEBUG
-                let background = developerMode ? Color.blue : nil
-#else
-                let background = nil
-#endif
-                RotatingTaler(size: 100,
-                          progress: true,                 // VoiceOver "In progress"
-                              once: false,
-                        background: background,
-                   rotationEnabled: $rotationEnabled)
-                    .onTapGesture(count: 1) {
-                        rotationEnabled.toggle()
-                    }
-                Spacer()
                 if let scopeInfo {
                     if let urlStr = scopeInfo.url {
                         Text(urlStr.trimURL)
@@ -176,7 +175,7 @@ struct LoadingView: View {
             dismissButton
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(.horizontal)
         .talerFont(.title)
         .navigationTitle(navTitle)
         .background(FullBackground())

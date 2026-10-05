@@ -75,26 +75,32 @@ struct TransactionTypeDetail: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()
 #endif
+#if DEBUG
+        let background = developerMode ? Color.orange : nil
+#else
+        let background: Color? = nil
+#endif
         let common = transaction.common
         let pending = transaction.isPending
         let isDialog = transaction.isDialog
         Group {
             switch transaction {
                 case .dummy(_): Group {
-                    let title = EMPTYSTRING
-                    Text(title)
-                        .talerFont(.body)
-                    if common.isWorking {
-#if DEBUG
-                        let background = developerMode ? Color.orange : nil
-#else
-                        let background = nil
-#endif
-                        RotatingTaler(size: 100, progress: true, once: false,
-                                background: background,
-                           rotationEnabled: $rotationEnabled)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            // has its own accessibilityLabel
+                    Section {
+                        if common.isWorking {
+                            HStack {
+                                Spacer()
+                                RotatingTaler(size: 100, progress: true, once: false,
+                                        background: background,
+                                   rotationEnabled: $rotationEnabled)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                // has its own accessibilityLabel
+                            }
+                        } else {
+                            let title = EMPTYSTRING
+                            Text(title)
+                                .talerFont(.body)
+                        }
                     }
                 }
                 case .withdrawal(let withdrawalTransaction): Group {

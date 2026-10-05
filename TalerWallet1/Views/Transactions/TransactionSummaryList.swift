@@ -292,22 +292,29 @@ struct TransactionSummaryList: View {
                : isRepurchase ? String(localized: "Already paid", comment:"repurchase merchant navTitle")
                               : talerTX.localizedType
     }
+    var is26: Bool {
+        if #available(iOS 26.0, *) { true } else { false }
+    }
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
+#if DEBUG
+        let background = developerMode ? Color.red : nil
+#else
+        let background: Color? = nil
+#endif
         let common = talerTX.common
 //        let scope = common.scopes.first                                     // might be nil if scopes == []
         let locale = TalerDater.shared.locale
-        let isPaying = talerTX.isPayment && talerTX.isDialog
+        let isPayDialog = talerTX.isPayment && talerTX.isDialog
         Group {
           if common.type != .dummy && transactionId == common.transactionId {
             let list = List {
                 if developerMode && withActions { suspendResume(common) }
-                if !isPaying {
+                if !isPayDialog {
                     Section {
                         HStack {
                             VStack(alignment: .leading) {
@@ -316,11 +323,6 @@ struct TransactionSummaryList: View {
                                     .talerFont(.title)
                             }
                             if isWorking {
-#if DEBUG
-                                let background = developerMode ? Color.red : nil
-#else
-                                let background = nil
-#endif
                                 RotatingTaler(size: 80, progress: true, once: false,
                                         background: background,
                                    rotationEnabled: Binding.constant(true))
@@ -329,9 +331,7 @@ struct TransactionSummaryList: View {
                         }
                     }
                 }
-                if controller.stalledConnection {
-//                    StalledView()         => show this in the safeArea
-                } else {
+                if !controller.stalledConnection {
                     TransactionTypeDetail(stack: stack.push(),
                                     transaction: $talerTX,
                                          payNow: $payNow,
@@ -340,25 +340,19 @@ struct TransactionSummaryList: View {
                                       effective: $effective,    // return amount for "Pay <amount> now"
                                        possible: $paymentPossible,
                                         hasDone: hasDone)
-
-                    // TODO: Retry Countdown, Retry Now button
-//                    if talerTX.isRetryable, let retryAction {
-//                        TransactionButton(transactionId: common.transactionId, command: .retry,
-//                                          warning: nil, action: abortAction)
-//                    } // Retry button
                     if withActions { abortFailDelete(common) }
                 }
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
             .background(FullBackground())
             .navigationBarBackButtonHidden(hasDone)
-            .interactiveDismissDisabled(hasDone && !isPaying)     // can only use "Done" button to dismiss
+            .interactiveDismissDisabled(hasDone && !isPayDialog)     // can only use "Done" button to dismiss
             .safeAreaInset(edge: .bottom) {
                 let cancelButton = Button("Cancel") { dismissTop(stack.push()) }
                     .buttonStyle(TalerButtonStyle(type: .bordered))
                     .padding(is26 ? .horizontal : .all)
                 let bottomButton = ZStack {
-                    if isPaying, case .payment(let paymentTransaction) = talerTX {
+                    if isPayDialog, case .payment(let paymentTransaction) = talerTX {
                         let details = paymentTransaction.details
                         if let effective, let terms = details.contractTerms, isFinished != true {
                             let formatted = effective.formatted(currencyInfo)

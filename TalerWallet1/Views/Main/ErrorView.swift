@@ -44,6 +44,8 @@ struct ErrorBanner: View {
         }
     }
 
+    @ScaledMetric var frameHeight: CGFloat = 60          // relative to fontSize
+
     var body: some View {
         let text = Text(errorText)
             .foregroundStyle(.white)
@@ -52,7 +54,7 @@ struct ErrorBanner: View {
             if #available(iOS 26.0, *) {
                 ContainerRelativeShape()
                     .fill(errorColor)
-                    .frame(height: 80)
+                    .frame(height: frameHeight)
                     .overlay {
                         ZStack {
                             VStack(spacing: 0) {
@@ -63,10 +65,10 @@ struct ErrorBanner: View {
                             text
                         }
                     }
-            } else {
+            } else {  // ContainerRelativeShape exists since iOS 14, but doesn't work correctly
                 text
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(height: 80)
+                    .frame(height: frameHeight)
                     .background {
                         let radius = 12.0
                         if #available(iOS 16.4, *) {
@@ -90,10 +92,7 @@ struct ErrorBanner: View {
                     }
             }
         }
-            .transition(.asymmetric(
-                insertion: .move(edge: .top),
-                removal: .move(edge: .top)
-            ))
+        .transition(.move(edge: .top).combined(with: .scale))
     }
 }
 

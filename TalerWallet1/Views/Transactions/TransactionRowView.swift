@@ -279,7 +279,7 @@ struct TransactionRowView: View {
 #if DEBUG
                 let background = developerMode ? Color.green : nil
 #else
-                let background = nil
+                let background: Color? = nil
 #endif
                 RotatingTaler(size: 80, progress: true, once: false,
                         background: background,
