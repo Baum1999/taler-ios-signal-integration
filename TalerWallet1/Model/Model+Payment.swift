@@ -517,14 +517,14 @@ enum TemplateType: String, Codable {
 struct TemplateContractDetails: Codable {
     let summary: String?                // Human-readable short summary of the contract. Editable if nil
     let currency: String?               // specify currency when amount is nil - unspecified if nil
-    let amount: Amount?                 // Total amount payable. Fixed if this field exists, editable if nil
-    let scopeInfo: ScopeInfo?
-    let minimumAge: Int?
     let payDuration: Duration?
     let maxPickupDuration: Duration?
+    let minimumAge: Int?
     let requestTip: Bool?
 
     let templateType: TemplateType?
+    let amount: Amount?                 // Total amount payable. Fixed if this field exists, editable if nil
+    let scopeInfo: ScopeInfo?           // unfortunately this DOESN'T exist - but it should
     let websiteRegex: String?
     let choices: [OrderChoice]?
 
@@ -613,11 +613,11 @@ struct TemplateContractDetailsDefaults: Codable {
 struct TalerMerchantTemplateDetails: Codable {
     let templateContract: TemplateContractDetails
     let editableDefaults: TemplateContractDetailsDefaults?
-//    let requiredCurrency: String?
+    let requiredCurrency: String?
     enum CodingKeys: String, CodingKey {
         case templateContract = "template_contract"
         case editableDefaults = "editable_defaults"
-//        case requiredCurrency = "required_currency"
+        case requiredCurrency = "required_currency"
     }
 }
 

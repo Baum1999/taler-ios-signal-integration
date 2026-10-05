@@ -150,22 +150,7 @@ struct TalerWallet1App: App {
             }
 #if TALER_NIGHTLY
             .backgroundTask(.appRefresh("net.taler.refresh")) {
-//                symLog.log("backgroundTask running")
-//#if 0
-//                let request = URLRequest(url: URL(string: "your_backend")!)
-//                guard let data = try? await URLSession.shared.data(for: request).0 else {
-//                    return
-//                }
-//                
-//                let decoder = JSONDecoder()
-//                guard let products = try? decoder.decode([Product].self, from: data) else {
-//                    return
-//                }
-//                
-//                if !products.isEmpty && !Task.isCancelled {
-//                    await notifyUser(for: products)
-//                }
-//#endif
+                symLog.log("backgroundTask running")
             }
 #endif
         } else {
