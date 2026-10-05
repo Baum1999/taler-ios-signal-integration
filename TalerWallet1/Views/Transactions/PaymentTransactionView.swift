@@ -122,7 +122,19 @@ struct PaymentTransactionView: View {
 #endif
         let details = paymentTransaction.details
         if common.isDialog {        // show payment confirmation dialog
+            let state = common.txState
             MerchantHeader(terms: details.contractTerms)
+                .task(id: state.hashValue) {
+                    let choicesTuple = controller.choicesTuple
+                    let choicesForPayment = choicesTuple.1
+                    if choicesTuple.0 != common.transactionId || choicesForPayment == nil {
+                        symLog.log("❗️❗️ task: \(state)")
+                        await controller.loadChoicesForPayment(stack.push(),
+                                                          txId: common.transactionId)
+                    } else {
+                        symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
+                    }
+                }
 
             let choicesTuple = controller.choicesTuple
             if let txId = choicesTuple.0, let choicesForPayment = choicesTuple.1 {
@@ -158,7 +170,6 @@ struct PaymentTransactionView: View {
                             let choice = choices[selectedChoice]
                             let selectionDetail: ChoiceSelectionDetail = choice.0
     //                        let contractChoice: ContractChoice = choice.1
-
                             PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
                                           paid: false,
                                            raw: selectionDetail.amountRaw,

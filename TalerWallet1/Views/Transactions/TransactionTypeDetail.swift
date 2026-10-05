@@ -156,22 +156,7 @@ struct TransactionTypeDetail: View {
                                         possible: $possible,
                                           payNow: $payNow,
                                   selectedChoice: $selectedChoice)
-                    .task(id: common.txState.hashValue) {
-                        let state = common.txState
-                        if common.isDialog {
-                            let choicesTuple = controller.choicesTuple
-                            let choicesForPayment = choicesTuple.1
-                            if choicesTuple.0 != common.transactionId || choicesForPayment == nil {
-                                symLog.log("❗️❗️ task: \(common.txState)")
-                                await controller.loadChoicesForPayment(stack.push(),
-                                                                  txId: common.transactionId)
-                            } else {
-                                symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
-                            }
-                        } else {
-                            symLog.log("❗️❗️ \(common.type.rawValue), no need for task: \(state)")
-                        }
-                    }
+
                 case .refund(let refundTransaction): Group {
                     let details = refundTransaction.details                 // TODO: more details, details.info?.merchant.name
                     ThreeAmountsSheet(stack: stack.push(),
