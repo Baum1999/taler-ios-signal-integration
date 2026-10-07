@@ -1,7 +1,12 @@
+Version 1.6.17 (wallet-core 1.6.48.1)
+
+• complete Discounts + Passes
+
+
 Version 1.6.16 (wallet-core 1.6.48)
 
-• fix error handling
-• fix Request money
+- fix error handling
+- fix Request money
 
 
 Version 1.6.15 (wallet-core 1.6.47)
