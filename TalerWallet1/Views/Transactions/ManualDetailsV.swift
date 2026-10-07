@@ -91,7 +91,7 @@ struct WireTransferView: View {
 //            let _ = print(amountStr, " | ", obtainStr)
                 if !minimalistic {
                     Text(title)
-                        .bold()
+                        .talerFont(.headline)
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
                         .accessibilityLabel(titleA11y)

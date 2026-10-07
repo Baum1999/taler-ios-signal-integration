@@ -134,9 +134,8 @@ struct UnconfirmedKeyChangeView: View {
                         warning1
                             .talerFont(.body)
                         warning2
-                            .bold()
-                            .talerFont(.body)
-                        
+                            .talerFont(.headline)
+
                         Button(keep(formatted.0), action: keepAction)
                             .buttonStyle(TalerButtonStyle(type: .bordered))
                             .padding(.horizontal)

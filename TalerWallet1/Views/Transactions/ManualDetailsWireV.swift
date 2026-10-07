@@ -331,8 +331,7 @@ struct ManualDetailsWireV: View {
             let manda = debitIBAN == nil ? String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
                                          : String(localized: "This is mandatory, otherwise the verification will fail.")
             let mandatory = Text("\(warningIcon) \(note)\n\(manda)")
-                .bold()
-                .talerFont(.body)
+                .talerFont(.headline)
                 .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
             let step1i = Text(minimalistic ? "**Step 1:** Copy+Paste recipient and IBAN:"
