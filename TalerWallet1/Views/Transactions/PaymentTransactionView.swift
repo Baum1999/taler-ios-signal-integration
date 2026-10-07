@@ -115,6 +115,19 @@ struct PaymentTransactionView: View {
     var isNotClaiming: Bool {
         !common.isClaiming
     }
+
+    func selectedOrFirst(_ choices: [ChoiceTriple]) -> ChoiceTriple? {
+        if let selectedChoice {
+            if selectedChoice < choices.count {
+                return choices[selectedChoice]
+            }
+        }
+        if let choice = choices.first {
+            return choice
+        }
+        return nil
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -164,10 +177,9 @@ struct PaymentTransactionView: View {
                             }
                         }
 
-                        let summary = details.info?.locSummary ??
-                            String(localized: "No summary", comment: "OrderShortInfo.summary")
-                        if let selectedChoice {
-                            let choice = choices[selectedChoice]
+                        if let choice = selectedOrFirst(choices) {
+                            let summary = details.info?.locSummary ??
+                                          String(localized: "No summary", comment: "OrderShortInfo.summary")
                             let selectionDetail: ChoiceSelectionDetail = choice.0
     //                        let contractChoice: ContractChoice = choice.1
                             PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
@@ -177,19 +189,6 @@ struct PaymentTransactionView: View {
                                     firstScope: scope,
                                        baseURL: nil,
                                        summary: summary,
-                                      products: terms.products ?? [],
-                                balanceDetails: selectionDetail.balanceDetails)
-                        } else if let choice = choices.first {
-                            let selectionDetail: ChoiceSelectionDetail = choice.0
-
-                            PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
-                                          paid: false,
-                                           raw: selectionDetail.amountRaw,
-                                     effective: nil,
-                                    firstScope: scope,
-                                       baseURL: nil,
-                                       summary: summary,
-                                      products: terms.products ?? [],
                                 balanceDetails: selectionDetail.balanceDetails)
                         }
                     } else { // should never happen...

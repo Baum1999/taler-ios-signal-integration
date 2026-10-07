@@ -164,7 +164,6 @@ struct PaymentView2: View, Sendable {
     let baseURL: String?
 //    let terms: MerchantContractTerms
     let summary: String?
-    let products: [ProductSold]?
     let balanceDetails: PaymentInsufficientBalanceDetails?
 
     func computeFee(raw: Amount?, eff: Amount?) -> Amount? {
