@@ -268,52 +268,36 @@ struct TokenLabel: View {
 struct DiscountPassesSection: View {
     let stack: CallStack
     @EnvironmentObject private var controller: Controller
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-
-    @State private var discounts: Bool = false
-    @State private var passes: Bool = false
 
     var body: some View {
-        let discText = String(localized: "Discounts")
-        let passText = String(localized: "Passes")
-        let activeColor = WalletColors().primaryAccent
-        let inactiveColor = WalletColors().secondary2(colorScheme, colorSchemeContrast)
         let discCount = controller.discounts.count
         let passCount = controller.subscriptions.count
         if discCount > 0 || passCount > 0 {
             Section {
                 if discCount > 0 {
+                    let discText = String(localized: "Discounts", comment: "Label, View heading")
                     // TODO: only show active color if at least 1 discount is active
-                    let discColor = discCount > 0 ? activeColor : inactiveColor
-                    let discountsLabel = Label {
-                                             Text(discText)
-                                         } icon: {
-                                             Image(ICONNAME_DISCOUNTS, SYSTEM_DISCOUNTS)
-                                                 .renderingMode(.template)
-                                                 .foregroundColor(discColor)
-                                         }
-                    let discountsDest = DiscountsPassesList(stack: stack.push(),
-                                                           isPass: false,
-                                                         navTitle: discText)
-                    NavigationLink(destination: discountsDest) { discountsLabel }
+                    let discLabel = TokenLabel(stack: stack.push(),
+                                               title: discText,
+                                            isActive: discCount > 0,
+                                              isPass: false)
+                    let discDest = DiscountsPassesList(stack: stack.push(),
+                                                      isPass: false,
+                                                    navTitle: discText)
+                    NavigationLink(destination: discDest) { discLabel }
                     // TODO: a11y for discCount > 0
                 }
                 if passCount > 0 {
+                    let passText = String(localized: "Passes", comment: "Label, View heading")
                     // TODO: only show active color if at least 1 pass is active
-                    let passColor = passCount > 0 ? activeColor : inactiveColor
-                    let passesLabel = Label {
-                                          Text(passText)
-                                      } icon: {
-                                          Image(ICONNAME_PASSES, SYSTEM_PASSES)
-                                              .renderingMode(.template)
-                                              .foregroundColor(passColor)
-                                      }
-
-                    let passesDest = DiscountsPassesList(stack: stack.push(),
-                                                        isPass: true,
-                                                      navTitle: passText)
-                    NavigationLink(destination: passesDest) { passesLabel }
+                    let passLabel = TokenLabel(stack: stack.push(),
+                                               title: passText,
+                                            isActive: passCount > 0,
+                                              isPass: true)
+                    let passDest = DiscountsPassesList(stack: stack.push(),
+                                                      isPass: true,
+                                                    navTitle: passText)
+                    NavigationLink(destination: passDest) { passLabel }
                     // TODO: a11y for passCount > 0
                 }
             }
