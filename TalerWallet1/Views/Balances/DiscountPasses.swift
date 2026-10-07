@@ -235,6 +235,35 @@ struct DiscountsPassesList: View {
         }
     }
 }
+struct TokenLabel: View {
+    let stack: CallStack?
+    let title: String
+    let isActive: Bool
+    let isPass: Bool                        // false = isDiscount
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
+    init(stack: CallStack? = nil, title: String, isActive: Bool, isPass: Bool) {
+        self.stack = stack
+        self.title = title
+        self.isActive = isActive
+        self.isPass = isPass
+    }
+    var body: some View {
+        let color = isActive ? WalletColors().primaryAccent
+                             : WalletColors().secondary2(colorScheme, colorSchemeContrast)
+        let iconName = isPass ? ICONNAME_PASSES : ICONNAME_DISCOUNTS
+        let iconSystem = isPass ? SYSTEM_PASSES : SYSTEM_DISCOUNTS
+        Label {
+            Text(title)
+        } icon: {
+            Image(iconName, iconSystem)
+                .renderingMode(.template)
+                .foregroundColor(color)
+        }
+    }
+}
 // MARK: -
 struct DiscountPassesSection: View {
     let stack: CallStack
