@@ -42,7 +42,6 @@ struct PaidTransactionDetailV: View {
                     totp
                 }
             }
-//            Text(info.summary)
             if let info {
 //              Text(info.merchant.name)        TODO: show name & logo here?
                 Text("Order-ID:")

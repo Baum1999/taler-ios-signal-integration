@@ -121,13 +121,11 @@ struct ThreeAmountsSection: View {
                                         : WalletColors().transactionColor(incoming)
         let hasNoFees = noFees ?? false
         Section {
-            if let summary {
-//                if productImages.isEmpty {  // otherwise we already have rendered the images
-                    Text(summary)           // and thus don't need a summary
-                        .talerFont(.title3)
-                        .padding(.bottom)
-//                }
-            }
+//            if let summary {
+//                Text(summary)
+//                    .talerFont(.title3)
+//                    .padding(.bottom)
+//            }
 
             if currency != "UNKNOWN" {
                 if pendingDialog || isDone {

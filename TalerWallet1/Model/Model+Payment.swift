@@ -457,7 +457,7 @@ struct ChoicesForPayment: Codable {
         if let ctChoices = terms.choices {
             let combined = Array(zip(choices, ctChoices, ctChoices.indices))
             return (combined, true)
-        } else if let amount = terms.amount {       // V0
+        } else if let amount = terms.amount {       // V0 = only 1 option
             let maxFee = terms.maxFee ?? Amount.zero(currency: amount.currencyStr)
             let ctChoice = ContractChoice(amount: amount,
                                           maxFee: maxFee,

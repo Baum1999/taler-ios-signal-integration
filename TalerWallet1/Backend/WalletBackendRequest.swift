@@ -132,14 +132,14 @@ struct MerchantInfo: Identifiable, Codable, Hashable, Sendable {
 }
 
 /// A tax made on a payment.
-struct Tax: Codable {
+struct Tax: Codable, Hashable {
     var name: String
     var tax: Amount
 }
 
 /// A product being purchased from a merchant.
 /// https://docs.taler.net/core/api-merchant.html#the-contract-terms
-struct ProductSold: Codable, Identifiable {
+struct ProductSold: Codable, Identifiable, Hashable {
     let productId: String?
     let productName: String?
 //    let productGroupId: Int?
@@ -147,7 +147,7 @@ struct ProductSold: Codable, Identifiable {
     let descriptionI18n: I18nDict?
     let quantity: Int?
     let unitQuantity: String?       // float with max 6 fractional digits
-    let unit: String?               // name of merchantUnit
+    let unit: String?               // MerchantUnit?
     let price: Amount?              // deprecated - use prices
     let prices: [Amount]?
     let pricesAreNet: Bool?

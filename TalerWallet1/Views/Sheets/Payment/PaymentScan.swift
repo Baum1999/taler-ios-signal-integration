@@ -231,8 +231,10 @@ struct PaymentView2: View, Sendable {
                     )
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
-                    Text("Error")
-                        .talerFont(.body)
+                    // actually this is shown when effective is not yet loaded for a brief moment
+                    // - so don't show an error here
+//                    Text("Error")
+//                        .talerFont(.body)
                 }
     }
 }
