@@ -59,6 +59,43 @@ struct TokenView: View, Sendable {
 
     }
 }
+struct OutputTokenView: View, Sendable {
+    let outputs: [ContractOutputAny]
+    let tokenFamilies: [String: ContractTokenFamily]   // token_family_slug: String
+
+    var body: some View {
+        ForEach(outputs, id: \.self) { output in
+            switch output {
+                case .token(let token):
+                    if let slug = token.tokenFamilySlug {
+                        let count = token.count ?? 1
+                        TokenView(count: count > 1 ? count : nil,
+                                   slug: slug,
+                          tokenFamilies: tokenFamilies)
+                    }
+                case .taxReceipt(let taxReceipt):
+                    let amount = taxReceipt.amount
+                    // TODO: taxReceipt
+                case .unknown(let string):
+                    let _ = print("❗️❗️ChoicesView: Unknown output type: \(string)")
+            }
+        }
+    }
+}
+struct InputTokenView: View, Sendable {
+    let inputs: [ContractInput]
+    let tokenFamilies: [String: ContractTokenFamily]   // token_family_slug: String
+
+    var body: some View {
+        ForEach(inputs, id: \.self) { input in
+            if let slug = input.tokenFamilySlug {
+                let count = input.count ?? 1
+                TokenView(count: count, slug: slug, tokenFamilies: tokenFamilies)
+            }
+        }
+    }
+}
+// MARK: -
 struct ChoicesView: View, Sendable {
     let stack: CallStack
     let choiceTriple: [ChoiceTriple]
