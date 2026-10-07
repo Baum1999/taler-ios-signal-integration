@@ -9,20 +9,24 @@ import SwiftUI
 import taler_swift
 
 struct SelectedBackground: View, Sendable {
-    let useColor: Bool
+    let useColor: Bool?
 
     var body: some View {
         let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
-        let color: Color = useColor ? WalletColors().primaryAccent
-                                    : .secondary
+        let rect = RoundedRectangle(cornerRadius: is26 ? 26 : 10)
+        let line = useColor == nil ? 0.5 : 2.4
+        let color = useColor == true ? WalletColors().primaryAccent
+                  : useColor == false ? .secondary : WalletColors().gray4
         if #available(iOS 17.0, *) {
-            RoundedRectangle(cornerRadius: is26 ? 26 : 10)
+            rect
                 .fill(.background)
-                .strokeBorder(color, lineWidth: 2.4)
+                .strokeBorder(color, lineWidth: line)
         } else {
-            RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(color, lineWidth: 2.4)
-                .foregroundColor(Color.clear)
+            rect
+                .strokeBorder(color, lineWidth: line)
+                .background(.background)
+                .clipped()
+                .clipShape(rect)
         }
     }
 }
