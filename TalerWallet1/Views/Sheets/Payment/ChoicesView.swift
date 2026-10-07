@@ -30,7 +30,35 @@ struct SelectedBackground: View, Sendable {
         }
     }
 }
+// MARK: -
+struct TokenView: View, Sendable {
+    let count: Int?
+    let slug: String
+    let tokenFamilies: [String: ContractTokenFamily]   // token_family_slug: String
 
+    var body: some View {
+        if let family = tokenFamilies[slug] {
+            let accent = WalletColors().primaryAccent
+            let onPrimary = WalletColors().onPrimary
+            let isPass = family.details.clazz == "subscription" // else "discount"
+            HStack {
+                TokenLabel(title: family.name, isActive: true, isPass: isPass)
+                Spacer()
+                if let count {
+                    Text("x\(count)")
+                        .foregroundColor(onPrimary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Capsule().fill(accent.opacity(0.3)))
+                }
+            }
+            .talerFont(.headline)
+            .padding(4)
+            .background(RoundedRectangle(cornerRadius: 8).fill(accent.opacity(0.1)))
+        }
+
+    }
+}
 struct ChoicesView: View, Sendable {
     let stack: CallStack
     let choiceTriple: [ChoiceTriple]
