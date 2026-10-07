@@ -66,21 +66,12 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
                          incoming: incoming,
                           baseURL: baseURL,
                        txStateLcl: txStateLcl,
-                          summary: summary,
-                         products: nil)
+                          summary: summary)
     }
 }
 
 struct ProductImage: Codable, Hashable {
     var imageBase64: String
-    var description: String
-    var price: Amount?
-
-    init(_ image: String, _ desc: String, _ price: Amount?) {
-        self.imageBase64 = image
-        self.description = desc
-        self.price = price
-    }
 
     var image: Image? {
         Image(imageBase64)
@@ -107,59 +98,21 @@ struct ThreeAmountsSection: View {
     let baseURL: String?
     let txStateLcl: String?                 // localizedState
     let summary: String?
-    let products: [ProductSold]?
 
     @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State private var productImages: [ProductImage] = []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
     @MainActor
     private func viewDidLoad() async {
-        var temp: [ProductImage] = []
-        if let products {
-            for product in products {
-                if let imageBase64 = product.image {
-                    // TODO: choose price for scope
-                    let price = product.prices?.first ?? product.price
-                    let productImage = ProductImage(imageBase64, product.description, price)
-                    temp.append(productImage)
-                }
-            }
-        }
-        productImages = temp
         if let scope {
             currencyInfo = controller.info(for: scope) ?? CurrencyInfo.zero(UNKNOWN)
         }
     }
 
-    @ViewBuilder
-    var productImageSections: some View {
-        ForEach(productImages, id: \.self) { productImage in
-            if let image = productImage.image {
-                Section {
-                    HStack {
-                        image.resizable()
-                            .scaledToFill()
-                            .frame(width: 64, height: 64)
-                            .accessibilityHidden(true)
-                        Text(productImage.description)
-//                        if let product_id = product.product_id {
-//                            Text(product_id)
-//                        }
-                        if let price = productImage.price {
-                            Spacer()
-                            AmountV(scope, price, isNegative: nil)
-                        }
-                    }.talerFont(.body)
-                        .accessibilityElement(children: .combine)
-                }
-            }
-        }
-    }
 
     var body: some View {
         let currency = currencyInfo.currency
@@ -167,14 +120,13 @@ struct ThreeAmountsSection: View {
         let bottomColor = pendingDialog ? WalletColors().pendingColor(incoming)
                                         : WalletColors().transactionColor(incoming)
         let hasNoFees = noFees ?? false
-        productImageSections
         Section {
             if let summary {
-                if productImages.isEmpty {  // otherwise we already have rendered the images
+//                if productImages.isEmpty {  // otherwise we already have rendered the images
                     Text(summary)           // and thus don't need a summary
                         .talerFont(.title3)
                         .padding(.bottom)
-                }
+//                }
             }
 
             if currency != "UNKNOWN" {

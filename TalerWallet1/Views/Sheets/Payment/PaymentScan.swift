@@ -203,7 +203,7 @@ struct PaymentView2: View, Sendable {
                                       baseURL: baseURL,
                                    txStateLcl: nil,
                                       summary: nil,     // summary already shown in PaymentView above choices
-                                     products: products)
+                    )
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails {    // Insufficient
                     if let localizedCause = balanceDetails.causeHint?.localizedCause(raw.currencyStr) {
@@ -228,7 +228,7 @@ struct PaymentView2: View, Sendable {
                                       baseURL: baseURL,
                                    txStateLcl: nil,
                                       summary: nil,     // summary already shown in PaymentView above choices
-                                     products: products)
+                    )
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")

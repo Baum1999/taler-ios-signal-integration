@@ -185,8 +185,7 @@ struct PeerPushCreditView: View  {
                          incoming: true,
                           baseURL: nil,
                        txStateLcl: nil,
-                          summary: summary,
-                         products: nil)
+                          summary: summary)
     }
 }
 // MARK: -

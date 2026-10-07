@@ -95,8 +95,7 @@ struct WithdrawAcceptView: View {
                                          incoming: true,
                                           baseURL: exchange2.exchangeBaseUrl,
                                        txStateLcl: nil,        // common.txState.major.localizedState
-                                          summary: nil,
-                                         products: nil)
+                                          summary: nil)
                         if let wireFee {
                             if !wireFee.isZero {
                                 let currencyInfo = controller.info(for: scope, controller.currencyTicker)
