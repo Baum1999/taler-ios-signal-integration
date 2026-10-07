@@ -13,7 +13,33 @@ import SymLog
 struct MerchantHeader: View {
     let terms: MerchantContractTerms?
 
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
     @State private var image: Image? = nil
+
+    func compactAddress(_ address: Location?) -> String? {
+        if let address {
+            var result: String = EMPTYSTRING
+            if let street = address.street {
+                result.append(street)
+            }
+            if let town = address.town {
+                if !result.isEmpty {
+                    result.append(", ")
+                }
+                result.append(town)
+            }
+            if let country = address.country {
+                if !result.isEmpty {
+                    result.append(", ")
+                }
+                result.append(country)
+            }
+            return result.isEmpty ? nil : result
+        }
+        return nil
+    }
 
     var body: some View {
         if let terms {
@@ -21,15 +47,15 @@ struct MerchantHeader: View {
                 Text(terms.locSummary)
                     .talerFont(.title3)
             } header: {
-                HStack {
-                    Spacer()
-                    VStack(alignment: .center) {
+                VStack(alignment: .leading) {
+                    HStack {
                         if terms.merchant.logo != nil {
                             if let image {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(maxHeight: 50)
+                                    .padding(.trailing, 8)
                             }
                         } else {
 #if TALER_NIGHTLY
@@ -39,16 +65,25 @@ struct MerchantHeader: View {
                                 .frame(width: 44, height: 44)
 #endif
                         }
-                        let merchant = terms.merchant.name
-                        Text(merchant)
-                            .talerFont(.title3)
+                        VStack(alignment: .leading) {
+                            let merchant = terms.merchant
+                            Text(merchant.name)
+                                .talerFont(.title3)
+                            if let address = compactAddress(merchant.address) {
+                                Text(address)
+                                    .talerFont(.body)
+                            }
+                        }
                     }   .foregroundStyle(Color.primary)
+                        .padding(.bottom)
                         .task {
                             if let imageBase64 = terms.merchant.logo {
                                 image = Image(imageBase64: imageBase64)
                             }
                         }
-                    Spacer()
+                    Text("Summary")
+                        .talerFont(.title3)
+                        .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
                 }
             }
         }
@@ -147,22 +182,28 @@ struct PaymentTransactionView: View {
                     } else {
                         symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
                     }
-                }
+                } // loadChoicesForPayment
 
             let choicesTuple = controller.choicesTuple
             if let txId = choicesTuple.0, let choicesForPayment = choicesTuple.1 {
-                let terms = choicesForPayment.contractTerms
                 if txId == common.transactionId {
+                    let terms = choicesForPayment.contractTerms
+                    if let products = terms.products {
+                        ProductsView(stack: stack.push(),
+                                     scope: scope,
+                                  products: products)
+                    }
                     if let (choices, showHeader) = choicesForPayment.choiceTriple() {
                         let hasAutomatic = choicesForPayment.automaticExecution ?? false
                         let automaticIndex = hasAutomatic ? choicesForPayment.automaticExecutableIndex : nil
                         ChoicesView(stack: stack.push(),
-                             choiceTriple: choices,
+                            choiceTriples: choices,
+                            tokenFamilies: terms.tokenFamilies,
                                showHeader: showHeader,
                            automaticIndex: automaticIndex,
                            selectedChoice: $selectedChoice)
                         .task {
-                            automaticOrDefault(automaticIndex, choicesForPayment.defaultChoiceIndex, of:    choices)
+                            automaticOrDefault(automaticIndex, choicesForPayment.defaultChoiceIndex, of: choices)
                         }
                         .onChange(of: selectedChoice) { newValue in
                             if let newValue, newValue < choices.count {
@@ -185,7 +226,7 @@ struct PaymentTransactionView: View {
                             PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
                                           paid: false,
                                            raw: selectionDetail.amountRaw,
-                                     effective: effective,
+                                     effective: effective,              // V0?
                                     firstScope: scope,
                                        baseURL: nil,
                                        summary: summary,

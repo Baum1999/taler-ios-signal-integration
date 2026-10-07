@@ -44,12 +44,40 @@ struct PaidTransactionDetailV: View {
             }
             if let info {
 //              Text(info.merchant.name)        TODO: show name & logo here?
-                Text("Order-ID:")
-                    .talerFont(.title3)
-                    .listRowSeparator(.hidden)
-                Text(info.orderId)
-                    .talerFont(.body)
-
+                if common.isDone {
+                    VStack(alignment: .leading) {
+                        Text("Order-ID:")
+                            .talerFont(.title3)
+                        HStack {
+                            Spacer()
+                            Text(info.orderId)
+                                .talerFont(.body)
+                        }
+                    }
+                }
+            }
+            VStack(alignment: .leading) {
+                if let info {
+                    Text(info.summary)
+                        .talerFont(.title3)
+                }
+                if let choiceIndex = details.choiceIndex {
+                    if let contractTerms = details.contractTerms {
+                        if let choices = contractTerms.choices,
+                           choices.indices.contains(choiceIndex) {
+                            let choice = choices[choiceIndex]
+                            HStack {
+                                if let info {
+                                    Spacer()
+                                }
+                                Text(choice.locDescription ?? "Index: \(choiceIndex)")   // fallback should never happen
+                                    .talerFont(.body)
+                            }
+                        }
+                    }
+                }
+            }
+            if let info {
                 if let fulfillmentUrl = info.fulfillmentUrl, common.isDone {
                     // per api-common.rst's WebURL definition, fulfillment_url must be http(s) -
                     // reject any other scheme (tel:, sms:, a third-party app's custom scheme, ...)
@@ -80,16 +108,6 @@ struct PaidTransactionDetailV: View {
                 if developerMode {
                     if let hint3 = abortReason.hint {
                         Text(hint3)
-                            .talerFont(.body)
-                    }
-                }
-            }
-            if let choiceIndex = details.choiceIndex {
-                if let contractTerms = details.contractTerms {
-                    if let choices = contractTerms.choices,
-                       choices.indices.contains(choiceIndex) {
-                        let choice = choices[choiceIndex]
-                        Text(choice.locDescription ?? "Index: \(choiceIndex)")   // fallback should never happen
                             .talerFont(.body)
                     }
                 }
