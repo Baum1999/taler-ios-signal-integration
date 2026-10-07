@@ -200,8 +200,8 @@ struct PaymentTransactionView: View {
                 }
             }
         } else if isNotClaiming { // show finished payment
-            TransactionPayDetailV(stack: stack.push(),
-                              paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
+            PaidTransactionDetailV(stack: stack.push(),
+                               paymentTx: paymentTransaction)           // TODO: details.info.merchant.name
             ThreeAmountsSheet(stack: stack.push(),
                               scope: scope,
                              common: common,

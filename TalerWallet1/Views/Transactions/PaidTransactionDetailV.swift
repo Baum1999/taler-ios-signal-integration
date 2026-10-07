@@ -9,7 +9,7 @@
  */
 import SwiftUI
 
-struct TransactionPayDetailV: View {
+struct PaidTransactionDetailV: View {
     let stack: CallStack
     let paymentTx: PaymentTransaction
 
@@ -97,11 +97,10 @@ struct TransactionPayDetailV: View {
             }
         }
         if let products = terms?.products {
-            ForEach(products) { product in
-                if let productId = product.productId {
-                    Section {
-                        Text(productId)
-                            .talerFont(.body)
+            if !products.isEmpty {
+                Section {
+                    ForEach(products) { product in
+//                        if let productId = product.productId {
                         if let productName = product.productName {
                             Text(productName)
                                 .talerFont(.body)
