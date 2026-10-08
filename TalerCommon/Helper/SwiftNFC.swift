@@ -21,12 +21,13 @@
  * @author Marc Stibane
  */
 import SwiftUI
-import CoreNFC
+@preconcurrency import CoreNFC
 
-@available(iOS 15.0, *)
+fileprivate let comment: StaticString = "NFC tag reader"
+
 public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
     
-    public var startAlert = String(localized: "Hold your iPhone near the tag.")
+    public var startAlert = String(localized: "Hold your iPhone near the tag.", comment: comment)
     public var endAlert = EMPTYSTRING
     public var msg = EMPTYSTRING
     public var type = "T"   // T=Text - U=URL
@@ -36,7 +37,7 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
     
     public func write(_ data: Data? = nil) {
         guard NFCNDEFReaderSession.readingAvailable else {
-            print("Error readingAvailable")
+            print("  ❗️Error readingAvailable")
             return
         }
         self.data = data
@@ -45,20 +46,20 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
             session.alertMessage = self.startAlert
             session.begin()
         } else {
-            print("Error NFCNDEFReaderSession")
+            print("  ❗️Error NFCNDEFReaderSession")
         }
     }
     
     public func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
         // Do not add code in this function.
         // This method isn't called when you provide `reader(_:didDetect:)`.
-//        print("didDetectNDEFs", messages)
+//        print("  ❗️didDetectNDEFs", messages)
     }
 
     public func readerSession(_ session: NFCNDEFReaderSession, didDetect tags: [NFCNDEFTag]) {
         if tags.count > 1 {
             let retryInterval = DispatchTimeInterval.milliseconds(500)
-            session.alertMessage = "Detected more than 1 tag. Please try again."
+            session.alertMessage = String(localized: "Detected more than 1 tag. Please try again.", comment: comment)
             DispatchQueue.global().asyncAfter(deadline: .now() + retryInterval, execute: {
                 session.restartPolling()
             })
@@ -66,14 +67,15 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
         }
         
         let tag = tags.first!
-        session.connect(to: tag, completionHandler: { (error: Error?) in
+        session.connect(to: tag) { (error: Error?) in
             if nil != error {
-                session.alertMessage = "Unable to connect to tag."
+                print("  ❗️Connection error: \(String(describing: error))")
+                session.alertMessage = String(localized: "Unable to connect to tag.", comment: comment)
                 session.invalidate()
                 return
             }
             
-            tag.queryNDEFStatus(completionHandler: { (ndefStatus: NFCNDEFStatus, capacity: Int, error: Error?) in
+            tag.queryNDEFStatus() { (ndefStatus: NFCNDEFStatus, capacity: Int, error: Error?) in
                 guard error == nil else {
                     session.alertMessage = "Unable to query the status of the tag."
                     session.invalidate()
@@ -90,39 +92,38 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
                 case .readWrite:
                     let payload: NFCNDEFPayload?
                     if self.type == "T" {       // TAG
-                        payload = NFCNDEFPayload.init(
-                            format: .nfcWellKnown,
-                            type: Data("\(self.type)".utf8),
-                            identifier: Data(),
-                            payload: self.data ?? Data("\(self.msg)".utf8)
+                        payload = NFCNDEFPayload.init(format: .nfcWellKnown,
+                                                        type: Data("\(self.type)".utf8),
+                                                  identifier: Data(),
+                                                     payload: self.data ?? Data("\(self.msg)".utf8)
                         )
                     } else {
                         payload = NFCNDEFPayload.wellKnownTypeURIPayload(string: "\(self.msg)")
                     }
                     let message = NFCNDEFMessage(records: [payload].compactMap({ $0 }))
-                    tag.writeNDEF(message, completionHandler: { (error: Error?) in
+                    tag.writeNDEF(message) { (error: Error?) in
                         if nil != error {
-                            session.alertMessage = "Write to tag failed: \(error!)"
+                            session.alertMessage = String(localized: "Write to tag failed: \(error!)", comment: comment)
                         } else {
                             session.alertMessage = self.endAlert != EMPTYSTRING ? self.endAlert
-                                                 : "Write \(self.msg) to tag successful."
+                                                 : String(localized: "Write \(self.msg) to tag successful.", comment: comment)
                         }
                         session.invalidate()
-                    })
+                    }
                 @unknown default:
-                    session.alertMessage = "Unknown tag status."
+                    session.alertMessage = String(localized: "Unknown tag status.", comment: comment)
                     session.invalidate()
                 }
-            })
-        })
+            }
+        }
     }
     
     public func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
-        // TODO: change statusLabel
+        session.alertMessage = String(localized: "Reading Tag...", comment: comment)
     }
 
     public func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
-        print("Session did invalidate with error: \(error)")
+        print("  ❗️Session did invalidate with error: \(error)")
         self.session = nil
     }
 }
