@@ -15,6 +15,7 @@ import FTalerWalletcore
 // will be called from wallet-core for networking
 func request_create(userdata: Optional<UnsafeMutableRawPointer>,
                  requestInfo: Optional<UnsafeMutablePointer<JSHttpRequestInfo>>) -> Int32 {
+    let useHTTP3 = false    // <<== make this a parameter
     let quickjs = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
 
     if let requestInfo {
@@ -31,6 +32,11 @@ func request_create(userdata: Optional<UnsafeMutableRawPointer>,
 
             var request = URLRequest(url: url)
             request.httpMethod = method
+            if useHTTP3 {
+                // if server endpoint is known to support HTTP/3. Enables QUIC
+                // racing without HTTP/3 service discovery. Defaults to `false`.
+                request.assumesHTTP3Capable = true
+            }
             switch timeoutMs {
                 case 0:         // leave URLSession's default
                     break
