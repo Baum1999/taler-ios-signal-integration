@@ -86,12 +86,8 @@ struct BackupView: View {
                 withAnimation {
                     self.isRestoring = true
                 }
-//                symLog.log("❗️Restore \(selectedBackup)❗️")
-//                if #available(iOS 16.0, *) {
-//                    backupPath = docDirUrl.appending(component: selectedBackup)
-//                }
-                let backupPath = docDirUrl.appendingPathComponent(selectedBackup).absoluteString
-                let path = backupPath.deletingPrefix(PREFIX)
+                // .path doesn't percent-encode e.g. "Taler-… 2.json" into "Taler-…%202.json"
+                let path = docDirUrl.appendingPathComponent(selectedBackup).path(withSlash: false)
                 symLog.log("❗️Restore \(path)❗️")
                 restoreBackup(path)
                 withAnimation { self.selectedBackup = nil }
