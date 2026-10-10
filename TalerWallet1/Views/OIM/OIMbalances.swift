@@ -251,7 +251,7 @@ struct OIMbalances: View {
                     HStack(spacing: 30) {
                         ForEachWithIndex(array: controller.balances) { index, balance in
                             let oimCurrency = oimCurrency(balance.scopeInfo, oimEuro: oimEuro)
-                            let itsMe = selectedBalance == balance
+                            let itsMe = selectedBalance?.scopeInfo == balance.scopeInfo
                             let isClosed = selectedBalance == nil
                             let size = isClosed ? 160.0 : OIMbuttonSize
                             ZStack {
