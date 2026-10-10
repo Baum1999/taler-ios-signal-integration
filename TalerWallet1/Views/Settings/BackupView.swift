@@ -46,7 +46,13 @@ struct BackupView: View {
                     self.progress = 1
                 }
                 controller.hapticFeedback(.medium)
-            } catch {}
+            } catch {
+                // the error was already shown (viewHandles: false) - back to the list of backups
+                withAnimation {
+                    self.isRestoring = false
+                    self.progress = 0
+                }
+            }
         }
     }
 
