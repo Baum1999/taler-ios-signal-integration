@@ -390,6 +390,13 @@ struct TransactionSummaryList: View {
                 }
             }
             .navigationTitle(navTitle ?? navTitleStr)
+            .onDisappear {
+                // the cached choices (payable or not, effective amount) depend on the balance -
+                // drop them, so that opening this payment again asks wallet-core afresh
+                if controller.choicesTuple.0 == transactionId {
+                    controller.choicesTuple = (nil, nil)
+                }
+            }
             .onChange(of: payNow) { payNow2 in
                 if payNow2 {
                     Task {
