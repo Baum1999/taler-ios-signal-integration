@@ -32,10 +32,10 @@ class AmountTests: XCTestCase {
         XCTAssert(3 == amt.fraction)
         
         let maxValue = 4503599627370496                 // 16 significant digits are 1 too many for double
-        str = "TESTKUDOS123:\(maxValue).99999999"
+        str = "GOLDLATINUM:\(maxValue).99999999"        // 11 letters is the longest valid currency
         amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
-        XCTAssert("TESTKUDOS123" == amt.currencyStr)
+        XCTAssert("GOLDLATINUM" == amt.currencyStr)
         // At 2^52 the spacing of Double is 1.0, so `value` cannot represent
         // maxValue + 0.99999999 — it rounds up to maxValue + 1. That is exactly the
         // precision loss the `maxValue` comment warns about, so assert on the exact
@@ -44,9 +44,10 @@ class AmountTests: XCTestCase {
         XCTAssert(99999999 == amt.fraction)
         XCTAssert(Double(maxValue) != amt.value)
 
-        XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS1234:\(maxValue).99999999"))
-        XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS123:\(maxValue + 1).99999999"))
-        XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS123:\(maxValue).999999990"))
+        XCTAssertThrowsError(try Amount(fromString: "GOLDLATINUMS:\(maxValue).99999999"))
+        XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS1:1"))       // letters only
+        XCTAssertThrowsError(try Amount(fromString: "GOLDLATINUM:\(maxValue + 1).99999999"))
+        XCTAssertThrowsError(try Amount(fromString: "GOLDLATINUM:\(maxValue).999999990"))
         XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS:0,5"))
         XCTAssertThrowsError(try Amount(fromString: "+TESTKUDOS:0.5"))
         XCTAssertThrowsError(try Amount(fromString: "0.5"))
