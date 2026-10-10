@@ -33,7 +33,7 @@ struct ManualWithdrawDone: View {
         if transactionId == nil {
             if let result = try? await model.acceptManualWithdrawal(amountToTransfer,
                                                            baseUrl: baseURL,
-                                                       restrictAge: 0)
+                                                       restrictAge: nil)    // No age restriction
             {
                 if let url {
                     controller.removeURL(url)
