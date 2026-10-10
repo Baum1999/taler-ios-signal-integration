@@ -453,7 +453,9 @@ struct MainView: View {
             logger.log("❗️App Will Resign")
             backgrounded = Date.now
 #if TALER_NIGHTLY
-            sheetType = nil
+            if sheetType == .scanner {      // only turn the camera off, keep URL and Action sheets
+                sheetType = nil
+            }
 #else
             showScanner = false
 #endif
