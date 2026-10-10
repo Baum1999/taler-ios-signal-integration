@@ -79,8 +79,9 @@ struct WithdrawUriScan: View {
                 let fee = try? details.amountRaw - details.amountEffective
                 let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? ("0", "0")
                 symLog.log("Fee = \(feeStr.0)")
+                // amountAvailable is the bank's maxAmount: only more than that is too much
                 let insufficient = if let amountAvailable {
-                    (try? details.amountRaw < amountAvailable) ?? true
+                    (try? details.amountRaw > amountAvailable) ?? true
                 } else {
                     false
                 }
