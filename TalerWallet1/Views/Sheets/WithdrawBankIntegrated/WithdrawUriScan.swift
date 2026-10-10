@@ -73,9 +73,12 @@ struct WithdrawUriScan: View {
           if amountLastChecked != amount {
             amountLastChecked = amount
 
+            // viewHandles: the next digit's call has the same progressToken (baseUrl), so wallet-core
+            // cancels this one with WALLET_CORE_REQUEST_CANCELLED - not an error to show the user
             if let details = try? await model.getWithdrawalDetailsForAmount(amount,
                                                                    baseUrl: exchange.exchangeBaseUrl,
-                                                                     scope: nil) {     // TODO: scope
+                                                                     scope: nil,       // TODO: scope
+                                                               viewHandles: true) {
                 let fee = try? details.amountRaw - details.amountEffective
                 let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? ("0", "0")
                 symLog.log("Fee = \(feeStr.0)")
