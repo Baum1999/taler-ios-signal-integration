@@ -49,7 +49,7 @@ extension WalletModel {
 struct CheckPeerPushDebitResponse: Codable {
     let type: String                            // ok, insufficient-balance
     let exchangeBaseUrl: String?                // API "2:0:1"
-    let amountRaw: Amount
+    let amountRaw: Amount?                      // not for insufficient-balance
     let amountEffective: Amount?
     let defaultExpiration: Duration?
     let maxExpirationDate: Timestamp?           // API "2:0:1" TODO: limit expiration (30 days or 7 days)

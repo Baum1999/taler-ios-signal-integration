@@ -85,8 +85,8 @@ struct SendAmountView: View {
         }
             do {
                 let ppCheck = try await model.checkPeerPushDebit(amount, scope: balance.scopeInfo, viewHandles: true)
-                let raw = ppCheck.amountRaw
-                if let effective = ppCheck.amountEffective {
+                if let raw = ppCheck.amountRaw,
+                   let effective = ppCheck.amountEffective {
                     if let fee = fee(raw: raw, effective: effective) {
                         feeString = fee.formatted(balance.scopeInfo, isNegative: false)
                         symLog.log("Fee = \(feeString.0)")
