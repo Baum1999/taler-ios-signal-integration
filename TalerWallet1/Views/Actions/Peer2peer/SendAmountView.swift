@@ -90,7 +90,12 @@ struct SendAmountView: View {
                     if let fee = fee(raw: raw, effective: effective) {
                         feeString = fee.formatted(balance.scopeInfo, isNegative: false)
                         symLog.log("Fee = \(feeString.0)")
-                        let insufficient = (try? effective > amountAvailable) ?? true
+                        // wallet-core found coins for amount + fees, so it is affordable.
+                        let insufficient = false
+//                        let insufficient = (try? effective > amountAvailable) ?? true
+                        // Comparing effective with amountAvailable would be wrong:
+                        // that is the *raw* maximum (getMaxPeerPushDebitAmount),
+                        // which effective exceeds near the maximum.
 
                         peerPushCheck = ppCheck
                         let feeLabel = (feeLabel(feeString.0), feeLabel(feeString.1))
