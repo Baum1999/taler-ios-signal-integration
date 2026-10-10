@@ -81,13 +81,19 @@ struct P2PSubjectV: View {
 
     @MainActor
     private func checkPeerPushDebit() async {
-        if outgoing && feeLabel == nil {
-            if let ppCheck = try? await model.checkPeerPushDebit(amountToTransfer, scope: scope) {
-                if let feeAmount = p2pFee(ppCheck: ppCheck) {
-                    let feeStr = feeAmount.formatted(scope, isNegative: false)
-                    myFeeLabel = (String(localized: "+ \(feeStr.0) fee"),
-                                  String(localized: "+ \(feeStr.1) fee"))
-                } else { myFeeLabel = (EMPTYSTRING, EMPTYSTRING) }
+        // Needed even when the caller already computed the fee (feeLabel != nil): SelectDays
+        // tells the user defaultExpiration, and that is what wallet-core applies when P2PReadyV
+        // sends purse_expiration nil. The caller has already shown errors of this check.
+        if outgoing {
+            if let ppCheck = try? await model.checkPeerPushDebit(amountToTransfer, scope: scope,
+                                                                viewHandles: feeLabel != nil) {
+                if feeLabel == nil {
+                    if let feeAmount = p2pFee(ppCheck: ppCheck) {
+                        let feeStr = feeAmount.formatted(scope, isNegative: false)
+                        myFeeLabel = (String(localized: "+ \(feeStr.0) fee"),
+                                      String(localized: "+ \(feeStr.1) fee"))
+                    } else { myFeeLabel = (EMPTYSTRING, EMPTYSTRING) }
+                }
                 defaultExpiration = ppCheck.defaultExpiration
                 maxExpirationDate = ppCheck.maxExpirationDate
             } else {
@@ -96,13 +102,18 @@ struct P2PSubjectV: View {
         }
     }
 
-    var maxExpirationHours: UInt64 {
+    var maxExpirationHours: UInt {
         if let duration = try? maxExpirationDate?.duration() {
-            return duration.toHours()
+            return UInt(duration.toHours())
         }
         return 0
     }
-
+    var defaultExpirationHours: UInt {
+        if let defaultExpiration {
+            return UInt(defaultExpiration.toHours())
+        }
+        return UInt(DEFAULTEXPIRATION)
+    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -154,7 +165,7 @@ struct P2PSubjectV: View {
 
             // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
             SelectDays(selected: $expireDays, maxExpirationHours: maxExpirationHours,
-                       defaultExpirationHours: defaultExpiration?.toHours() ?? 28*24, outgoing: outgoing)
+                       defaultExpirationHours: defaultExpirationHours, outgoing: outgoing)
                 .padding(.bottom)
 
             let disabled = (expireDays == 0)    // || (numChars < 1)    // TODO: check amountAvailable

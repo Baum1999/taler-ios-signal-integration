@@ -48,6 +48,7 @@ public let BANNERDURATION: Double = 0.5
 public let ONEDAY: UInt = 1         // 1..3
 public let SEVENDAYS: UInt = 7      // 3..9
 public let THIRTYDAYS: UInt = 30    // 10..30
+public let DEFAULTEXPIRATION = 7*24 // for P2P Send - that's what wallet-core uses
 
 public let EMPTYSTRING = ""                         // avoid automatic translation of empty "" textLiterals in Text()
 public let SPACE = " "

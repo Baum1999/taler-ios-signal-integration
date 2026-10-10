@@ -19,8 +19,8 @@ struct SelectDays: View {
 #endif
 
     @Binding var selected: UInt
-    let maxExpirationHours: UInt64
-    let defaultExpirationHours: UInt64
+    let maxExpirationHours: UInt
+    let defaultExpirationHours: UInt
     let outgoing: Bool
 
     func oneDayAction() -> Void {
