@@ -60,7 +60,7 @@ struct UnconfirmedKeyChangeView: View {
     }
 
     func acceptAction() {
-        if let exchange, let masterPub = exchange.masterPub {
+        if let exchange, let masterPub = exchange.unconfirmedKeyChange?.currentMasterPub ?? exchange.masterPub {
             Task {
                 try? await model.confirmExchangeKeyChange(exchangeBaseUrl: baseURL,
                                                          currentMasterPub: masterPub)
@@ -110,7 +110,13 @@ struct UnconfirmedKeyChangeView: View {
 
     @MainActor
     private func viewDidLoad() async {
-        exchange = await controller.exchange(for: baseURL)
+        // confirm and purge must send the master key wallet-core uses *now*
+        // (not the controller's cached entry) or they fail with KEY_CHANGE_MISMATCH / BAD_REQUEST
+        if let fresh = try? await model.getExchangeByUrl(url: baseURL, viewHandles: true) {
+            exchange = fresh
+        } else {
+            exchange = await controller.exchange(for: baseURL)
+        }
     }
 
     var body: some View {

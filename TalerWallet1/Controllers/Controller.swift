@@ -508,10 +508,15 @@ class Controller: ObservableObject {
     func updateExchange(for baseUrl: String, state: ExchangeState) {
         Task {
             if let exchange = await exchange(for: baseUrl) {
-                if exchange.tosStatus != state.tosStatus {
-                    logger.log("  ❗️updating exchange: \(baseUrl)")
-                    let model = WalletModel.shared
-                    if let exchange2 = try? await model.getExchangeByUrl(url: baseUrl) {
+                // The notification only carries tosStatus - a detected, confirmed or reverted
+                // master-key change ("update-from-response", "key-change-confirmed") leaves it
+                // unchanged, so always re-fetch and compare what the views depend on.
+                let model = WalletModel.shared
+                if let exchange2 = try? await model.getExchangeByUrl(url: baseUrl, viewHandles: true) {
+                    if exchange.tosStatus != exchange2.tosStatus ||
+                       exchange.masterPub != exchange2.masterPub ||
+                       exchange.unconfirmedKeyChange != exchange2.unconfirmedKeyChange {
+                        logger.log("  ❗️updating exchange: \(baseUrl)")
                         if let index = exchanges.firstIndex(where: {$0.exchangeBaseUrl == baseUrl}) {
                             exchanges[index] = exchange2
                         } else {
