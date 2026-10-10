@@ -279,7 +279,7 @@ struct PaySafeArea: View, Sendable {
                 timeToPay = terms.timeToPay(true)
                 if let timeToPay {
                     if timeToPay >= fiveMinutes {
-                        let nextCheck = timeToPay - fiveMinutes
+                        let nextCheck = timeToPay - fiveMinutes + 1
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(nextCheck)) {
                             self.timeToPay = terms.timeToPay(true)
                         }

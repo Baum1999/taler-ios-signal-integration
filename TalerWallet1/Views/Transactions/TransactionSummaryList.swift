@@ -354,7 +354,7 @@ struct TransactionSummaryList: View {
                 let bottomButton = ZStack {
                     if isPayDialog, case .payment(let paymentTransaction) = talerTX {
                         let details = paymentTransaction.details
-                        if let effective, let terms = details.contractTerms, isFinished != true {
+                        if let effective, let terms = details.contractTerms, isFinished == false {
                             let formatted = effective.formatted(currencyInfo)
                             PaySafeArea(symLog: symLog,
                                          stack: stack.push(),
