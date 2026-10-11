@@ -40,7 +40,7 @@ struct KYCauth: View {
                                     reservePub: info.accountPub,
                                      obtainStr: nil,
                                        kycData: kycData,
-                                  validDetails: validDetails)
+                                  validDetails: validDetails.withScope(scope))
                     } else { ErrorView(stack.push(), title: kycErr, message: String(localized: "No scope")) }
                 } else { ErrorView(stack.push(), title: kycErr, message: "No valid details") }
             } else {

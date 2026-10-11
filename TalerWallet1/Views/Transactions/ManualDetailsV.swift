@@ -29,7 +29,7 @@ struct ManualDetailsV: View {
                             reservePub: details.reservePub,
                              obtainStr: obtainStr,              // only for withdrawal
                                kycData: nil,                    // only for deposit auth
-                          validDetails: validDetails)
+                          validDetails: validDetails.withScope(scope))
             } else { ErrorView(stack.push(), title: errTitle, message: String(localized: "No scope")) }
         } else { ErrorView(stack.push(), title: errTitle, message: String(localized: "No valid details")) }
     } // body
@@ -86,7 +86,7 @@ struct WireTransferView: View {
                // an option of type "uri" has neither paytoUri nor qrCodes - use one which has
                let firstOption = transferOptions.first(where: { $0.paytoUri != nil }) ?? transferOptions.first {
                 let specs = account.currencySpecification
-                let amountStr = transferAmount.formatted(specs: specs, isNegative: false)
+                let amountStr = transferAmount.formatted(specs: specs, isNegative: false, scope: account.scope)
                 let amountValue = transferAmount.valueStr
 //            let _ = print(amountStr, " | ", obtainStr)
                 if !minimalistic {

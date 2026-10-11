@@ -53,7 +53,7 @@ struct ExchangeAccountDetails: Codable, Hashable {
     var currencySpecification: CurrencySpecification?           // only if wallet-core knows it
     var creditRestrictions: [AccountRestriction]?               // only if restrictions apply
 //    var conversionError: TalerErrorDetail?                    // only if error
-    var scope: ScopeInfo?                                       // for Deposit
+    var scope: ScopeInfo?                                       // not sent by wallet-core, set by withScope()
 }
 
 typealias AccountDetailsArray = [ExchangeAccountDetails]
@@ -68,6 +68,19 @@ extension AccountDetailsArray {
             return result           // guaranteed to have at least 1 item
         }
         return nil
+    }
+
+    /// wallet-core's WithdrawalExchangeAccountDetails has no scope, and currencySpecification
+    /// only for conversion accounts. Take the transaction's scope for every account whose
+    /// transferAmount is in that currency, so formatted(specs:scope:) needn't fall back to "1.00 EUR"
+    func withScope(_ scope: ScopeInfo) -> AccountDetailsArray {
+        self.map { detail in
+            var detail = detail
+            if detail.scope == nil && detail.transferAmount?.currencyStr == scope.currency {
+                detail.scope = scope
+            }
+            return detail
+        }
     }
 }
 
