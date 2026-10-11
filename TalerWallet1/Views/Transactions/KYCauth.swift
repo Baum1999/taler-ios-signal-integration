@@ -42,7 +42,7 @@ struct KYCauth: View {
                                        kycData: kycData,
                                   validDetails: validDetails.withScope(scope))
                     } else { ErrorView(stack.push(), title: kycErr, message: String(localized: "No scope")) }
-                } else { ErrorView(stack.push(), title: kycErr, message: "No valid details") }
+                } else { ErrorView(stack.push(), title: kycErr, message: String(localized: "No valid details")) }
             } else {
                 // TODO: What if payto contains no IBAN, but URL?
                 ErrorView(stack.push(), title: kycErr, message: String(localized: "No IBAN"))
