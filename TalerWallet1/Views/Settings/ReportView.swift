@@ -52,6 +52,7 @@ struct ReportView: View {
                     reportHint
                     Button(buttonTitle) { createReport() }
                         .buttonStyle(TalerButtonStyle(type: .bordered, disabled: creating))
+                        .disabled(creating)
                         .padding()
                 } else {
                     Text(report)
