@@ -27,6 +27,11 @@ struct P2pAcceptDone: View {
             if let _ = try? await model.acceptPeerPushCredit(transactionId) {
                 if let url {
                     controller.removeURL(url)
+#if TALER_SIGNAL
+                    // Rücksprung zu Signal nach erfolgreicher Annahme (T2);
+                    // consume stellt sicher, dass es genau ein Rücksprung ist.
+                    signalReturnReady(for: url)
+#endif
                 }
                 dismissTop(stack.push())
             }
@@ -34,6 +39,11 @@ struct P2pAcceptDone: View {
             if let _ = try? await model.confirmPeerPullDebit(transactionId) {
                 if let url {
                     controller.removeURL(url)
+#if TALER_SIGNAL
+                    // Rücksprung zu Signal nach erfolgreicher Zahlung (T2);
+                    // consume stellt sicher, dass es genau ein Rücksprung ist.
+                    signalReturnReady(for: url)
+#endif
                 }
                 dismissTop(stack.push())
             }
