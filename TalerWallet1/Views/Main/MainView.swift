@@ -31,6 +31,10 @@ struct MainView: View {
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
 
     @StateObject private var tabBarModel = TabBarModel()
+#if TALER_SIGNAL
+    // talerlink://-Links (Signal -> Taler); Router hält den offenen Request
+    @ObservedObject private var signalLinkRouter = SignalLinkRouter.shared
+#endif
     @State private var selectedBalance: Balance? = nil      // for sheets, gets set in TransactionsListView
     @State private var urlToOpen: URL? = nil
 #if TALER_NIGHTLY
@@ -51,6 +55,12 @@ struct MainView: View {
         symLog.log("sheet dismiss: \(urlToOpen)")
         urlToOpen = nil
         ViewState.shared.popToRootView(nil)
+#if TALER_SIGNAL
+        // Sheet ohne Abschluss geschlossen: Rücksprung cancelled zu Signal,
+        // falls noch ein peer-Kontext existiert (consume - nach einem ready
+        // bleibt kein Kontext mehr, also nie ein doppelter Rücksprung).
+        signalLinkRouter.cancelActivePeer()
+#endif
     }
 
     private func dismissSheet() {
@@ -318,6 +328,28 @@ struct MainView: View {
                         .environmentObject(tabBarModel)
                         .environment(\.fromSheet, true)
                 }   // ActionSheet
+#if TALER_SIGNAL
+                .sheet(item: unlocked($signalLinkRouter.pending, locked)) { request in
+                    // talerlink://compose-* (compose-send aus T3,
+                    // compose-refund aus T4, compose-abort aus T5)
+                    switch request {
+                        case .composeSend(let params):
+                            SignalComposeSendView(params: params)
+                        case .composeRefund(let originalUri, let ctx):
+                            SignalComposeRefundView(originalUri: originalUri, ctx: ctx)
+                        case .composeAbort(let uris, let ctx):
+                            SignalComposeAbortView(uris: uris, ctx: ctx)
+                        default:
+                            SignalLinkPlaceholderView(request: request)
+                    }
+                }
+                // talerlink://pay-* auf eine EIGENE Zahlung: Detail-Sheet mit
+                // Abbrechen statt Annehmen-Sheet (T2, Vertrag Abschnitt 6)
+                .sheet(item: unlocked($signalLinkRouter.ownPayment, locked),
+                       onDismiss: { signalLinkRouter.cancelActivePeer() }) { info in
+                    SignalOwnPaymentView(info: info)
+                        .environmentObject(tabBarModel)
+                }
 #endif
         }   // VStack { networkUnavailable + mainGroup }
 #if OIM
@@ -383,6 +415,16 @@ struct MainView: View {
         }   }
 
         .onOpenURL { url in
+#if TALER_SIGNAL
+            // talerlink:// ausschließlich über den Router: parsen, Kontext
+            // merken, bei peerAction die bereinigte taler://-URI weitergeben.
+            // Die talerlink-URL selbst darf nie als taler:// behandelt oder
+            // geloggt werden (Inhaberpapier, Vertrag 2.6).
+            if url.scheme?.lowercased() == "talerlink" {
+                let _ = SignalLinkRouter.shared.handle(url)
+                return
+            }
+#endif
             symLog.log(".onOpenURL: \(url)")
             // will be called on a taler:// scheme either
             // by user tapping such link in a browser (bank website)

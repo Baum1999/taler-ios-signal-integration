@@ -652,6 +652,15 @@ class Controller: ObservableObject {
 extension Controller {
     func urlCommand(_ url: URL, stack: CallStack) -> (UrlCommand, URL) {
         guard let scheme = url.scheme else {return (UrlCommand.unknown, url) }
+#if TALER_SIGNAL
+        if scheme.lowercased() == "talerlink" {
+            // talerlink:// wird ausschließlich über SignalLinkRouter mit der
+            // bereinigten taler://-URI verarbeitet (MainView .onOpenURL).
+            // Hier darf der Link weder geloggt (Inhaberpapier, Vertrag 2.6)
+            // noch als unknown gespeichert werden.
+            return (UrlCommand.unknown, url)
+        }
+#endif
 #if DEBUG
         symLog.log(url)
 #else

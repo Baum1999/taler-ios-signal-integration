@@ -16,8 +16,13 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>taler</string>
+				<string>talerlink</string>
 			</array>
 		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sgnl</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>
