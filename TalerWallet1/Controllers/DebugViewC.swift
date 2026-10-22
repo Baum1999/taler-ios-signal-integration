@@ -69,12 +69,18 @@ public let VIEW_BANK_ACCOUNTS = VIEW_PAYMENT_SERVICES + 1           // 73 BankLi
 public let VIEW_BACKUP = VIEW_BANK_ACCOUNTS + 1                     // 74 BackupView
 public let VIEW_SETTINGS2 = VIEW_BACKUP + 1                         // 75 MoreSettingsView
 public let VIEW_SETTINGS3 = VIEW_SETTINGS2 + 1                      // 76 DebugSettingsView
+public let VIEW_SETTINGS4 = VIEW_SETTINGS3 + 1                      // 77 TalDirSettingsView
+
+// MARK: - TalDir
+public let VIEW_CONTACTS = VIEW_SETTINGS + 10                       // 80 ContactsView
+public let VIEW_MAILBOX = VIEW_CONTACTS + 1                         // 81 MailboxView
+public let VIEW_ALIAS = VIEW_MAILBOX + 1                            // 82 AliasView
 
 // MARK: - Business Invoice (from Actions)
 // TBD
-//public let VIEW_INVOICE_P2P = VIEW_SETTINGS + 10                    // 80 Invoice Amount
-//public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 81 Invoice ToS
-//public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 82 Invoice Purpose
+//public let VIEW_INVOICE_P2P = VIEW_CONTACTS + 10                    // 90 Invoice Amount
+//public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 91 Invoice ToS
+//public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 92 Invoice Purpose
 
 
 // MARK: scan Bank-Integrated Withdrawal

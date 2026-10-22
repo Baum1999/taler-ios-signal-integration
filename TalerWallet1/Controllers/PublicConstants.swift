@@ -129,6 +129,11 @@ public let FALLBACK_INCOMING = "arrow.backward"                     // 􀰌     
 
 public let ICONNAME_PERSON_LEFT = "person.left"                     // 􁒃
 public let ICONNAME_PERSON_RIGHT = "person.right"                   // 􁒄
+public let ICONNAME_PERSON = "person"                               // 􀉩 􀉪
+public let ICONNAME_PERSON3 = "person.3"                            // 􀝊 􀝋
+public let ICONNAME_PERSON_FILL = "person.fill"                     // 􀉩 􀉪
+public let ICONNAME_MAILBOX = "smallcircle.filled.circle"           // 􀍷 􀕩
+public let ICONNAME_ALIAS = "person.fill.viewfinder"                // 􀲏
 
 public let ICONNAME_OUTGOING = "taler.outgoing"                     // 􁉆 􁉇
 public let SYSTEM_OUTGOING4 = "arrowshape.forward"                  // 􁉆 􁉇    4.0 (iOS 16)
