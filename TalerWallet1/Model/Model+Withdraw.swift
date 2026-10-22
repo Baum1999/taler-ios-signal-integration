@@ -262,7 +262,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = talerUri
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -274,7 +274,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = talerUri
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -287,7 +287,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = baseUrl
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -302,7 +302,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = baseUrl
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -310,7 +310,7 @@ extension WalletModel {
                                           viewHandles: Bool = false)
       async throws -> Decodable {
         let request = SetExchangeTOSAccepted(baseUrl: baseUrl)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -325,7 +325,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = withdrawURL
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -335,7 +335,7 @@ extension WalletModel {
                                          viewHandles: Bool = false)
       async throws -> AcceptManualWithdrawalResult? {
         let request = AcceptManualWithdrawal(amount: amount, baseUrl: baseUrl, restrictAge: restrictAge)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }

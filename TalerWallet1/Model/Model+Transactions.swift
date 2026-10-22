@@ -163,7 +163,7 @@ extension WalletModel {
                                         limit: limit,
                                        offset: offset,
                              includeRefreshes: includeRefreshes)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response.transactions
     }
     // MARK: -

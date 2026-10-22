@@ -41,7 +41,7 @@ extension WalletModel {
                                            viewHandles: Bool = false)
       async throws -> Amount {
         let request = GetMaxPeerPushDebitAmount(scope: scope)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response.rawAmount
     }
 } // getMaxPeerPushAmount
@@ -77,7 +77,7 @@ extension WalletModel {
 //        let controller = Controller.shared
 //        controller.progressOperation = request.operation
 //        controller.progressToken = request.operation
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // checkPeerPushDebit
@@ -109,7 +109,7 @@ extension WalletModel {
                                      viewHandles: Bool = false)
       async throws -> InitiatePeerPushDebitResponse {
         let request = InitiatePeerPushDebit(scope: scope, terms: terms)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // initiatePeerPushDebit
@@ -147,7 +147,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = request.operation
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // checkPeerPullCredit
@@ -176,7 +176,7 @@ extension WalletModel {
       async throws -> InitiatePeerPullCreditResponse {
         let request = InitiatePeerPullCredit(exchangeBaseUrl: baseURL,
                                         partialContractTerms: terms)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // initiatePeerPullCredit
@@ -208,7 +208,10 @@ extension WalletModel {
                                           viewHandles: Bool = false)
       async throws -> PreparePeerPushCreditResponse {
         let request = PreparePeerPushCredit(talerUri: talerUri)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = talerUri
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // preparePeerPushCredit
@@ -229,7 +232,7 @@ extension WalletModel {
                                               viewHandles: Bool = false)
       async throws -> Decodable {
         let request = AcceptPeerPushCredit(transactionId: transactionId)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // acceptPeerPushCredit
@@ -264,7 +267,7 @@ extension WalletModel {
           let controller = Controller.shared
           controller.progressOperation = request.operation
           controller.progressToken = talerUri
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // preparePeerPullDebit
@@ -285,7 +288,7 @@ extension WalletModel {
                                               viewHandles: Bool = false)
       async throws -> Decodable {
         let request = ConfirmPeerPullDebit(transactionId: transactionId)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 } // confirmPeerPullDebit

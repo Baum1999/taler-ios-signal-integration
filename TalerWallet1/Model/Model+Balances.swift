@@ -169,13 +169,13 @@ extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
     nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> (BalancesResponse, UInt) {
         let request = Balances()
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
-        return (response, id)
+        let (response, debugId) = try await sendRequest(request, viewHandles: viewHandles)
+        return (response, debugId)
     }
     /// fetch Discounts from Wallet-Core. No networking involved
     nonisolated func listDiscounts(_ stack: CallStack, viewHandles: Bool = false) async throws -> DiscountsResponse {
         let request = ListDiscounts()
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
     /// delete a discount. No networking involved
@@ -187,7 +187,7 @@ extension WalletModel {
     /// fetch Subscriptions from Wallet-Core. No networking involved
     nonisolated func listSubscriptions(_ stack: CallStack, viewHandles: Bool = false) async throws -> SubscriptionsResponse {
         let request = ListSubscriptions()
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
     /// delete a subscription. No networking involved

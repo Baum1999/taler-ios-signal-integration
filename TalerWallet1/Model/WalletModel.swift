@@ -245,7 +245,7 @@ extension WalletModel {
     func hintApplicationResumedT() async throws -> DbStatus {
         // T for any Thread
         let request = ApplicationResumedRequest()
-        let (response, id) = try await sendRequest(request)
+        let (response, _) = try await sendRequest(request)
         return response
     }
 }
@@ -341,7 +341,7 @@ extension WalletModel {
         controller.progressToken = txId
         controller.lastProgressError = nil
         controller.lastProgressPhase = nil
-        let (response, id) = try await sendRequest(request)
+        let (response, _) = try await sendRequest(request)
         return response
     }
     nonisolated func cancelProgressToken(_ op: String, token: String)
@@ -358,13 +358,13 @@ extension WalletModel {
     nonisolated func getTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> TalerTransaction {
         let request = GetTransactionById(txId: transactionId, inclTerms: includeContractTerms)
-          let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+          let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
           return response
     }
     nonisolated func jsonTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> String {
         let request = JSONTransactionById(transactionId: transactionId, includeContractTerms: includeContractTerms)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
         return response
     }
 }
@@ -440,7 +440,7 @@ extension WalletModel {
     @discardableResult
     nonisolated func setConfig(setTesting: Bool) async throws -> VersionInfo {
         let request = ConfigRequest(setTesting: setTesting)
-        let (response, id) = try await sendRequest(request)
+        let (response, _) = try await sendRequest(request)
         return response.versionInfo
     }
 }
@@ -492,7 +492,7 @@ extension WalletModel {
         let request = InitRequest(persistentPath: dbPath,
                                    temporaryPath: tmpURL?.path(withSlash: true),
                                       setTesting: setTesting)
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -589,7 +589,7 @@ extension WalletModel {
         let controller = Controller.shared
         controller.progressOperation = request.operation
         controller.progressToken = request.operation
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -661,7 +661,7 @@ extension WalletModel {
             let dbPath = docDirUrl.path(withSlash: false)
             let request = ExportDbToFile(directory: dbPath, stem: stem, asJSON: asJSON)
     print(dbPath, stem)
-            let (response, id) = try await sendRequest(request, viewHandles: viewHandles)
+            let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
             return response.path
         } else {
             return nil
@@ -675,13 +675,13 @@ extension WalletModel {
     nonisolated func getDiagnostics(viewHandles: Bool = false)
       async throws -> String {
         let request = GetDiagnostics()
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
         return response
     }
     nonisolated func getPerformanceStats(viewHandles: Bool = false)
     async throws -> String {
         let request = GetPerformanceStats()
-        let (response, id) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        let (response, _) = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
         return response
     }
 }
