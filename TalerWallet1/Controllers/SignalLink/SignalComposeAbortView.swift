@@ -34,13 +34,19 @@ final class SignalComposeAbortModel: ObservableObject {
     /// aus der Transaktion (Eiserne Regel 5), nie aus dem Link.
     struct Entry {
         let uri: String
+        /// false: ungültig oder über der Obergrenze - kein Auflösen, kein
+        /// Abbruch, Ergebnis `failed` (spec-multi-uri-link.md 3.5).
+        let processable: Bool
         var transactionId: String?
+        var amount: Amount?
         var amountText: String?
         var summaryText: String?
         var majorState: TransactionMajorState?
     }
 
     let uris: [String]
+    /// Anzeigehilfe aus Signal, nie Entscheidungsgrundlage (spec 3.2).
+    let meta: AbortRequestMeta
     let ctx: SignalReturnContext
 
     @Published var phase: Phase = .loading
@@ -54,9 +60,39 @@ final class SignalComposeAbortModel: ObservableObject {
 
     private let wallet = WalletModel.shared
 
-    init(uris: [String], ctx: SignalReturnContext) {
+    init(uris: [String], meta: AbortRequestMeta, ctx: SignalReturnContext) {
         self.uris = uris
+        self.meta = meta
         self.ctx = ctx
+    }
+
+    /// Zahl der URIs, die dieser Dialog tatsächlich bearbeitet.
+    var processableCount: Int {
+        uris.indices.filter { SignalLinkRequest.isProcessable(uris, at: $0) }.count
+    }
+
+    /// Weichen Angaben von Signal von den verifizierten Werten ab
+    /// (spec-multi-uri-link.md 3.2)? Geprüft wird nur, was sich sicher
+    /// vergleichen lässt: Währung, mehr URIs als Anteile, und ob die eigenen
+    /// offenen Anteile den ursprünglichen Gesamtbetrag übersteigen.
+    var metadataDeviates: Bool {
+        let amounts = entries.compactMap(\.amount)
+        if let currency = meta.currency, amounts.contains(where: { $0.currencyStr != currency }) {
+            return true
+        }
+        if let splitCount = meta.splitCount, uris.count > splitCount {
+            return true
+        }
+        if let total = meta.totalAmount, let first = amounts.first,
+           let totalAmount = try? Amount(fromString: "\(first.currencyStr):\(total)") {
+            var sum = Amount.zero(currency: first.currencyStr)
+            for amount in amounts {
+                guard let next = try? sum + amount else { return false }
+                sum = next
+            }
+            if (try? sum > totalAmount) == true { return true }
+        }
+        return false
     }
 
     // MARK: Start (Kaltstart)
@@ -67,8 +103,12 @@ final class SignalComposeAbortModel: ObservableObject {
         // Kaltstart über den Link: wallet-core evtl. noch nicht initialisiert.
         await SignalLinkBackendGate.awaitBackendReady(Controller.shared)
         var resolved: [Entry] = []
-        for uri in uris {
-            resolved.append(await resolve(uri: uri))
+        for index in uris.indices {
+            if SignalLinkRequest.isProcessable(uris, at: index) {
+                resolved.append(await resolve(uri: uris[index]))
+            } else {
+                resolved.append(Entry(uri: uris[index], processable: false))
+            }
         }
         entries = resolved
         phase = .confirm
@@ -78,9 +118,9 @@ final class SignalComposeAbortModel: ObservableObject {
     /// URI-Store (T3, OwnUriStore), dann die Transaktionssuche über alle
     /// Scopes (T2, findOwnPeerTransaction). Wird sie nirgends gefunden,
     /// gehört sie keiner eigenen Transaktion an - sie erhält später
-    /// `declined`, es gibt keinen Abbruch-Versuch.
+    /// `not_own`, es gibt keinen Abbruch-Versuch.
     private func resolve(uri: String) async -> Entry {
-        var entry = Entry(uri: uri)
+        var entry = Entry(uri: uri, processable: true)
         if let cached = OwnUriStore.shared.transactionId(forUri: uri) {
             entry.transactionId = cached
         } else {
@@ -91,6 +131,7 @@ final class SignalComposeAbortModel: ObservableObject {
             transactionId, includeContractTerms: false, viewHandles: true)
         else { return entry }
         entry.majorState = transaction.common.txState.major
+        entry.amount = transaction.common.amountRaw
         entry.amountText = transaction.common.amountRaw.readableDescription
         if case .peer2peer(let p2p) = transaction,
            let summary = p2p.details.info.summary, !summary.isEmpty {
@@ -141,6 +182,7 @@ final class SignalComposeAbortModel: ObservableObject {
     /// geladen (Race: Empfänger hat inzwischen eingelöst, oder die
     /// Transaktion war bereits abgelaufen), bevor gemappt wird.
     private func abortOne(_ entry: Entry) async -> String {
+        guard entry.processable else { return AbortOutcome.failed }
         guard let transactionId = entry.transactionId else {
             return AbortOutcome.outcome(for: nil, abortSucceeded: nil)
         }
@@ -191,8 +233,8 @@ struct SignalComposeAbortView: View {
 
     @StateObject private var vm: SignalComposeAbortModel
 
-    init(uris: [String], ctx: SignalReturnContext) {
-        _vm = StateObject(wrappedValue: SignalComposeAbortModel(uris: uris, ctx: ctx))
+    init(uris: [String], meta: AbortRequestMeta, ctx: SignalReturnContext) {
+        _vm = StateObject(wrappedValue: SignalComposeAbortModel(uris: uris, meta: meta, ctx: ctx))
     }
 
     var body: some View {
@@ -215,7 +257,7 @@ struct SignalComposeAbortView: View {
     @Environment(\.dismiss) private var dismiss
 
     private var title: String {
-        vm.uris.count == 1 ? "Zahlung abbrechen?" : "\(vm.uris.count) Zahlungen abbrechen?"
+        vm.processableCount == 1 ? "Zahlung abbrechen?" : "\(vm.processableCount) Zahlungen abbrechen?"
     }
 
     @ViewBuilder
@@ -251,6 +293,20 @@ struct SignalComposeAbortView: View {
     private var confirmView: some View {
         VStack(spacing: 0) {
             List {
+                if let context = contextText {
+                    Section {
+                        Text(context)
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                if vm.metadataDeviates {
+                    Section {
+                        Label("Angaben von Signal weichen ab. Angezeigt werden nur die Werte aus dieser Wallet.",
+                              systemImage: "exclamationmark.triangle")
+                            .font(.footnote)
+                    }
+                }
                 Section {
                     ForEach(vm.entries.indices, id: \.self) { index in
                         entryRow(vm.entries[index])
@@ -284,9 +340,34 @@ struct SignalComposeAbortView: View {
     /// Zeile je Eingangs-URI: Betrag und Zweck aus der wallet-core-
     /// Transaktion (verifizierte Quelle, Regel 5), nie die URI selbst
     /// (Regel 4). Nicht zugeordnete URIs werden als solche markiert -
-    /// sie erhalten `declined`.
+    /// sie erhalten `not_own`.
+    /// Kontext aus Signal (Auslöser, Chat) - nur Text, keine Beträge.
+    private var contextText: String? {
+        var parts: [String] = []
+        switch vm.meta.reason {
+            case "delete": parts.append("Die Nachricht wurde in Signal für alle gelöscht.")
+            case "menu": parts.append("Abbrechen in Signal angefordert.")
+            default: break
+        }
+        if let hint = vm.meta.recipientHint {
+            parts.append(vm.meta.isGroup == true ? "Gruppe laut Signal: \(hint)" : "Chat laut Signal: \(hint)")
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
+    }
+
     @ViewBuilder
     private func entryRow(_ entry: SignalComposeAbortModel.Entry) -> some View {
+        if !entry.processable {
+            Text("Kann hier nicht abgebrochen werden")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+        } else {
+            processableRow(entry)
+        }
+    }
+
+    @ViewBuilder
+    private func processableRow(_ entry: SignalComposeAbortModel.Entry) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             if let amountText = entry.amountText {
                 Text(amountText)

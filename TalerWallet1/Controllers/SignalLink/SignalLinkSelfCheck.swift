@@ -121,20 +121,28 @@ enum SignalLinkSelfCheck {
 
         // ---- compose-abort ----
 
-        // 12) Ungültige URIs werden verworfen, Reihenfolge der gültigen bleibt.
-        let abort = "talerlink://compose-abort?uri=taler%3A%2F%2Fpay-push%2Fexchange.example.org%2FAAAA"
+        // 12) Ungültige URIs bleiben drin (sie erhalten später `failed`),
+        // Reihenfolge bleibt, Dubletten werden zusammengefasst.
+        let abort = "talerlink://compose-abort?v=1&uri=taler%3A%2F%2Fpay-push%2Fexchange.example.org%2FAAAA"
             + "&uri=taler%3A%2F%2Fpay%2Fexchange.example.org%2FXXXX"
-            + "&uri=taler%3A%2F%2Fpay-pull%2Fexchange.example.org%2FBBBB&\(base)"
-        if case .composeAbort(let uris, _)? = SignalLinkRequest.parse(u(abort)) {
-            expect("compose-abort: ungültige URI verworfen",
+            + "&uri=taler%3A%2F%2Fpay-pull%2Fexchange.example.org%2FBBBB"
+            + "&uri=taler%3A%2F%2Fpay-push%2Fexchange.example.org%2FAAAA&\(base)"
+        if case .composeAbort(let uris, let meta, _)? = SignalLinkRequest.parse(u(abort)) {
+            expect("compose-abort: alle URIs, Dublette zusammengefasst",
                    uris == ["taler://pay-push/exchange.example.org/AAAA",
-                           "taler://pay-pull/exchange.example.org/BBBB"])
+                            "taler://pay/exchange.example.org/XXXX",
+                            "taler://pay-pull/exchange.example.org/BBBB"])
+            expect("compose-abort: ungültige URI nicht bearbeitbar",
+                   !SignalLinkRequest.isProcessable(uris, at: 1)
+                   && SignalLinkRequest.isProcessable(uris, at: 0))
+            expect("compose-abort: ohne Metadaten leer", meta == AbortRequestMeta())
         } else { expect("compose-abort: geparst", false) }
 
-        // 13) Case-insensitives Präfix (TALER://PAY-PUSH/).
+        // 13) Case-insensitives Präfix (TALER://PAY-PUSH/), v fehlt = 1.
         let abortCase = "talerlink://compose-abort?uri=TALER%3A%2F%2FPAY-PUSH%2Fexchange.example.org%2FCCCC&\(base)"
-        if case .composeAbort(let uris, _)? = SignalLinkRequest.parse(u(abortCase)) {
-            expect("compose-abort: Präfix case-insensitiv", uris.count == 1)
+        if case .composeAbort(let uris, let meta, _)? = SignalLinkRequest.parse(u(abortCase)) {
+            expect("compose-abort: Präfix case-insensitiv", SignalLinkRequest.isProcessable(uris, at: 0))
+            expect("compose-abort: v fehlt = 1", meta.version == 1)
         } else { expect("compose-abort case: geparst", false) }
 
         // 14) Nur ungültige bzw. gar keine URIs -> nil.
@@ -142,6 +150,39 @@ enum SignalLinkSelfCheck {
                SignalLinkRequest.parse(u("talerlink://compose-abort?uri=taler%3A%2F%2Fpay%2Fexchange.example.org%2FXXXX&\(base)")) == nil)
         expect("compose-abort ohne uri -> nil",
                SignalLinkRequest.parse(u("talerlink://compose-abort?\(base)")) == nil)
+
+        // 14a) Obergrenze 32: die 33. URI wird nicht bearbeitet.
+        let many = (0..<33).map { "uri=taler%3A%2F%2Fpay-push%2Fe%2FK\($0)" }.joined(separator: "&")
+        if case .composeAbort(let uris, _, _)? = SignalLinkRequest.parse(u("talerlink://compose-abort?\(many)&\(base)")) {
+            expect("compose-abort: 33 URIs übernommen", uris.count == 33)
+            expect("compose-abort: 32. bearbeitbar", SignalLinkRequest.isProcessable(uris, at: 31))
+            expect("compose-abort: 33. nicht bearbeitbar", !SignalLinkRequest.isProcessable(uris, at: 32))
+        } else { expect("compose-abort 33: geparst", false) }
+
+        // 14b) Metadaten: flach, einzeln validiert, Texte gekürzt.
+        let longHint = String(repeating: "h", count: 90)
+        let withMeta = "talerlink://compose-abort?v=2&uri=taler%3A%2F%2Fpay-push%2Fe%2FA"
+            + "&reason=delete&isGroup=true&recipientHint=\(longHint)&memberCount=4"
+            + "&isGroupSplit=true&includeSelf=false&splitCount=abc&currency=kudos"
+            + "&totalAmount=12.5&summary=Pizza%20%26%20Bier&sentAt=1760000000000&unknown=x&\(base)"
+        if case .composeAbort(_, let meta, _)? = SignalLinkRequest.parse(u(withMeta)) {
+            expect("meta: v=2 übernommen", meta.version == 2)
+            expect("meta: reason", meta.reason == "delete")
+            expect("meta: isGroup", meta.isGroup == true)
+            expect("meta: recipientHint gekürzt", meta.recipientHint?.count == AbortRequestMeta.maxRecipientHintLength)
+            expect("meta: memberCount", meta.memberCount == 4)
+            expect("meta: includeSelf false", meta.includeSelf == false)
+            expect("meta: ungültiges splitCount verworfen", meta.splitCount == nil)
+            expect("meta: currency", meta.currency == "KUDOS")
+            expect("meta: totalAmount", meta.totalAmount == "12.5")
+            expect("meta: summary dekodiert", meta.summary == "Pizza & Bier")
+            expect("meta: sentAt", meta.sentAt == 1_760_000_000_000)
+        } else { expect("compose-abort mit Metadaten: geparst", false) }
+        let badMeta = "talerlink://compose-abort?uri=taler%3A%2F%2Fpay-push%2Fe%2FA"
+            + "&reason=boom&isGroup=ja&memberCount=0&totalAmount=1.2.3&currency=K%C3%9CDOS&\(base)"
+        if case .composeAbort(_, let meta, _)? = SignalLinkRequest.parse(u(badMeta)) {
+            expect("meta: ungültige Werte einzeln verworfen", meta == AbortRequestMeta())
+        } else { expect("compose-abort mit ungültigen Metadaten: geparst", false) }
 
         // ---- peerAction (pay-push / pay-pull) ----
 
