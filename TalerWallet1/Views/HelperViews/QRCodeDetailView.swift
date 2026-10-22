@@ -76,10 +76,10 @@ struct QRCodeDetailView: View {
                 let logo = Image(TALER_LOGO_QR)
                 let size = 276.0            // 240.0
                 let logoSize = 60.0         // 88 is too big, Android phones don't recognize the QR code anymore
-                let qrView = GradientBorder(size: size + 20.0,
-                                           color: WalletColors().primaryAccent,
-                                      background: WalletColors().backgroundColor)
-                {
+                let qrView = ZStack {
+                    GradientBorder(size: size + 20.0,
+                                  color: WalletColors().primaryAccent,
+                             background: WalletColors().backgroundColor)
                     QRGeneratorView(text: talerURI, size: size, logo: logo, logoSize: logoSize, image: $qrImage)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }

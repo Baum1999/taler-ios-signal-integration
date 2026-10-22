@@ -196,11 +196,10 @@ struct BorderWithNFC<Content: View>: View {
                                 .talerFont(.subheadline)
                                 .padding(.vertical, -4)
                         }
-//                        let screenWidth = UIScreen.screenWidth
-                        GradientBorder(size: size + 20.0,
-                                      color: WalletColors().primaryAccent,
-                                 background: WalletColors().backgroundColor)
-                        {
+                        ZStack {
+                            GradientBorder(size: size + 20.0,
+                                          color: WalletColors().primaryAccent,
+                                     background: WalletColors().backgroundColor)
                             content()
                                 .onTapGesture(count: 1) { nfcWriter.write(totpData) }
                         }
@@ -236,13 +235,12 @@ struct BorderWithNFC<Content: View>: View {
 }
 // MARK: -
 // Use radius: 0 for rect instead of rounded rect
-struct GradientBorder<Content: View>: View {
+struct GradientBorder: View {
     let size: CGFloat
     let radius: CGFloat
     let lineWidth: CGFloat
     let color: Color
     let background: Color
-    var content: () -> Content
 
     @State private var rotation: CGFloat = 0
 
@@ -271,37 +269,36 @@ struct GradientBorder<Content: View>: View {
                             .stroke(lineWidth: lineWidth)
                             .frame(width: size - border, height: size - border)
                     }
-                content()
             }
             .frame(width: size, height: size)
             Spacer()
         }
         .onAppear {
-            withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
-                rotation = 720
+            withAnimation(.linear(duration: 4).repeatForever(autoreverses: false)) {
+                rotation = 360
             }
         }
     }
 }
 extension GradientBorder {
-    init(size: CGFloat, color: Color, background: Color, content: @escaping () -> Content) {
+    init(size: CGFloat, color: Color, background: Color) {
         self.size = size
         self.radius = 20.0
         self.lineWidth = 4.0
         self.color = color
         self.background = background
-        self.content = content
     }
 }
 // MARK: -
 struct GradientBorder_Previews: PreviewProvider {
     static var previews: some View {
 
-        GradientBorder(size: 260,
-//                     radius: 1,
-//                  lineWidth: 2,
-                      color: .blue,
-                 background: .yellow) {
+        ZStack {
+            GradientBorder(size: 260,
+//                       radius: 1,
+//                    lineWidth: 2,
+                          color: .blue,
+                     background: .yellow)
             Text(verbatim: "Preview")
         }
     }
