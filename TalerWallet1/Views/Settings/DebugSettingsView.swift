@@ -91,8 +91,9 @@ struct DebugSettingsView: View {
                     if #available (iOS 16.0, *) {
                         let localConsStr = String("on LocalConsole")
                         let observability = String("Observe walletCore")
-                        SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
-                            walletCore.isObserving = isObserving}),
+                        SettingsTriState(name: observability,
+                                        value: $localConsoleO.onChange({ isObserving in
+                                              walletCore.isObserving = isObserving}),
                                           id1: "observe",
                                   description: localConsStr) { _ in
                             let consoleManager = LCManager.shared
@@ -100,8 +101,9 @@ struct DebugSettingsView: View {
                             consoleManager.clear()
                         }
                         let showLogs = String("Show logs")
-                        SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
-                            walletCore.isLogging = isLogging}),
+                        SettingsToggle(name: showLogs,
+                                      value: $localConsoleL.onChange({ isLogging in
+                                            walletCore.isLogging = isLogging}),
                                         id1: "localConsoleL",
                                 description: localConsStr) { _ in
                             let consoleManager = LCManager.shared

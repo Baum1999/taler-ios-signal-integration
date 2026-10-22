@@ -123,7 +123,8 @@ struct SettingsView: View {
             NavigationLink {        // whole row like in a tableView
                 ExchangeListView(stack: stack.push(), url: .constant(nil))
             } label: {
-                SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges", imageName: EXCHANGE_LOGO,
+                SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges",
+                        imageName: EXCHANGE_LOGO,
                       description: String(localized: "Manage payment services")) {}
             }
 
@@ -134,7 +135,7 @@ struct SettingsView: View {
                 bankAccountsDest
             } label: {
                 SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
-                        imageName: "building.columns",
+                        imageName: ICONNAME_BANK,
                       description: String(localized: "Your accounts for deposit")) {}
             }
 
