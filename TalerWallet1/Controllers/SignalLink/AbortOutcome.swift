@@ -66,9 +66,9 @@ extension AbortOutcome {
     /// diesem Slot - der Reviewer fuehrt sie aus, Muster: SignalLinkSelfCheck).
     /// Rueckgabe ist die Liste der fehlgeschlagenen Faelle (leer = alles ok).
     static func runSelfCheck() -> [String] {
-        var failed: [String] = []
+        var failures: [String] = []
         func expect(_ name: String, _ condition: Bool) {
-            if !condition { failed.append(name) }
+            if !condition { failures.append(name) }
         }
 
         // 1) Abbruch erfolgreich -> immer aborted, egal welcher Zustand.
@@ -124,7 +124,7 @@ extension AbortOutcome {
         expect("Wert not_own exakt", notOwn == "not_own")
         expect("Wert failed exakt", failed == "failed")
 
-        return failed
+        return failures
     }
 }
 #endif
