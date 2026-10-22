@@ -129,6 +129,7 @@ struct ErrorView: View {
         let initializationError = String(localized: "Initialization error")
         let serializationError = String(localized: "Serialization error")
         let deserializationError = String(localized: "Deserialization error")
+        let wrongParameters = String(localized: "Wrong parameters")
         let unknownError = String(localized: "Unknown error")
         let userCancelled = String(localized: "User cancelled")
         let transactionError = String(localized: "Transaction Error")
@@ -176,6 +177,8 @@ struct ErrorView: View {
                         self.init(stack, title: serializationError, copyable: false, onDismiss: onDismiss)
                     case .deserializationError:
                         self.init(stack, title: deserializationError, copyable: false, onDismiss: onDismiss)
+                    case .wrongParameters:
+                        self.init(stack, title: wrongParameters, copyable: false, onDismiss: onDismiss)
                 }
             default:
                 self.init(stack, title: unknownError, message: error.localizedDescription, copyable: false, onDismiss: onDismiss)

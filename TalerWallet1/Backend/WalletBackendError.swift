@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -15,6 +15,7 @@ enum WalletBackendError: Error {
     case initializationError
     case serializationError
     case deserializationError
+    case wrongParameters
     case walletCoreError(TalerErrorDetail?)
 }
 
