@@ -10,14 +10,10 @@
 		4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1853992BDAE6D40034F3BA /* LocalConsole */; };
 		4E18539C2BDAE6E50034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E18539B2BDAE6E50034F3BA /* LocalConsole */; };
 		4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2D8DD22B3F513800234039 /* MarkdownUI */; };
-		4E3208572BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
-		4E3208582BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
-		4E363CC02A24754200D7E98C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
 		4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE162A990778009F1BE8 /* AnyCodable */; };
 		4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE182A990778009F1BE8 /* SymLog */; };
 		4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE152A990778009F1BE8 /* taler-swift */; };
 		4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE1A2A990778009F1BE8 /* CodeScanner */; };
-		4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
 		4E563DF82DC3C52C008FA91D /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE62DC3C52C008FA91D /* AnyCodable */; };
 		4E563DF92DC3C52C008FA91D /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE82DC3C52C008FA91D /* SymLog */; };
 		4E563DFA2DC3C52C008FA91D /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DF02DC3C52C008FA91D /* LocalConsole */; };
@@ -25,8 +21,6 @@
 		4E563DFD2DC3C52C008FA91D /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE52DC3C52C008FA91D /* taler-swift */; };
 		4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEE2DC3C52C008FA91D /* OrderedCollections */; };
 		4E563DFF2DC3C52C008FA91D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEA2DC3C52C008FA91D /* CodeScanner */; };
-		4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
-		4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
 		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
 		4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */; };
 		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
@@ -119,8 +113,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		4E363CBF2A24754200D7E98C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4E3EAE892A990778009F1BE8 /* GNU_Taler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GNU_Taler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E563E0A2DC3C52C008FA91D /* Taler_Nightly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler_Nightly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E753A042A08E720002D9328 /* transactions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transactions.json; sourceTree = "<group>"; };
@@ -140,6 +132,7 @@
 		4E5560C32FEA44FC00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				.gitignore,
 				FTalerWalletcoreCrash.xcframework,
 			);
 			target = 4E563DE42DC3C52C008FA91D /* Taler_Nightly */;
@@ -154,6 +147,7 @@
 		4E5560C52FEA452D00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				.gitignore,
 				FTalerWalletcoreCrash.xcframework,
 			);
 			target = D14AFD1C24D232B300C51073 /* Taler_Wallet */;
@@ -161,7 +155,10 @@
 		4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Entitlements Readme.txt",
+				"Taler_Nightly Info.plist",
 				"Taler_Nightly InfoPlist.xcstrings",
+				"Taler_Wallet Info.plist",
 				"Taler_Wallet InfoPlist.xcstrings",
 			);
 			target = 4E3EAE142A990778009F1BE8 /* GNU_Taler */;
@@ -169,7 +166,10 @@
 		4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Entitlements Readme.txt",
+				"GNU_Taler Info.plist",
 				"GNU_Taler InfoPlist.xcstrings",
+				"Taler_Wallet Info.plist",
 				"Taler_Wallet InfoPlist.xcstrings",
 			);
 			target = 4E563DE42DC3C52C008FA91D /* Taler_Nightly */;
@@ -177,8 +177,11 @@
 		4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Entitlements Readme.txt",
+				"GNU_Taler Info.plist",
 				"GNU_Taler InfoPlist.xcstrings",
 				OIM.xcassets,
+				"Taler_Nightly Info.plist",
 				"Taler_Nightly InfoPlist.xcstrings",
 			);
 			target = D14AFD1C24D232B300C51073 /* Taler_Wallet */;
@@ -197,7 +200,6 @@
 		4E4A40692CD572FE00CA6A90 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
 		4E4A40852CD5731A00CA6A90 /* Backend */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Backend; sourceTree = "<group>"; };
 		4E4A40DD2CD5737100CA6A90 /* Quickjs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Quickjs; sourceTree = "<group>"; };
-		4E4A40E42CD573D500CA6A90 /* Sounds */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Sounds; sourceTree = "<group>"; };
 		4E4A41252CD5769900CA6A90 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
 		4E9C5A922E58ADB3002E2709 /* XCFrameworks */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4E5560C42FEA452200412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4E5560C32FEA44FC00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4E5560C52FEA452D00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = XCFrameworks; sourceTree = "<group>"; };
 		4EB66D772E18238000BE0651 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
@@ -282,11 +284,8 @@
 				4E4A40852CD5731A00CA6A90 /* Backend */,
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
 				4EB66D772E18238000BE0651 /* Resources */,
-				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
-				4E363CBF2A24754200D7E98C /* Settings.bundle */,
 				4EB094F529897A9A0043A8A1 /* Preview Content */,
-				4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */,
 			);
 			path = TalerWallet1;
 			sourceTree = "<group>";
@@ -388,7 +387,6 @@
 				4E4A40692CD572FE00CA6A90 /* Model */,
 				4E4A40852CD5731A00CA6A90 /* Backend */,
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
-				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
 				4E9C5A922E58ADB3002E2709 /* XCFrameworks */,
 				4EB66D772E18238000BE0651 /* Resources */,
@@ -435,7 +433,6 @@
 				4E4A40692CD572FE00CA6A90 /* Model */,
 				4E4A40852CD5731A00CA6A90 /* Backend */,
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
-				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
 				4E9C5A922E58ADB3002E2709 /* XCFrameworks */,
 				4EB66D772E18238000BE0651 /* Resources */,
@@ -482,7 +479,6 @@
 				4E4A40692CD572FE00CA6A90 /* Model */,
 				4E4A40852CD5731A00CA6A90 /* Backend */,
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
-				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
 				4E9C5A922E58ADB3002E2709 /* XCFrameworks */,
 				4EB66D772E18238000BE0651 /* Resources */,
@@ -607,8 +603,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E3208572BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */,
-				4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,8 +610,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */,
-				4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,8 +617,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E3208582BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */,
-				4E363CC02A24754200D7E98C /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
