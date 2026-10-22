@@ -82,6 +82,8 @@ struct MigrationView: View {
         }
     }
 
+    var isIpad : Bool { UIDevice.current.userInterfaceIdiom == .pad }
+
     var body: some View {
         let list = List {
             Section(header: Text("Update database")) {
@@ -121,8 +123,8 @@ struct MigrationView: View {
                             .talerFont(.body)
                     }
                 } else {
-                    let device = controller.isIpad ? Text("this iPad", comment: "device")
-                                                   : Text("this iPhone", comment: "device")
+                    let device = isIpad ? Text("this iPad", comment: "device")
+                                        : Text("this iPhone", comment: "device")
                     Text("The \(controller.localizedAppName) database on \(device) can be updated and will then be faster.", comment: "appName, device")
                         .talerFont(.title)
                     Text("This might take from a few seconds to a minute or two, depending on how many transactions you made.")
