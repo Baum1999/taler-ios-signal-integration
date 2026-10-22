@@ -32,9 +32,9 @@ func signalUriMatchKey(_ uri: String) -> String? {
 func findOwnPeerTransaction(forTalerUri uri: String, model: WalletModel) async -> String? {
     guard let matchKey = signalUriMatchKey(uri) else { return nil }
     let stack = CallStack("SignalLink")
-    guard let balances = try? await model.getBalances(stack) else { return nil }
+    guard let response = try? await model.getBalances(stack) else { return nil }
     for filter in [TransactionStateFilter.nonfinal, TransactionStateFilter.final] {
-        for balance in balances.balances {
+        for balance in response.0.balances {
             guard let transactions = try? await model.getTransactionsV2(stack,
                                                                   scope: balance.scopeInfo,
                                                           filterByState: filter)
