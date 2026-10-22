@@ -328,6 +328,7 @@ struct MainView: View {
                         .environmentObject(tabBarModel)
                         .environment(\.fromSheet, true)
                 }   // ActionSheet
+#endif
 #if TALER_SIGNAL
                 .sheet(item: unlocked($signalLinkRouter.pending, locked)) { request in
                     // talerlink://compose-* (compose-send aus T3,
