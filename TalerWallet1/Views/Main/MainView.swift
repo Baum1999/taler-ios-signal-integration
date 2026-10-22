@@ -337,8 +337,8 @@ struct MainView: View {
                             SignalComposeSendView(params: params)
                         case .composeRefund(let originalUri, let ctx):
                             SignalComposeRefundView(originalUri: originalUri, ctx: ctx)
-                        case .composeAbort(let uris, let ctx):
-                            SignalComposeAbortView(uris: uris, ctx: ctx)
+                        case .composeAbort(let uris, let meta, let ctx):
+                            SignalComposeAbortView(uris: uris, meta: meta, ctx: ctx)
                         default:
                             SignalLinkPlaceholderView(request: request)
                     }

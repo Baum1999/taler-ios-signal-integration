@@ -17,9 +17,14 @@ enum AbortOutcome {
     static let alreadyClaimed = "already_claimed"
     /// Transaktion ist abgelaufen.
     static let expired = "expired"
-    /// Nutzer hat abgelehnt, die URI gehoert keiner eigenen Transaktion
-    /// oder der Abbruch schlug fehl.
+    /// Nutzer hat abgelehnt bzw. den Dialog ohne Entscheidung geschlossen.
     static let declined = "declined"
+    /// Die URI gehoert keiner eigenen Transaktion dieser Wallet
+    /// (Multi-URI-Link, spec-multi-uri-link.md 3.3).
+    static let notOwn = "not_own"
+    /// Abbruch technisch gescheitert, URI ungueltig oder ueber der
+    /// Obergrenze von 32 URIs (Multi-URI-Link).
+    static let failed = "failed"
 
     /// Reines Mapping von wallet-core-Zustand und Abbruch-Erfolg auf das
     /// Protokoll-Ergebnis einer URI (Paket T5):
@@ -27,10 +32,11 @@ enum AbortOutcome {
     /// - Zustand aborting/aborted (zuvor bereits abgebrochen) -> `aborted`.
     /// - Zustand done -> `already_claimed`.
     /// - Zustand expired -> `expired`.
-    /// - Alles andere (keine eigene Transaktion, Abbruch fehlgeschlagen
-    ///   bei noch offenem Zustand, unbekannter Zustand) -> `declined`.
-    ///   `declined` ist das konservative Ergebnis: Signal aendert keinen
-    ///   Status, der Fast-Poll ermittelt den echten Zustand.
+    /// - Keine eigene Transaktion -> `not_own`.
+    /// - Abbruch fehlgeschlagen bei noch offenem Zustand -> `failed`.
+    /// - Nicht versucht bei unbekanntem Zustand -> `declined`.
+    ///   Keines davon aendert in Signal einen Status, Signal fragt nur den
+    ///   echten Zustand ab.
     ///
     /// Parameter:
     /// - `majorState`: Zustand der Transaktion vor dem Abbruchversuch
@@ -39,7 +45,7 @@ enum AbortOutcome {
     ///   false = Abbruchversuch fehlgeschlagen, nil = nicht versucht.
     static func outcome(for majorState: TransactionMajorState?, abortSucceeded: Bool?) -> String {
         if abortSucceeded == true { return aborted }
-        guard let majorState else { return declined }
+        guard let majorState else { return abortSucceeded == false ? failed : notOwn }
         switch majorState {
             case .aborting, .aborted:
                 return aborted
@@ -48,7 +54,7 @@ enum AbortOutcome {
             case .expired:
                 return expired
             default:
-                return declined
+                return abortSucceeded == false ? failed : declined
         }
     }
 }
@@ -92,13 +98,15 @@ extension AbortOutcome {
         expect("zustand expired, fehlgeschlagen -> expired",
                outcome(for: .expired, abortSucceeded: false) == expired)
 
-        // 5) Keine eigene Transaktion -> declined.
-        expect("keine Transaktion, nicht versucht -> declined",
-               outcome(for: nil, abortSucceeded: nil) == declined)
+        // 5) Keine eigene Transaktion -> not_own.
+        expect("keine Transaktion, nicht versucht -> not_own",
+               outcome(for: nil, abortSucceeded: nil) == notOwn)
 
-        // 6) Abbruch fehlgeschlagen bei noch offenem Zustand -> declined.
-        expect("abort fehlgeschlagen + pending -> declined",
-               outcome(for: .pending, abortSucceeded: false) == declined)
+        // 6) Abbruch fehlgeschlagen bei noch offenem Zustand -> failed.
+        expect("abort fehlgeschlagen + pending -> failed",
+               outcome(for: .pending, abortSucceeded: false) == failed)
+        expect("abort fehlgeschlagen, Zustand unbekannt -> failed",
+               outcome(for: nil, abortSucceeded: false) == failed)
 
         // 7) Nicht abgedeckte Zustaende -> konservativ declined.
         for state in [TransactionMajorState.none, .dialog, .finalizing,
@@ -108,11 +116,13 @@ extension AbortOutcome {
                    outcome(for: state, abortSucceeded: nil) == declined)
         }
 
-        // 8) Nur die vier Protokoll-Werte, exakte Schreibweise.
+        // 8) Protokoll-Werte, exakte Schreibweise.
         expect("Wert aborted exakt", aborted == "aborted")
         expect("Wert already_claimed exakt", alreadyClaimed == "already_claimed")
         expect("Wert expired exakt", expired == "expired")
         expect("Wert declined exakt", declined == "declined")
+        expect("Wert not_own exakt", notOwn == "not_own")
+        expect("Wert failed exakt", failed == "failed")
 
         return failed
     }
