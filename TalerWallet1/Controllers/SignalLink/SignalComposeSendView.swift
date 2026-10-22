@@ -218,7 +218,7 @@ final class SignalComposeSendModel: ObservableObject {
         // Kaltstart über den Link: erst wallet-core bereit, dann Salden
         // (Vertrag Abschnitt 3: "backendState == .ready abwarten").
         await SignalLinkBackendGate.awaitBackendReady(controller)
-        _ = await controller.loadBalances(CallStack().push(), wallet)
+        _ = await controller.loadBalances(CallStack().push())
         balances = controller.balances
             .filter { $0.disablePeerPayments != true }
         scopes = balances.map { $0.scopeInfo }

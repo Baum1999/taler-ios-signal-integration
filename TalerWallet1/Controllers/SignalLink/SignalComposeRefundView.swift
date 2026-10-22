@@ -141,7 +141,7 @@ final class SignalComposeRefundModel: ObservableObject {
         // Währung), sonst erstes passendes Guthaben.
         scope = p2p.common.scopes.first { $0.currency == p2p.common.amountEffective.currencyStr }
         if scope == nil {
-            _ = await controller.loadBalances(CallStack().push(), wallet)
+            _ = await controller.loadBalances(CallStack().push())
             scope = controller.balances
                 .filter { $0.disablePeerPayments != true
                        && $0.scopeInfo.currency == p2p.common.amountEffective.currencyStr }
