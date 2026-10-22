@@ -11,8 +11,11 @@ import Foundation
 /// (Vertrag docs/cross-platform/datenmodell.md Abschnitt 2,
 /// Android-Gegenstück: link/TalerPaymentData.kt).
 ///
-/// Feldnamen sind Protokoll und exakt: `legacyText`, `version`,
-/// `includeSelf`, `totalAmount`, `uri` (Singular, obwohl Liste).
+/// Feldnamen sind Protokoll und exakt: `version`, `includeSelf`,
+/// `totalAmount`, `uri` (Singular, obwohl Liste). Kein `legacyText`
+/// (mehr): den Klartext vor den URIs setzt seit 2026-10-11 der Messenger
+/// selbst; ein mitgeschicktes `legacyText` älterer Versionen wird beim
+/// Dekodieren ignoriert.
 /// Android kodiert mit kotlinx.serialization (encodeDefaults=false):
 /// Felder mit Standardwert (version = 1, null) werden weggelassen -
 /// dieser Encoder erzeugt dasselbe Byte-Bild, damit beide Seiten
@@ -20,13 +23,6 @@ import Foundation
 /// parst) keine Abweichung sieht.
 struct SignalLinkPaymentData: Codable {
 
-    /// Fallback-Text für Clients ohne Feld 9000 (Vertrag: heute englisch,
-    /// identisch zu taler-android taler_payment_legacy_text).
-    static let legacyText =
-        "This is a GNU Taler link. Update Signal or copy the URI below into the GNU Taler app to make the payment."
-
-    /// Fallback-Text für Clients ohne Feld 9000.
-    var legacyText: String
     /// Split: Sender hat sich mitgezählt; nil = keine Split-Info.
     var includeSelf: Bool?
     /// Split: Gesamtbetrag vor dem Split als Dezimalstring ohne Währung
@@ -42,11 +38,9 @@ struct SignalLinkPaymentData: Codable {
     /// Aufgelöste Format-Version: fehlt im JSON -> 1 (Vertrag).
     var resolvedVersion: Int { version ?? 1 }
 
-    init(legacyText: String,
-         includeSelf: Bool? = nil,
+    init(includeSelf: Bool? = nil,
          totalAmount: String? = nil,
          uri: [String]) {
-        self.legacyText = legacyText
         self.includeSelf = includeSelf
         self.totalAmount = totalAmount
         self.uri = uri
@@ -54,12 +48,11 @@ struct SignalLinkPaymentData: Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case legacyText, version, includeSelf, totalAmount, uri
+        case version, includeSelf, totalAmount, uri
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        legacyText = try container.decode(String.self, forKey: .legacyText)
         version = try container.decodeIfPresent(Int.self, forKey: .version)
         includeSelf = try container.decodeIfPresent(Bool.self, forKey: .includeSelf)
         totalAmount = try container.decodeIfPresent(String.self, forKey: .totalAmount)
@@ -68,10 +61,9 @@ struct SignalLinkPaymentData: Codable {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        // Feldreihenfolge wie die Kotlin-Deklaration (legacyText, version,
-        // includeSelf, totalAmount, uri); version wird wie bei Android
+        // Feldreihenfolge wie die Kotlin-Deklaration (version, includeSelf,
+        // totalAmount, uri); version wird wie bei Android
         // (encodeDefaults=false, immer Standard 1) nie mitgesendet.
-        try container.encode(legacyText, forKey: .legacyText)
         try container.encodeIfPresent(includeSelf, forKey: .includeSelf)
         try container.encodeIfPresent(totalAmount, forKey: .totalAmount)
         try container.encode(uri, forKey: .uri)
