@@ -261,22 +261,18 @@ enum SignalLinkSelfCheck {
         // ---- T3: TalerPaymentDataJSON (SignalLinkPaymentData) ----
 
         // 27) Einzelzahlung: exakt wie Android (kotlinx,
-        // encodeDefaults=false) - version/includeSelf/totalAmount fehlen.
-        let single = SignalLinkPaymentData(legacyText: SignalLinkPaymentData.legacyText,
-                                           uri: ["taler://pay-push/e.org/AAA"])
-        let singleJSON = "{\"legacyText\":\"\(SignalLinkPaymentData.legacyText)\","
-            + "\"uri\":[\"taler://pay-push/e.org/AAA\"]}"
+        // encodeDefaults=false) - nur uri, kein legacyText mehr.
+        let single = SignalLinkPaymentData(uri: ["taler://pay-push/e.org/AAA"])
+        let singleJSON = "{\"uri\":[\"taler://pay-push/e.org/AAA\"]}"
         expect("JSON Einzelzahlung: exakter Aufbau", single.encodedJSON() == singleJSON)
 
         // 28) Split: includeSelf und totalAmount nur beim Split,
         // Feldnamen exakt (uri im Singular, Reihenfolge wie Android).
-        let split = SignalLinkPaymentData(legacyText: SignalLinkPaymentData.legacyText,
-                                         includeSelf: true,
+        let split = SignalLinkPaymentData(includeSelf: true,
                                          totalAmount: "10",
                                          uri: ["taler://pay-push/e.org/AAA",
                                                "taler://pay-push/e.org/BBBB"])
-        let splitJSON = "{\"legacyText\":\"\(SignalLinkPaymentData.legacyText)\","
-            + "\"includeSelf\":true,"
+        let splitJSON = "{\"includeSelf\":true,"
             + "\"totalAmount\":\"10\","
             + "\"uri\":[\"taler://pay-push/e.org/AAA\",\"taler://pay-push/e.org/BBBB\"]}"
         expect("JSON Split: exakter Aufbau", split.encodedJSON() == splitJSON)
@@ -292,8 +288,7 @@ enum SignalLinkSelfCheck {
 
         // 30) Roundtrip OHNE optionale Felder (Beispiel aus
         // datenmodell.md, identisch zu Android).
-        let androidExample = "{\"legacyText\":\"\(SignalLinkPaymentData.legacyText)\","
-            + "\"uri\":[\"taler://pay-push/exchange.example.org/7Q4XK2\"]}"
+        let androidExample = "{\"uri\":[\"taler://pay-push/exchange.example.org/7Q4XK2\"]}"
         if let back = SignalLinkPaymentData.decodeJSON(androidExample) {
             expect("JSON Android-Beispiel: uri",
                    back.uri == ["taler://pay-push/exchange.example.org/7Q4XK2"])
@@ -312,6 +307,15 @@ enum SignalLinkSelfCheck {
             "{\"legacyText\":\"x\",\"version\":2,\"uri\":[\"taler://pay-push/e/2\"]}") {
             expect("JSON version gelesen", withVersion.resolvedVersion == 2)
         } else { expect("JSON mit version: geparst", false) }
+
+        // 32) Altes JSON mit legacyText (aeltere Versionen) bleibt lesbar,
+        // wird aber ohne legacyText neu kodiert.
+        if let old = SignalLinkPaymentData.decodeJSON(
+            "{\"legacyText\":\"x\",\"uri\":[\"taler://pay-push/e/3\"]}") {
+            expect("JSON alt: uri", old.uri == ["taler://pay-push/e/3"])
+            expect("JSON alt: ohne legacyText kodiert",
+                   old.encodedJSON() == "{\"uri\":[\"taler://pay-push/e/3\"]}")
+        } else { expect("JSON alt mit legacyText: geparst", false) }
         // ---- T2: Vergleichsschlüssel eigene Zahlung (OwnTransactionLookup) ----
 
         // 24) Scheme in Kleinbuchstaben, Query und Fragment entfernt.

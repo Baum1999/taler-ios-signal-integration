@@ -479,7 +479,6 @@ final class SignalComposeSendModel: ObservableObject {
         guard !fired, let first = uris.first else { return }
         fired = true
         let data = SignalLinkPaymentData(
-            legacyText: SignalLinkPaymentData.legacyText,
             includeSelf: isSplit ? includeSelf : nil,
             totalAmount: isSplit ? total.valueStr : nil,
             uri: uris)

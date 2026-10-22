@@ -284,8 +284,7 @@ final class SignalComposeRefundModel: ObservableObject {
                                         refundTransactionId: transactionId)
         guard !fired else { return }
         fired = true
-        let data = SignalLinkPaymentData(legacyText: SignalLinkPaymentData.legacyText,
-                                         uri: [talerUri])
+        let data = SignalLinkPaymentData(uri: [talerUri])
         ReturnURLBuilder.open(ReturnURLBuilder.ready(ctx: ctx,
                                                      talerUri: talerUri,
                                                      paymentDataJson: data.encodedJSON()))
