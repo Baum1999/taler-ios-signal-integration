@@ -51,6 +51,7 @@ struct MoreSettingsView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let list = List {
+            Section {
                 let showQRstring = String(localized: "Show QR codes")
                 let showQRhint = String(localized: "Automatically for P2P transactions")
                 if #available(iOS 17.7, *) {
@@ -87,35 +88,33 @@ struct MoreSettingsView: View {
                     SettingsItem(name: backupTitle, id1: "backup",
                           description: String(localized: "Backup your money")) {}
                 }
-
-                Section(header: Text(String(localized: "Pay automatically"))) {
-                    SettingsToggle(name: String(localized: "Pay token automatically"), value: $payTokenAutomatically,
-                                    id1: "payTokenAutomatically",
-                            description: String(localized: "Skip confirmation to speed up", comment: "Pay automatically"))
-                    SettingsToggle(name: String(localized: "Pay money automatically"), value: $payMoneyAutomatically,
-                                    id1: "payMoneyAutomatically",
-                            description: String(localized: "Skip confirmation to speed up", comment: "Pay automatically"))
-                    if payMoneyAutomatically {
-                        Text("Not yet implemented...")
-                        Text("Allow automatic payments for chosen merchants only.")
-                    }
+//                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
+//                    .id("font")
+            }
+            Section(header: Text(String(localized: "Pay automatically"))) {
+                SettingsToggle(name: String(localized: "Pay token automatically"), value: $payTokenAutomatically,
+                                id1: "payTokenAutomatically",
+                        description: String(localized: "Skip confirmation to speed up", comment: "Pay automatically"))
+                SettingsToggle(name: String(localized: "Pay money automatically"), value: $payMoneyAutomatically,
+                                id1: "payMoneyAutomatically",
+                        description: String(localized: "Skip confirmation to speed up", comment: "Pay automatically"))
+                if payMoneyAutomatically {
+                    Text("Not yet implemented...")
+                    Text("Allow automatic payments for chosen merchants only.")
                 }
+            } // Pay automatically
 #if OIM
+            Section {
                 SettingsToggle(name: String(localized: "OIM: Euro"), value: $oimEuro,
                                 id1: "oimEuro",
                         description: String(localized: "OIM currency for KUDOS"))
-#endif
-#if OIM
                 SettingsToggle(name: String(localized: "OIM: Chart"), value: $oimChart,
                                 id1: "oimChart",
                         description: String(localized: "OIM history as chart"))
+            } // OIM
 #endif
-
-//                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
-//                    .id("font")
-        }
+        }   .listStyle(myListStyle.style).anyView
             .id(listID)
-            .listStyle(myListStyle.style).anyView
             .navigationTitle(navTitle)
             .onAppear() {
                 DebugViewC.shared.setViewID(VIEW_SETTINGS2, stack: stack.push())
