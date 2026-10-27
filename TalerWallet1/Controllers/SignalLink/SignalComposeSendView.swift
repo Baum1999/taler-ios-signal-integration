@@ -281,15 +281,24 @@ final class SignalComposeSendModel: ObservableObject {
         return Self.amount(from: shareDecimal, currency: total.currencyStr)
     }
 
+    /// Was tatsächlich ausgegeben wird: beim Split Anteil × Personen (der
+    /// eigene Anteil bei includeSelf wird nicht verschickt), sonst der
+    /// eingegebene Betrag.
+    var spendAmount: Amount? {
+        guard showSplitControls && splitEnabled else { return parsedAmount() }
+        guard let share = shareAmount else { return nil }
+        return try? share * UInt32(personCount)
+    }
+
     var canCreate: Bool {
         guard phase == .form else { return false }
-        return parsedAmount() != nil
+        return parsedAmount() != nil && !insufficientBalance
     }
 
     /// Schlüssel der Gebühren-Vorschau: ändert sich eine Eingabe, bricht
     /// SwiftUI die alte .task(id:) ab und startet neu.
     var feePreviewKey: String {
-        "\(amountText)|\(direction.rawValue)|\(scopeIndex)"
+        "\(amountText)|\(direction.rawValue)|\(scopeIndex)|\(splitEnabled)|\(personCount)|\(includeSelf)"
     }
 
     /// Gebühren-Vorschau (nur Anzeige). Beträge aus der Antwort von
@@ -304,11 +313,16 @@ final class SignalComposeSendModel: ObservableObject {
         if Task.isCancelled { return }
         do {
             if direction == .payPush {
-                let response = try await wallet.checkPeerPushDebit(amount, scope: scope, viewHandles: true)
+                // Beim Split die Summe aller verschickten Anteile prüfen,
+                // nicht den eingegebenen Gesamtbetrag (Android c6907838).
+                guard let spend = spendAmount else { return }
+                let response = try await wallet.checkPeerPushDebit(spend, scope: scope, viewHandles: true)
                 if response.type == "insufficient-balance" {
                     insufficientBalance = true
                 } else if let effective = response.amountEffective {
-                    effectiveText = "Empfänger erhält: \(effective.readableDescription)"
+                    effectiveText = showSplitControls && splitEnabled
+                        ? "Alle Anteile zusammen: \(effective.readableDescription)"
+                        : "Empfänger erhält: \(effective.readableDescription)"
                 }
             } else {
                 let response = try await wallet.checkPeerPullCredit(amount, scope: scope, viewHandles: true)
@@ -370,6 +384,30 @@ final class SignalComposeSendModel: ObservableObject {
                              isSplit: Bool,
                              count: Int) async {
         let pullBase = direction == .payPull ? (lastPullExchangeBaseUrl ?? scope.url) : nil
+
+        // Vorab-Check der Summe aller Anteile (Android c6907838): echten
+        // Geldmangel erkennen, bevor auch nur eine Purse entsteht - sonst
+        // legen die ersten Anteile Purses an, die übrigen scheitern nach
+        // allen Retries, und es bleibt ein Teilversand in der Liste. Deckt
+        // nur "insgesamt zu wenig"; die transiente Race um einzelne Münzen
+        // (Refresh einer Geschwister-Share) fängt Phase B ab. Andere Fehler
+        // blockieren hier nicht, Phase A meldet sie ohnehin.
+        if isSplit && direction == .payPush,
+           let spend = try? terms.amount * UInt32(count) {
+            var insufficient = false
+            do {
+                let response = try await wallet.checkPeerPushDebit(spend, scope: scope, viewHandles: true)
+                insufficient = response.type == "insufficient-balance"
+            } catch {
+                insufficient = signalLinkIsInsufficientBalance(error)
+            }
+            if insufficient {
+                phase = .form
+                insufficientBalance = true
+                errorText = "Unzureichendes Guthaben für alle \(count) Anteile."
+                return
+            }
+        }
 
         // Phase A: N Purses parallel anlegen (Split) bzw. eine (Einzelzahlung).
         var results = await signalLinkInitiateSharesParallel(wallet: wallet,
