@@ -773,7 +773,7 @@ extension Controller {
         // https://wallet.taler.net/link/#/${action}/${rest}
         // https://wallet.taler.net/link/#${action}/${rest}
         // are all mapped to taler://${action}/${rest}
-        if let host = url.host, host == "wallet.taler.net" {
+        if let host = url.host, TalerURIExtractor.linkHosts.contains(host) {
             if url.path == "/link" {
                 if let fragment = url.fragment {
                     // 'fragment(percentEncoded:)' is only available in iOS 16.0 or newer

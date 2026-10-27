@@ -59,10 +59,36 @@ struct TalerWallet1App: App {
         }
     }
 
+    /// Opens the first taler:// URI found in `string` and keeps the others
+    /// (e.g. the shares of a group split) in the list of scanned URLs.
+    /// Returns false if `string` contains no taler:// URI.
+    @discardableResult
+    func handlePasted(_ string: String) -> Bool {
+        let uris = TalerURIExtractor.extractAll(string)
+        guard let first = uris.first else { return false }
+        Task { @MainActor in
+            for uri in uris.dropFirst() {
+                controller.saveURL(uri, urlCommand: controller.command(uri.host ?? EMPTYSTRING))
+            }
+            post(first)
+        }
+        return true
+    }
+
     func inspectPasteboard(playSound: Bool) {
         let pasteboard = UIPasteboard.general
-        // We are only interested in URLs
-        if !pasteboard.hasURLs { return }
+        // taler:// URIs mostly arrive as plain text, often with text around them
+        if !pasteboard.hasURLs && !pasteboard.hasStrings { return }
+
+        if playSound {
+            // The user tapped Paste: read the text directly. probableWebURL
+            // misses taler:// in plain text, and iOS asks before pasting anyway.
+            if let string = pasteboard.string, handlePasted(string) {
+                return
+            }
+            controller.playSound(0)     // tell the user we didn't find anything
+            return
+        }
 
         // users get asked whether they want to paste, and only if they agree we go to completion
         pasteboard.detectPatterns(for: [UIPasteboard.DetectionPattern.probableWebURL],
@@ -80,13 +106,8 @@ struct TalerWallet1App: App {
                         if let string = pasteboard.string {
                             if self.pastedString != string {
                                 self.pastedString = string
-                                if let pastedURL = string.toURL {
-                                    let scheme = pastedURL.scheme
-                                    if scheme?.lowercased() == "taler" {
-//                                        print(string)
-                                        post(pastedURL)
-                                        return
-                                    }
+                                if handlePasted(string) {
+                                    return
                                 }
                             }
                         }

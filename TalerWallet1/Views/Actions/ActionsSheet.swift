@@ -146,19 +146,13 @@ struct ActionsSheet: View {
                 if #available(iOS 26.0, *) {
                     if !pasteAutomatically {
 #if TALER_NIGHTLY
-                        PasteButton(supportedContentTypes: [.url]) { providers in
+                        // .plainText: taler:// URIs mostly arrive as text, often with text around them
+                        PasteButton(supportedContentTypes: [.url, .plainText]) { providers in
                             for provider in providers {
                                 if provider.canLoadObject(ofClass: String.self) {
                                     _ = provider.loadObject(ofClass: String.self) { string, error in
                                         guard let string else { return }
-                                        if let pastedURL = string.toURL {
-                                            let scheme = pastedURL.scheme
-                                            if scheme?.lowercased() == "taler" {
-                                                let pasteType = PasteType(pastedURL: pastedURL)
-                                                let userinfo = [NOTIFICATIONPASTE: pasteType]
-                                                NotificationCenter.default.post(name: .PasteAction, object: nil, userInfo: userinfo)
-                                            }
-                                        }
+                                        TalerWallet1App().handlePasted(string)
                                     }
                                 }
                             }
@@ -168,7 +162,7 @@ struct ActionsSheet: View {
                         .buttonBorderShape(.circle) // capsule
                         .accessibility(sortPriority: 1)
 #else
-                        let isEnabled = UIPasteboard.general.hasURLs
+                        let isEnabled = UIPasteboard.general.hasURLs || UIPasteboard.general.hasStrings
                         TalerPasteButton(accessibilityLabelStr: "Paste") {
                             Task {
                                 TalerWallet1App().inspectPasteboard(playSound: true)
