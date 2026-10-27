@@ -179,46 +179,68 @@ struct TransactionsArraySection: View {
             .foregroundColor(WalletColors().secondary2(colorScheme, colorSchemeContrast))
     }
 
+    @ViewBuilder
+    func transactionRow(_ transaction: TalerTransaction) -> some View {
+        let deleteAction = model.deleteTransaction
+        let destination = TransactionSummaryList(stack: stack.push("TransactionsArraySection"),
+                                         transactionId: transaction.id,
+                                               talerTX: $talerTX,
+                                              navTitle: nil,
+                                               hasDone: false,          // just show an old tx
+                                              showDone: nil,
+                                                   url: nil,
+                                           withActions: true)
+        let row = NavigationLink { destination } label: {
+            TransactionRowView(stack: stack.push("TransactionsArraySection"),
+                              logger: logger, scope: scope, transaction: transaction)
+                .padding(.leading, ICONLEADING)
+                .padding(.trailing, CGFloat(padd))
+        }.id(transaction.id)
+        if transaction.isDeleteable {
+            row.swipeActions(edge: .trailing) {
+                    Button {
+                        symLog?.log("deleteAction")
+                        Task { // runs on MainActor
+                            try? await deleteAction(transaction.id, false)
+                            await reloadAllAction(stack.push())
+                        }
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                    .tint(WalletColors().negative)
+                }
+        } else {
+            row
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let deleteAction = model.deleteTransaction
-
         Section {
-            ForEach(transactions, id: \.self) { transaction in
-                let destination = TransactionSummaryList(stack: stack.push("TransactionsArraySection"),
-                                                 transactionId: transaction.id,
-                                                       talerTX: $talerTX,
-                                                      navTitle: nil,
-                                                       hasDone: false,          // just show an old tx
-                                                      showDone: nil,
-                                                           url: nil,
-                                                   withActions: true)
-                let row = NavigationLink { destination } label: {
-                    TransactionRowView(stack: stack.push("TransactionsArraySection"),
-                                      logger: logger, scope: scope, transaction: transaction)
-                        .padding(.leading, ICONLEADING)
-                        .padding(.trailing, CGFloat(padd))
-                }.id(transaction.id)
-                if transaction.isDeleteable {
-                    row.swipeActions(edge: .trailing) {
-                            Button {
-                                symLog?.log("deleteAction")
-                                Task { // runs on MainActor
-                                    try? await deleteAction(transaction.id, false)
-                                    await reloadAllAction(stack.push())
-                                }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                            .tint(WalletColors().negative)
+#if TALER_SIGNAL
+            // Anteile eines Gruppen-Splits als eine Sammelzeile (GroupShareStore)
+            let entries = GroupTransactionSummary.groupEntries(transactions) {
+                GroupShareStore.shared.info(forTransactionId: $0.id)
+            }
+            ForEach(entries, id: \.listId) { entry in
+                switch entry {
+                    case .single(let transaction):
+                        transactionRow(transaction)
+                    case .group(let groupId, let shares, let includeSelf):
+                        GroupTransactionRow(groupId: groupId, shares: shares,
+                                            includeSelf: includeSelf, scope: scope) { transaction in
+                            transactionRow(transaction)
                         }
-                } else {
-                    row
                 }
             }
+#else
+            ForEach(transactions, id: \.self) { transaction in
+                transactionRow(transaction)
+            }
+#endif
         } header: {
 #if TALER_NIGHTLY
             if developerMode && debugViews {

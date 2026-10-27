@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import taler_swift
 
 #if TALER_SIGNAL && DEBUG
 
@@ -446,6 +447,63 @@ enum SignalLinkSelfCheck {
         expect("refund Zweck: Steuerzeichen gefiltert",
                SignalComposeRefundModel.prefilledSummary(original: "Kaf\u{07}fee")
                    == "Refund: Kafee")
+
+        // ---- Gruppen-Sammelzeile der Transaktionsliste ----
+
+        // 35) Fortschritt: Eigenanteil zählt sofort als bezahlt.
+        expect("group progress: gemischt mit self",
+               GroupTransactionSummary.progress(states: [.done, .pending, .aborted], includeSelf: true)
+                   == GroupProgress(paid: 2, open: 1, declined: 1, total: 4))
+        expect("group progress: ohne self",
+               GroupTransactionSummary.progress(states: [.done, .expired, .failed], includeSelf: false)
+                   == GroupProgress(paid: 1, open: 0, declined: 2, total: 3))
+        expect("group progress: includeSelf nil wie false",
+               GroupTransactionSummary.progress(states: [.pending, .pending], includeSelf: nil)
+                   == GroupProgress(paid: 0, open: 2, declined: 0, total: 2))
+
+        // 36) Summe: plus ein Anteil bei includeSelf.
+        let share = Amount(currency: "KUDOS", integer: 5, fraction: 0)
+        expect("group total: ohne self",
+               GroupTransactionSummary.total(amounts: [share, share], includeSelf: false)
+                   == Amount(currency: "KUDOS", integer: 10, fraction: 0))
+        expect("group total: mit self",
+               GroupTransactionSummary.total(amounts: [share, share], includeSelf: true)
+                   == Amount(currency: "KUDOS", integer: 15, fraction: 0))
+        expect("group total: leer -> nil",
+               GroupTransactionSummary.total(amounts: [], includeSelf: true) == nil)
+
+        // 37) Gruppierung: Position des ersten Anteils, Einzelanteil bleibt single.
+        let groupInfos: [String: GroupShareStore.Info] = [
+            "b": GroupShareStore.Info(groupId: "g1", index: 0, count: 2, includeSelf: true),
+            "d": GroupShareStore.Info(groupId: "g1", index: 1, count: 2, includeSelf: true),
+            "e": GroupShareStore.Info(groupId: "g2", index: 0, count: 2, includeSelf: nil),
+        ]
+        let grouped = GroupTransactionSummary.groupEntries(["a", "b", "c", "d", "e"]) { groupInfos[$0] }
+        let shape = grouped.map { entry -> String in
+            switch entry {
+                case .single(let id): return id
+                case .group(let groupId, let shares, _): return "\(groupId):\(shares.joined())"
+            }
+        }
+        expect("group entries: Reihenfolge und Zusammenfassung",
+               shape == ["a", "g1:bd", "c", "e"])
+
+        // 38) Store-Roundtrip in eigener Suite.
+        let groupSuite = "SignalLinkSelfCheck.GroupShare"
+        UserDefaults.standard.removePersistentDomain(forName: groupSuite)
+        let groupStore = GroupShareStore(defaults: UserDefaults(suiteName: groupSuite)!)
+        groupStore.record(transactionIds: ["tx:a", "", "tx:c"], groupId: "corr1", includeSelf: false)
+        expect("group store: Eintrag gelesen",
+               groupStore.info(forTransactionId: "tx:c")
+                   == GroupShareStore.Info(groupId: "corr1", index: 2, count: 3, includeSelf: false))
+        expect("group store: leere transactionId nicht gespeichert",
+               groupStore.info(forTransactionId: "") == nil)
+        expect("group store: unbekannt -> nil",
+               groupStore.info(forTransactionId: "tx:x") == nil)
+        let groupStoreReloaded = GroupShareStore(defaults: UserDefaults(suiteName: groupSuite)!)
+        expect("group store: überlebt neue Instanz",
+               groupStoreReloaded.info(forTransactionId: "tx:a")?.groupId == "corr1")
+        UserDefaults.standard.removePersistentDomain(forName: groupSuite)
 
         return failed
     }

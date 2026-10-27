@@ -270,13 +270,25 @@ final class SignalComposeSendModel: ObservableObject {
         return try? Amount(fromString: "\(scope.currency):\(normalized)")
     }
 
+    /// Angezeigte Personenzahl = Divisor (wie viele sich den Betrag teilen),
+    /// wie "Number of people" auf Android. personCount bleibt die Zahl der
+    /// Empfänger; dadurch verschiebt "Mich mitzählen" die Anzeige um ±1.
+    var splitDivisor: Int {
+        get { personCount + (includeSelf ? 1 : 0) }
+        set { personCount = newValue - (includeSelf ? 1 : 0) }
+    }
+
+    var splitDivisorRange: ClosedRange<Int> {
+        includeSelf ? 3...11 : 2...10
+    }
+
     /// Anteil pro Person beim Split (FLOOR auf 8 Stellen, siehe AmountSplit).
     var shareAmount: Amount? {
         guard splitEnabled, let total = parsedAmount(),
               let totalDecimal = Self.decimal(from: total),
               let shareDecimal = AmountSplit.splitAmountEvenly(
                   total: totalDecimal,
-                  parts: personCount + (includeSelf ? 1 : 0))
+                  parts: splitDivisor)
         else { return nil }
         return Self.amount(from: shareDecimal, currency: total.currencyStr)
     }
@@ -513,6 +525,11 @@ final class SignalComposeSendModel: ObservableObject {
         let groupId = isSplit ? params.ctx.correlationId : nil
         for (uri, transactionId) in zip(uris, transactionIds) {
             OwnUriStore.shared.record(uri: uri, transactionId: transactionId, groupId: groupId)
+        }
+        if let groupId {
+            // Sammelzeile in der Transaktionsliste
+            GroupShareStore.shared.record(transactionIds: transactionIds, groupId: groupId,
+                                          includeSelf: includeSelf)
         }
         guard !fired, let first = uris.first else { return }
         fired = true
@@ -781,7 +798,7 @@ struct SignalComposeSendView: View {
     private var splitSection: some View {
         Toggle("Aufteilen", isOn: $vm.splitEnabled)
         if vm.splitEnabled {
-            Stepper("Personen: \(vm.personCount)", value: $vm.personCount, in: 2...10)
+            Stepper("Personen: \(vm.splitDivisor)", value: $vm.splitDivisor, in: vm.splitDivisorRange)
             Toggle("Mich mitzählen", isOn: $vm.includeSelf)
             if let share = vm.shareAmount {
                 Text("Anteil pro Person: \(share.readableDescription)")
