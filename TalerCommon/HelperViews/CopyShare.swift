@@ -15,6 +15,7 @@ struct FeedbackButton: View {
     let title: String?
     let image: UIImage?
     let isDisabled: Bool
+    let haptic: Bool
     let action: () -> Void
 
     @EnvironmentObject private var controller: Controller
@@ -23,10 +24,12 @@ struct FeedbackButton: View {
     public init(_ title: String? = nil,
                   image: UIImage? = nil,
                disabled: Bool = false,
+                 haptic: Bool = true,
                  action: @escaping @MainActor () -> Void) {
         self.title = title
         self.image = image
         self.isDisabled = disabled
+        self.haptic = haptic
         self.action = action
     }
 
@@ -52,7 +55,9 @@ struct FeedbackButton: View {
     var body: some View {
         Button(title ?? EMPTYSTRING) {
             symLog.log(title ?? EMPTYSTRING)
-            controller.hapticFeedback(.medium)
+            if haptic {
+                controller.hapticFeedback(.medium)
+            }
             action()
             triggerPulse()
         }
