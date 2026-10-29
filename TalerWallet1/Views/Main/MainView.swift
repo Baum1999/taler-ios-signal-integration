@@ -47,10 +47,12 @@ struct MainView: View {
     @Namespace private var namespace
 
     func sheetDismissed() -> Void {
-        logger.info("sheetDismissed")
+        logger.info("sheetDismissed: \(urlToOpen?.absoluteString ?? "nil")")
         symLog.log("sheet dismiss: \(urlToOpen)")
-        urlToOpen = nil
-        ViewState.shared.popToRootView(nil)
+        if urlToOpen != nil {
+            urlToOpen = nil
+            ViewState.shared.popToRootView(nil)
+        }
     }
 
     private func dismissSheet() {
