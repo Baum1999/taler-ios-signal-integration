@@ -222,11 +222,20 @@ struct SettingsTriState: View {
     var action: (_ value: Int) -> Void = {value in }
 
     func imageName(_ value: Int) -> (String, String) {
-        return (value == 0) ? ("eye.slash", "Off")
-             : (value == 1) ? ("eye",       "Type only")
-                            : ("eye.fill",  "Type and JSON")
+        if id1 == "observe" {
+            return (value == 0) ? ("eye.slash", "Off")
+                 : (value == 1) ? ("eye",       "Type only")
+                                : ("eye.fill",  "Type and JSON")
+        } else if id1 == "delay" {
+            return (value == 0) ? ("figure.run",   "none")      // 􀐳
+                 : (value == 1) ? ("figure.walk",  "3 seconds") // 􀝢
+                                : ("figure.hiking","6 seconds") // 􁔭
+        } else {
+            return (value == 0) ? ("square.slash", "none")       // 􀣦
+                 : (value == 1) ? ("2.square",     "2 failures") // 􀃌
+                                : ("4.square",     "4 failures") // 􀃐
+        }
     }
-
     var body: some View {
         let image = imageName(value)
 
