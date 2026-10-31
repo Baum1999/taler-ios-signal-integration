@@ -135,6 +135,7 @@ class Controller: ObservableObject {
     @Published var scannedURLs: [ScannedURL] = []
     @Published var contacts: [ContactEntry] = []
     @Published var mailboxConfiguration: MailboxConfiguration? = nil
+    @Published var messages: [MailboxMessage] = []
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
@@ -386,6 +387,17 @@ class Controller: ObservableObject {
         }
         return nil
     }
+    // MARK: -
+    @MainActor
+    @discardableResult
+    func createMailbox() async ->MailboxConfiguration? {
+        if mailboxConfiguration == nil {
+            let model = WalletModel.shared
+            let configuration = try? await model.initializeMailbox()
+            mailboxConfiguration = configuration
+        }
+        return mailboxConfiguration
+    }
     @MainActor
     @discardableResult
     func loadContacts(_ stack: CallStack) async -> Int? {
@@ -404,6 +416,24 @@ class Controller: ObservableObject {
             }
         }
         return nil
+    }
+    @MainActor
+    func refreshMailbox(_ stack: CallStack) async {
+        // Do we have a mailbox?
+        let model = WalletModel.shared
+        if let mailboxConfiguration {
+            if let response = try? await model.refreshMailbox(mailboxConfiguration) {
+                messages = response.messages
+#if DEBUG   // TODO: tell user?
+                if let expiration = response.mailboxExpiration {
+                    if expiration != mailboxConfiguration.expiration {
+                        let expirationDate = TalerDater.dateString(expiration)
+                        self.logger.log("••Mailbox expiration changed: \(expirationDate.0)")
+                    }
+                }
+#endif
+            }
+        }
     }
 // MARK: -
     @MainActor
