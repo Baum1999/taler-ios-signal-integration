@@ -57,6 +57,7 @@ enum UrlCommand: String, Codable {
     case refund
 #if GNU_TALER || TALER_NIGHTLY
     case devExperiment
+    case addContact
 #endif
 
     var isOutgoing: Bool {
@@ -88,6 +89,8 @@ enum UrlCommand: String, Codable {
                                              comment: "UrlCommand")
 #if GNU_TALER || TALER_NIGHTLY
             case .devExperiment:    String("DevExperiment")
+            case .addContact:       String(localized: "Add contact",
+                                             comment: "UrlCommand")
 #endif
         }
     }
@@ -104,6 +107,7 @@ enum UrlCommand: String, Codable {
             case .refund:           .refund
 #if GNU_TALER || TALER_NIGHTLY
             case .devExperiment:    .dummy
+            case .addContact:       .dummy
 #endif
         }
     }
@@ -711,6 +715,7 @@ class Controller: ObservableObject {
                     self.backendState = walletCore.nativeDB ? .ready : .update
                 }
 //                await loadBalances(stack.push())
+//                await loadContacts(stack.push())
             } catch {
                 self.logger.error("\(error.localizedDescription)")
                 backendState = .error(error.toEquatableError())                 // ❗️Yikes app cannot continue
@@ -783,7 +788,8 @@ extension Controller {
 //    }
     
     func command(_ command:String) -> UrlCommand {
-        switch command.lowercased() {
+        let lcCommand = command.lowercased()
+        switch lcCommand {
             case "withdraw":            return .withdraw
             case "withdraw-exchange":   return .withdrawExchange
             case "add-exchange":        return .addExchange
@@ -794,11 +800,12 @@ extension Controller {
             case "refund":              return .refund
 #if GNU_TALER || TALER_NIGHTLY
             case "dev-experiment":      return .devExperiment
+            case "add-contact":         return .addContact
 #endif
             default:
                 self.logger.error("❗️unknown command taler://\(command)")
         }
-        messageForSheet = command.lowercased()
+        messageForSheet = lcCommand
         return .unknown
     }
 
