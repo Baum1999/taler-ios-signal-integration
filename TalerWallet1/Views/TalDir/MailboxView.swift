@@ -41,6 +41,18 @@ struct MailboxView: View {
                 .talerFont(.body)
                 .accessibilityLabel(a11yDate)
         }
+        .contentShape(.rect)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .onTapGesture {
+            if let url = URL(string: message.talerUri) {
+                dismissTop(stack.push())
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    controller.talerURI = url    // pass it via .onChange(of: controller.talerURI) directly to MainView
+                }
+            } else {
+                // TODO: show alert that the url is not recognized
+            }
+        }
     }
 
     var body: some View {
