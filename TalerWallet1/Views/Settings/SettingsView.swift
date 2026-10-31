@@ -158,6 +158,19 @@ struct SettingsView: View {
             // TODO: add another toggle with snail/hare for 60 sec / 10 sec
         }
     }
+#if GNU_TALER || TALER_NIGHTLY
+    @ViewBuilder func talDirV() -> some View {
+        let talDirTitle = String(localized: "TitleTalDir", defaultValue: "Taler Directory")
+        NavigationLink {
+            TalDirSettingsView(stack: stack.push(),
+                            navTitle: talDirTitle)
+        } label: {
+            SettingsItem(name: talDirTitle, id1: "talDir",
+                    imageName: ICONNAME_PERSON3,
+                  description: String(localized: "Your payment contacts", comment: "TalDir")) {}
+        }
+    }
+#endif
     @ViewBuilder func pushNotificationsV() -> some View {
         SettingsToggle(name: String(localized: "Push Notifications"),
                       value: $pushNotifications, id1: "pushNotifications",
@@ -239,6 +252,9 @@ struct SettingsView: View {
             paymentServicesV()
             bankAccountsV()
             biometryV()
+#if GNU_TALER || TALER_NIGHTLY
+            talDirV()
+#endif
 #if TALER_NIGHTLY
             pushNotificationsV()
                 .alert("Push Notifications are disabled",
