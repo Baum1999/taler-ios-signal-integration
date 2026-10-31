@@ -133,6 +133,7 @@ class Controller: ObservableObject {
     @Published var subscriptions: [TalerToken] = []
     @Published var defaultExchanges: [DefaultExchange] = []
     @Published var scannedURLs: [ScannedURL] = []
+    @Published var contacts: [ContactEntry] = []
     @Published var mailboxConfiguration: MailboxConfiguration? = nil
 
     @Published var backendState: BackendState = .none       // only used for launch animation
@@ -344,6 +345,7 @@ class Controller: ObservableObject {
         discounts = []
         subscriptions = []
         defaultExchanges = []
+        contacts = []
 //        printFonts()
 //        checkInternetConnection()
         startObserving()
@@ -380,6 +382,25 @@ class Controller: ObservableObject {
         for balance in balances {
             if balance.scopeInfo == scope {
                 return balance
+            }
+        }
+        return nil
+    }
+    @MainActor
+    @discardableResult
+    func loadContacts(_ stack: CallStack) async -> Int? {
+        // Do we have a mailbox?
+        let model = WalletModel.shared
+        if mailboxConfiguration == nil {
+            let configuration = try? await model.getMailbox()
+            mailboxConfiguration = configuration
+        }
+        // if yes, then return how many contacts changed
+        if mailboxConfiguration != nil {
+            if let response = try? await model.getContacts() {
+                let count = contacts.count
+                contacts = response//.sorted(by: { })
+                return response.count - count
             }
         }
         return nil
