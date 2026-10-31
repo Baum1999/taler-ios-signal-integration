@@ -12,7 +12,7 @@ import SymLog
 struct AboutView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let localizedAppName: String
+    let appName: String     // localized
     let navTitle: String
 
     @EnvironmentObject private var controller: Controller
@@ -66,7 +66,7 @@ struct AboutView: View {
                         UIApplication.shared.open(URL(string:HTTPS + TALER)!, options: [:])
                     }
 
-                SettingsItem(name: String(localized: "Open \(localizedAppName) settings"),
+                SettingsItem(name: String(localized: "Open \(appName) settings"),
                               id1: "webSettings",
                         imageName: SETTINGS,
                       description: String(localized: "System settings -> Apps")) { }
@@ -163,7 +163,7 @@ extension Bundle {
 #if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        AboutView(stack: CallStack("Preview"), localizedAppName: "GNU Taler", navTitle: "About")
+        AboutView(stack: CallStack("Preview"), appName: "GNU Taler", navTitle: "About")
     }
 }
 #endif

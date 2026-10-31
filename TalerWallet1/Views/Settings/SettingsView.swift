@@ -34,6 +34,7 @@ struct SettingsView: View {
     @State private var mayNotUsePush: Bool = false
     @State private var registerState: Bool = false
 
+    // MARK: -
     var isRegistered: Bool {
         UIApplication.shared.isRegisteredForRemoteNotifications
     }
@@ -104,7 +105,129 @@ struct SettingsView: View {
 #endif
 
     }
-
+    // MARK: -
+    @ViewBuilder func aboutV(_ localizedAppName: String) -> some View {
+        let aboutStr = String(localized: "About \(localizedAppName)")
+        NavigationLink {        // whole row like in a tableView
+            AboutView(stack: stack.push(),
+                    appName: localizedAppName,
+                   navTitle: aboutStr)
+        } label: {
+            SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
+        }
+    }
+    // MARK: -
+    @ViewBuilder func paymentServicesV() -> some View {
+        NavigationLink {
+            ExchangeListView(stack: stack.push(), url: .constant(nil))
+        } label: {
+            SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges",
+                    imageName: EXCHANGE_LOGO,
+                  description: String(localized: "Manage payment services")) {}
+        }
+    }
+    // MARK: -
+    @ViewBuilder func bankAccountsV() -> some View {
+        let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
+        NavigationLink {
+            BankListView(stack: stack.push(),
+                      navTitle: bankAccountsTitle)
+        } label: {
+            SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
+                    imageName: ICONNAME_BANK,
+                  description: String(localized: "Your accounts for deposit")) {}
+        }
+    }
+    // MARK: -
+    @ViewBuilder func biometryV() -> some View {
+        let biometryType = controller.biometryType() ?? biometricService.biometryType()
+        let hasFaceID = biometryType == .faceID
+        let hasTouchID = biometryType == .touchID
+        let biometryString = hasFaceID ? String(localized: "Use FaceID")
+                           : hasTouchID ? String(localized: "Use TouchID")
+                                        : EMPTYSTRING
+        if !biometryString.isEmpty {
+            SettingsToggle(name: biometryString,
+                          value: $useAuthentication,
+                            id1: "useFaceID",
+                      imageName: hasFaceID ? "faceid" : "touchid", // 􀎽  􀟒
+                    description: String(localized: "Protect your money")
+            ) { _ in
+                biometricService.isAuthenticated = false
+            }
+            // TODO: add another toggle with snail/hare for 60 sec / 10 sec
+        }
+    }
+    @ViewBuilder func pushNotificationsV() -> some View {
+        SettingsToggle(name: String(localized: "Push Notifications"),
+                      value: $pushNotifications, id1: "pushNotifications",
+                  imageName: registerState ? NOTIFICATION2 : NOTIFICATION1,  // 􀝖 or 􀋙
+                description: String(localized: "Get notified when pending payments change status")
+        ) { newVal in
+            checkPushNotifications(newVal)
+        }
+    }
+#if !TALER_WALLET
+    @ViewBuilder func useNymV() -> some View {
+        SettingsToggle(name: "NYM mixnet",
+                      value: $useMixnet,
+                        id1: "useMixnet",
+                  imageName: "eye.slash", // 􀋯
+                description: String(localized: "Protect your privacy"))
+    }
+#endif // !TALER_WALLET
+    // MARK: -
+    @ViewBuilder func minimalV() -> some View {
+        SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
+                  imageName: "heart",                   // 􀊴
+                description: String(localized: "Omit text where possible"))
+    }
+    // MARK: -
+    @ViewBuilder func warningsV() -> some View {
+        SettingsToggle(name: String(localized: "Show Warnings"),
+                      value: $shouldShowWarning,
+                        id1: "warnings",
+                  imageName: WARNING,           // 􀇾
+                description: String(localized: "For Delete, Abandon & Abort buttons"))
+    }
+    // MARK: -
+    @ViewBuilder func reportV(_ localizedAppName: String) -> some View {
+        let reportTitle = String(localized: "TitleReport", defaultValue: "Report diagnostics")
+        NavigationLink {
+            ReportView(stack: stack.push(reportTitle),
+                    navTitle: reportTitle)
+        } label: {
+            SettingsItem(name: reportTitle, id1: "report",
+                    imageName: "arrow.up.message",    // 􀜃
+                  description: String(localized: "Help improve \(localizedAppName)")) {}
+        }
+    }
+    // MARK: -
+    @ViewBuilder func developerV(_ localizedAppName: String) -> some View {
+        let devTitle = String(localized: "TitleDeveloper", defaultValue: "Developer")
+        NavigationLink {
+            DebugSettingsView(stack: stack.push(devTitle),
+                           navTitle: devTitle)
+        } label: {
+            SettingsItem(name: devTitle, id1: "developer",
+                    imageName: "hammer",        // 􀙄
+                  description: String(localized: "Help debug \(localizedAppName)")) {}
+        }
+    }
+    // MARK: -
+    @ViewBuilder func moreV() -> some View {
+        let moreItem = String(localized: "TitleMore", defaultValue: "More")
+        let moreTitle = String(localized: "TitleMoreSettings", defaultValue: "More Settings")
+        NavigationLink {
+            MoreSettingsView(stack: stack.push(),
+                          navTitle: moreTitle)
+        } label: {
+            SettingsItem(name: moreItem, id1: "more",
+                    imageName: "ellipsis",          // 􀍠
+                  description: nil) {}
+        }
+    }
+    // MARK: -
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -112,115 +235,35 @@ struct SettingsView: View {
 #endif
         let localizedAppName = controller.localizedAppName
         let list = List {
-            let aboutStr = String(localized: "About \(localizedAppName)")
-            NavigationLink {        // whole row like in a tableView
-                AboutView(stack: stack.push(), localizedAppName: localizedAppName,
-                       navTitle: aboutStr)
-            } label: {
-                SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
-            }
-
-            NavigationLink {        // whole row like in a tableView
-                ExchangeListView(stack: stack.push(), url: .constant(nil))
-            } label: {
-                SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges",
-                        imageName: EXCHANGE_LOGO,
-                      description: String(localized: "Manage payment services")) {}
-            }
-
-            let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
-            let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
-                                             navTitle: bankAccountsTitle)
-            NavigationLink {        // whole row like in a tableView
-                bankAccountsDest
-            } label: {
-                SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
-                        imageName: ICONNAME_BANK,
-                      description: String(localized: "Your accounts for deposit")) {}
-            }
-
-            let biometryType = controller.biometryType() ?? biometricService.biometryType()
-            let hasFaceID = biometryType == .faceID
-            let hasTouchID = biometryType == .touchID
-            let biometryString = hasFaceID ? String(localized: "Use FaceID")
-                               : hasTouchID ? String(localized: "Use TouchID")
-                               : EMPTYSTRING
-            if !biometryString.isEmpty {
-                SettingsToggle(name: biometryString,
-                              value: $useAuthentication,
-                                id1: "useFaceID",
-                          imageName: hasFaceID ? "faceid" : "touchid", // 􀎽  􀟒
-                        description: String(localized: "Protect your money")) { _ in
-                    biometricService.isAuthenticated = false
-                }
-                // TODO: add another toggle with snail/hare for 60 sec / 10 sec
-            }
-#if !TALER_WALLET
-            SettingsToggle(name: "NYM mixnet",
-                          value: $useMixnet,
-                            id1: "useMixnet",
-                      imageName: "eye.slash", // 􀋯
-                    description: String(localized: "Protect your privacy"))
-#endif
+            aboutV(localizedAppName)        // About... is always the first
+            paymentServicesV()
+            bankAccountsV()
+            biometryV()
 #if TALER_NIGHTLY
-                SettingsToggle(name: String(localized: "Push Notifications"), value: $pushNotifications,
-                                id1: "pushNotifications",
-                          imageName: registerState ? NOTIFICATION2 : NOTIFICATION1,  // 􀝖 or 􀋙
-                        description: String(localized: "Check pending payments in the background")
-                ) { newVal in
-                    checkPushNotifications(newVal)
-                }
+            pushNotificationsV()
+                .alert("Push Notifications are disabled",
+                   isPresented: $mayNotUsePush,
+                   actions: { openSettingsButton
+                              dismissAlertButton },
+                   message: { Text("Please go to Settings > \(localizedAppName) > Notifications and turn them on.") }
+                )
 #endif
-                SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
-                          imageName: "heart",                   // 􀊴
-                        description: String(localized: "Omit text where possible"))
-
-                SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning,
-                                id1: "warnings",
-                          imageName: WARNING,           // 􀇾
-                        description: String(localized: "For Delete, Abandon & Abort buttons"))
-
-              /// Report
-                let reportTitle = String(localized: "TitleReport", defaultValue: "Report diagnostics")
-                let reportDest = ReportView(stack: stack.push(reportTitle),
-                                         navTitle: reportTitle)
-                NavigationLink {
-                    reportDest
-                } label: {
-                    SettingsItem(name: reportTitle, id1: "report",
-                            imageName: "arrow.up.message",    // 􀜃
-                          description: String(localized: "Help improve \(localizedAppName)")) {}
-                }
+#if !TALER_WALLET
+            useNymV()
+#endif
+            minimalV()
+            warningsV()
+            reportV(localizedAppName)
 
 #if DEBUG
-                let showDiagnostic = true
+            let showDiagnostic = true
 #else
-                let showDiagnostic = controller.diagnosticModeEnabled
+            let showDiagnostic = controller.diagnosticModeEnabled
 #endif
-                if showDiagnostic {
-                    let devTitle = String(localized: "TitleDeveloper", defaultValue: "Developer")
-                    let devDest = DebugSettingsView(stack: stack.push(devTitle),
-                                                 navTitle: devTitle)
-                    NavigationLink {
-                        devDest
-                    } label: {
-                        SettingsItem(name: devTitle, id1: "developer",
-                                imageName: "hammer",        // 􀙄
-                                     description: String(localized: "Help debug \(localizedAppName)")) {}
-                    }
-                }
-
-                let moreItem = String(localized: "TitleMore", defaultValue: "More")
-                let moreTitle = String(localized: "TitleMoreSettings", defaultValue: "More Settings")
-                let moreDest = MoreSettingsView(stack: stack.push(moreTitle),
-                                             navTitle: moreTitle)
-                NavigationLink {
-                    moreDest
-                } label: {
-                    SettingsItem(name: moreItem, id1: "more",
-                            imageName: "ellipsis",          // 􀍠
-                          description: nil) {}
-                }
+            if showDiagnostic {
+                developerV(localizedAppName)
+            }
+            moreV()                         // More... is always the last
         }
             .id(listID)
             .listStyle(myListStyle.style).anyView
@@ -229,12 +272,6 @@ struct SettingsView: View {
                 DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
                 registerState = isRegistered
             }
-            .alert("Push Notifications are disabled",
-                   isPresented: $mayNotUsePush,
-                   actions: { openSettingsButton
-                              dismissAlertButton },
-                   message: { Text("Please go to Settings > \(localizedAppName) > Notifications and turn them on.") }
-            )
         if #available(iOS 26.0, *) {
             list
         } else {
