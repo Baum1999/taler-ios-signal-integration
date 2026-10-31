@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 
 // MARK: -
-enum LookupState {
+enum LookupState: Equatable {
     case unknown            // not yet asked
     case error              // (Error)
     case unregistered       //
@@ -20,6 +20,16 @@ enum LookupState {
         switch self {
             case .registered, .confirmed:
                 return true
+            default:
+                return false
+        }
+    }
+    func isMine(address: String) -> Bool {
+        switch self {
+            case .registered(let targetUri, _):
+                return address == targetUri
+            case .confirmed(let targetUri, _):
+                return address == targetUri
             default:
                 return false
         }
