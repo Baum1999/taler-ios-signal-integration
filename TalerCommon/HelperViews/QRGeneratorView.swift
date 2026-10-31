@@ -21,14 +21,26 @@
  */
 import SwiftUI
 
+public func QRCode(from text: String) -> UIImage? {
+    guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
+    let data = text.data(using: .utf8, allowLossyConversion: false)
+    filter.setValue(data, forKey: "inputMessage")
+    filter.setValue("Q", forKey: "inputCorrectionLevel")    // 4 levels: L M Q H
+    guard let ciimage = filter.outputImage else { return nil }
+    let transform = CGAffineTransform(scaleX: 10, y: 10)
+    let scaledCIImage = ciimage.transformed(by: transform)
+    // a UIImage(ciImage:) has no bitmap representation, so pngData() would return nil
+    guard let cgImage = CIContext().createCGImage(scaledCIImage,
+                                            from: scaledCIImage.extent) else { return nil }
+    return UIImage(cgImage: cgImage)
+}
+// MARK: -
 struct QRGeneratorView: View {
     let text: String
     let size: CGFloat
     let logo: Image?
     let logoSize: CGFloat
-    @Binding var image: UIImage?
-
-    @State private var failed = false
+    let image: UIImage?
 
     // a QR code which cannot be generated must not look like an empty area to scan
     private var failedText: Text {
@@ -49,40 +61,14 @@ struct QRGeneratorView: View {
                         .scaledToFit()
                         .frame(width: logoSize * 2, height: logoSize)
                 }
-            } else if failed {
+            } else {
                 failedText
                     .talerFont(.title2)
                     .frame(width: size, height: size)
-            } else {
-                EmptyView()
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(failed ? failedText : Text("QR Code", comment: "a11y"))
-        .onAppear {
-//          if let uiImage = getQRCode(text: text) {
-            if let data = getQRCodeData(text: text),
-               let uiImage = UIImage(data: data)  {
-                image = uiImage
-            } else {
-                failed = true
-            }
-        }
-    }
-
-//    func getQRCode(text: String) -> UIImage? {
-    func getQRCodeData(text: String) -> Data? {
-        guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
-        let data = text.data(using: .utf8, allowLossyConversion: false)
-        filter.setValue(data, forKey: "inputMessage")
-        filter.setValue("Q", forKey: "inputCorrectionLevel")    // 4 levels: L M Q H 
-        guard let ciimage = filter.outputImage else { return nil }
-        let transform = CGAffineTransform(scaleX: 10, y: 10)
-        let scaledCIImage = ciimage.transformed(by: transform)
-        // a UIImage(ciImage:) has no bitmap representation, so pngData() would return nil
-        guard let cgImage = CIContext().createCGImage(scaledCIImage, from: scaledCIImage.extent)
-        else { return nil }
-        return UIImage(cgImage: cgImage).pngData()
+        .accessibilityLabel(image == nil ? failedText : Text("QR Code", comment: "a11y"))
     }
 }
 

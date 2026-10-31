@@ -29,27 +29,27 @@ struct QRcodeCopyShare: View {
     }
 
     var body: some View {
-//        Text(spec.type)
+        let textToShare = textToShare()
         if let qrCodes = option.qrCodes {
             ForEach(qrCodes, id: \.self) { qrCodeSpec in
                 let logo = qrCodeSpec.type == "spc" ? Image(SWISS_QR) : nil
                 let size = 276.0    // 46x46mm, swiss flag = 7x7mm plus border  276*9/46 = 54
-                QRGeneratorView(text: qrCodeSpec.qrContent, size: size,
-                                logo: logo, logoSize: size * 9 / 46,
-                               image: $qrImage)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .listRowSeparator(.hidden)
+                let image = QRCode(from: qrCodeSpec.qrContent)
+                if let image {
+                    QRGeneratorView(text: qrCodeSpec.qrContent, size: size,
+                                    logo: logo, logoSize: size * 9 / 46,
+                                   image: image)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .listRowSeparator(.hidden)
+                }
+                if let textToShare {
+                    CopyShare(stack.push(), textToShare, image: image)
+                        .disabled(false)
+                }
             }
-        }
-        if let textToShare = textToShare() {
-            HStack {
-//                Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
-//                    .accessibilityHidden(true)
-//                    .foregroundColor(Color.clear)
-//              Spacer()
-                CopyShare(stack.push(), textToShare, image: qrImage)
-                    .disabled(false)
-            }
+        } else if let textToShare {
+            CopyShare(stack.push(), textToShare)
+                .disabled(false)
         }
     }
 }

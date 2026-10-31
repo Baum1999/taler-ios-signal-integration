@@ -82,7 +82,9 @@ struct QRCodeDetailView: View {
                     GradientBorder(size: size + 20.0,
                                   color: WalletColors().primaryAccent,
                              background: WalletColors().backgroundColor)
-                    QRGeneratorView(text: talerURI, size: size, logo: logo, logoSize: logoSize, image: $qrImage)
+                    QRGeneratorView(text: talerURI, size: size,
+                                    logo: logo, logoSize: logoSize,
+                                   image: qrImage)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 if #available(iOS 17.7, *) {
@@ -105,6 +107,9 @@ struct QRCodeDetailView: View {
             }
             .task(id: controller.currencyTicker) { await currencyTickerChanged() }
             .task {
+                if let image = QRCode(from: talerURI) {
+                    qrImage = image
+                }
                 withAnimation {
                     if #available(iOS 17.7, *) {
                         showQRcode = showQRauto17

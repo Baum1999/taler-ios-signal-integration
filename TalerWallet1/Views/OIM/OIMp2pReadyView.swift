@@ -27,7 +27,7 @@ struct OIMp2pReadyView: View {
 //        let _ = Self._printChanges()
 
         OIMbackground() {
-            VStack {
+            Group {
                 if let transactionId {
                     if talerTX.isPendingReady {
                         let details = talerTX.detailsToShow()
@@ -35,13 +35,20 @@ struct OIMp2pReadyView: View {
                         if keys.contains(TALERURI) {
                             if let talerURI = details[TALERURI] {
                                 if talerURI.count > 10 {
-                                    Group {
+                                    VStack {
                                         Spacer()
                                         let size = 240.0
-                                        QRGeneratorView(text: talerURI, size: size, logo: nil, logoSize: size / 4, image: $qrImage)
+                                        QRGeneratorView(text: talerURI, size: size,
+                                                        logo: nil, logoSize: size / 4,
+                                                       image: qrImage)
                                             .frame(maxWidth: .infinity, alignment: .center)
                                             .accessibilityLabel(Text("QR Code", comment: "a11y"))
                                         Spacer()
+                                    }
+                                    .task {
+                                        if let image = QRCode(from: talerURI) {
+                                            qrImage = image
+                                        }
                                     }
                                 }
                             }
