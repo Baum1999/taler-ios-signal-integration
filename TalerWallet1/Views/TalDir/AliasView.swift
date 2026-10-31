@@ -85,7 +85,7 @@ struct AliasView: View {
             let register = TaldirRegistration(alias: alias,
                                           aliasType: aliasType.name,
                                      mailboxAddress: targetUri,
-                                          challenge: challenge)
+                                          challenge: challenge.uppercased())
             Task {
                 do {
                     try await model.completeRegisterAlias(register)
