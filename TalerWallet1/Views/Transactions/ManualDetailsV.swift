@@ -145,7 +145,7 @@ struct WireTransferView: View {
                             } else if countB > 0 {   // show the single QR directly
                                 Text("If your banking software runs on another device, you can scan this QR code:")
                                     .listRowSeparator(.hidden)
-                                QRcodeCopyShare(option: firstOption)
+                                QRcodeCopyShare(stack: stack.push(), option: firstOption)
                                     .listRowSeparator(.automatic)
                             }
                         }.id(listID)

@@ -686,15 +686,13 @@ extension WalletModel {
     }
 }
 // MARK: -
-fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
-    var operation: String { "applyDevExperiment" }
-    func args() -> Args { Args(devExperimentUri: talerUri) }
-
+fileprivate struct ApplyDevExperiment: WalletBackendFormattedRequest {
     var talerUri: String
-
+    var operation: String { "applyDevExperiment" }
     struct Args: Encodable {
         var devExperimentUri: String
     }
+    func args() -> Args { Args(devExperimentUri: talerUri) }
     struct Response: Decodable {}
 }
 
@@ -702,7 +700,7 @@ extension WalletModel {
     /// tell wallet-core to mock new transactions
     nonisolated func devExperimentT(_ talerUri: String, viewHandles: Bool = false) async throws {
         // T for any Thread
-        let request = DevExperimentRequest(talerUri: talerUri)
+        let request = ApplyDevExperiment(talerUri: talerUri)
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

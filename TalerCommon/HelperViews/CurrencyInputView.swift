@@ -216,7 +216,7 @@ struct CurrencyInputView: View {
                 }
                 .padding(.vertical, 6)
             } // iOS 16+ only
-        }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
+        }.onAppear {   // make CurrencyField show the keyboard after 0.7 seconds
 #if OIM
             let oimModeActive = controller.oimModeActive
 #else

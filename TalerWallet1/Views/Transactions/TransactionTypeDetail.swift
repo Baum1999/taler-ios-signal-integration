@@ -252,7 +252,7 @@ struct TransactionTypeDetail: View {
                         // TODO: details.info.summary
                     if pending {
                         if transaction.isPendingReady {
-                            QRCodeDetails(transaction: transaction)
+                            QRCodeDetails(stack: stack.push(), transaction: transaction)
                             if hasDone {
                                 Text("QR code and link can also be scanned or copied / shared from Transactions later.")
                                     .multilineTextAlignment(.leading)

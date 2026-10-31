@@ -514,17 +514,21 @@ struct TransactionSummaryList: View {
     }
 // MARK: -
     struct QRCodeDetails: View {
+        let stack: CallStack
         var transaction : TalerTransaction
         var body: some View {
             let details = transaction.detailsToShow()
             let keys = details.keys
             if keys.contains(TALERURI) {
                 if let talerURI = details[TALERURI] {
+                    let summary = details["summary"]
                     if talerURI.count > 10 {
-                        QRCodeDetailView(talerURI: talerURI,
-                                         incoming: transaction.isP2pIncoming,
-                                           amount: transaction.common.amountRaw,
-                                            scope: transaction.common.scopes.first)
+                        QRCodeDetailView(stack: stack.push(),
+                                      talerURI: talerURI,
+                                      incoming: transaction.isP2pIncoming,
+                                        amount: transaction.common.amountRaw,
+                                         scope: transaction.common.scopes.first,
+                                       subject: summary)
                                             // scopes shouldn't (- but might) be nil!
                     }
                 }

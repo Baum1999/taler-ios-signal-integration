@@ -10,6 +10,7 @@ import OrderedCollections
 import taler_swift
 
 struct QRcodeCopyShare: View {
+    let stack: CallStack
     let option: TransferOption
     @State private var qrImage: UIImage? = nil
 
@@ -46,7 +47,7 @@ struct QRcodeCopyShare: View {
 //                    .accessibilityHidden(true)
 //                    .foregroundColor(Color.clear)
 //              Spacer()
-                CopyShare(textToShare, image: qrImage)
+                CopyShare(stack.push(), textToShare, image: qrImage)
                     .disabled(false)
             }
         }
@@ -68,7 +69,7 @@ struct QRcodesForPayto: View {
                     .listRowSeparator(.hidden)
             }
             ForEach(transferOptions, id: \.self) { option in
-                QRcodeCopyShare(option: option)
+                QRcodeCopyShare(stack: stack.push(), option: option)
                     .listRowSeparator(.automatic)
             }
         }

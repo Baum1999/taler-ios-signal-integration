@@ -170,8 +170,8 @@ struct MainView: View {
 #if TALER_NIGHTLY
     var showScanner: Bool { sheetType == .scanner }
     var showUrlSheet: Bool { sheetType != nil && sheetType != .scanner && sheetType != .action }
-
 #endif
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()

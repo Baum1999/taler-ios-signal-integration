@@ -246,12 +246,15 @@ struct ShareButton: View {
 }
 // MARK: -
 struct CopyShare: View {
+    let stack: CallStack
     @Environment(\.isEnabled) private var isEnabled: Bool
 
     let textToCopy: String
     let image: UIImage?
 
-    init(_ string: String, image: UIImage? = nil) {
+    init(_ stack: CallStack, _ string: String, image: UIImage? = nil,
+    ) {
+        self.stack = stack
         self.textToCopy = string
         self.image = image
     }
@@ -284,6 +287,6 @@ struct CopyShare: View {
 // MARK: -
 struct CopyShare_Previews: PreviewProvider {
     static var previews: some View {
-        CopyShare("Hallö", image: nil)
+        CopyShare(CallStack("Preview"), "Hallö", image: nil)
     }
 }

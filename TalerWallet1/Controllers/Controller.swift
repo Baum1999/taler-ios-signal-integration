@@ -138,6 +138,8 @@ class Controller: ObservableObject {
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
     @Published var userAction: Int = 0                      // make Action button jump
 
+    @Published var tcDelay: Int = 0
+    @Published var fake500: Int = 0
     @Published var isConnected: Bool = true
     @Published var networkUnavailable: Bool = false
     @Published var slowConnection: Bool = false
@@ -158,7 +160,7 @@ class Controller: ObservableObject {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("deviceTokenAPNs") var deviceTokenAPNs: String?
-    @AppStorage("developDelay") var developDelay: Bool = false
+
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
@@ -350,7 +352,7 @@ class Controller: ObservableObject {
     @discardableResult
     func loadBalances(_ stack: CallStack) async -> Int? {
         let model = WalletModel.shared
-        if let (response, id) = try? await model.getBalances(stack.push()) {
+        if let (response, debugId) = try? await model.getBalances(stack.push()) {
             let reloaded = response.balances
             if reloaded != balances {
                 for balance in reloaded {
@@ -358,13 +360,13 @@ class Controller: ObservableObject {
                     checkInfo(for: scope)
                 }
 #if DEBUG
-                self.logger.log("\(id) ••Got new balances, will redraw")
+                self.logger.log("\(debugId) ••Got new balances, will redraw")
 #endif
-                lastNewBalances = id
+                lastNewBalances = debugId
                 balances = reloaded         // redraw
             } else {
 #if DEBUG
-                self.logger.log("\(id) ••Same balances as \(self.lastNewBalances), no redraw")
+                self.logger.log("\(debugId) ••Same balances as \(self.lastNewBalances), no redraw")
 #endif
             }
             haveProdBalance = response.haveProdBalance
@@ -584,9 +586,33 @@ class Controller: ObservableObject {
         currencyInfos[scope] = newInfo
         currencyTicker += 1         // triggers published view update
     }
+
+    @MainActor
+    func setDelayAsync(_ delay: Int, _ f500: Int) async {
+        let delayTime = delay > 0 ? 3000
+                      : delay < 0 ? 6000
+                                  : 0
+        let fakeValue = delay != 0 ? ( f500 > 0 ? 2
+                                     : f500 < 0 ? 4
+                                                : 0 ) : 0
+        symLog.log(delay != 0 ? "wallet-core delaying by \(delayTime) milliseconds, with \(fakeValue) fake_500"
+                              : "wallet-core stop delaying")
+//          try? await model.setConfig(setTesting: newVal)
+        tcDelay = delay
+        fake500 = f500
+        let model = WalletModel.shared
+        try? await model.devExperimentT("taler://dev-experiment/start-tc?fake_500_count=\(fakeValue)&delay_resp=\(delayTime)")
+    }
+
+    @MainActor
+    func setDelay(_ delay: Int, _ f500: Int) {
+        Task {
+            await setDelayAsync(delay, f500)
+        }
+    }
 // MARK: -
     @MainActor
-    func initWalletCore(setTesting: Bool, delay: TimeInterval)
+    func initWalletCore(stack: CallStack, setTesting: Bool, delay: TimeInterval)
       async throws {
         if backendState == .instantiated {
             backendState = .initing
@@ -598,18 +624,11 @@ class Controller: ObservableObject {
                 walletCore.versionInfo = response.versionInfo
                 walletCore.nativeDB = (response.databaseBackend == "sqlite")
                 if developerMode {
-                    // best-effort dev-mode setup: a network hiccup here must not abort
-                    // wallet-core startup (see the force `try!` at the call site)
                     do {
-                        try await model.setConfig(setTesting: true)
-                        if developDelay == true {
-                            try await model.devExperimentT(
-                                "taler://dev-experiment/start-tc?delay_resp=\(TCDELAY)")
-                        }
-//                        try await model.devExperimentT("taler://dev-experiment/start-tc?fake_500=0.7")
+//                        try await model.setConfig(setTesting: true)
 //                        try await model.devExperimentT("taler://dev-experiment/default-exchange-demo?val=1")
-                        try await model.devExperimentT(
-                            "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
+//                        try await model.devExperimentT(
+//                            "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                     } catch {
                         self.logger.error("developer-mode setup failed, continuing without it: \(error.localizedDescription)")
                     }
@@ -635,21 +654,20 @@ class Controller: ObservableObject {
 #endif
                 let launchDelay: TimeInterval = walletCore.nativeDB ? 0.1 : delay
                 DispatchQueue.main.asyncAfter(deadline: .now() + launchDelay) {
-                    // dismiss the launch animation
+                    // dismiss the launch animation after delay
+                    self.symLog.log("backendState = ready")
                     self.backendState = walletCore.nativeDB ? .ready : .update
                 }
-                await loadBalances(CallStack())
-            } catch {       // rethrows
+//                await loadBalances(stack.push())
+            } catch {
                 self.logger.error("\(error.localizedDescription)")
                 backendState = .error(error.toEquatableError())                 // ❗️Yikes app cannot continue
-//                throw error         // will not be catched by MainView.task anyway
             }
         } else {
             self.logger.fault("Yikes❗️ wallet-core already initialized")
         }
     }
 }
-
 // MARK: -
 extension Controller {
     func urlCommand(_ url: URL, stack: CallStack) -> (UrlCommand, URL) {
@@ -680,13 +698,14 @@ extension Controller {
 // MARK: -
 extension Controller {
     func httpsScheme(_ url: URL) -> (UrlCommand, URL) {
-        // https://wallet.taler.net/#taler://${action}/${rest}
-        // https://wallet.taler.net/#/${action}/${rest}
-        // https://wallet.taler.net/#${action}/${rest}
+        // https://wallet.taler.net/link/#taler://${action}/${rest}
+        // https://wallet.taler.net/link/#/${action}/${rest}
+        // https://wallet.taler.net/link/#${action}/${rest}
         // are all mapped to taler://${action}/${rest}
         if let host = url.host, host == "wallet.taler.net" {
             if url.path == "/link" {
                 if let fragment = url.fragment {
+                    // 'fragment(percentEncoded:)' is only available in iOS 16.0 or newer
                     var split = fragment.split(separator: "/")
                     if split.first == "taler:" {
                         split.removeFirst()

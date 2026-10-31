@@ -622,7 +622,7 @@ struct P2PTransactionDetails: Codable, Sendable {
     var talerUri: String?       // only if we initiated the transaction
     var info: P2pShortInfo
 }
-struct P2PTransaction : Sendable {
+struct P2PTransaction: Sendable {
     var common: TransactionCommon
     var details: P2PTransactionDetails
 }
@@ -630,7 +630,7 @@ struct P2PTransaction : Sendable {
 struct RecoupTransactionDetails: Decodable {
     var recoupReason: String?
 }
-struct RecoupTransaction : Sendable {
+struct RecoupTransaction: Sendable {
     var common: TransactionCommon
     var details: RecoupTransactionDetails
 }

@@ -10,10 +10,12 @@ import taler_swift
 import AVFoundation
 
 struct QRCodeDetailView: View {
+    let stack: CallStack
     let talerURI: String
     let incoming: Bool
     let amount: Amount
     let scope: ScopeInfo?
+    let subject: String?
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -95,7 +97,7 @@ struct QRCodeDetailView: View {
                         withAnimation { showQRcode = true }
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                 }
-                CopyShare(talerCopyShare, image: qrImage)
+                CopyShare(stack.push(), talerCopyShare, image: qrImage)
                     .disabled(false)
 //                  .padding(.bottom)
                     .listRowSeparator(.hidden)

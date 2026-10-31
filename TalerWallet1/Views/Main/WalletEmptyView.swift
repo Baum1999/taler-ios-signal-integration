@@ -91,8 +91,8 @@ struct ProdSectionView: View {
                 let currency = defaultExchange.currency
                 let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
                 Button(title) {
-                    if let talerUri = URL(string: defaultExchange.talerUri) {
-                        controller.talerURI = talerUri
+                    if let talerURI = URL(string: defaultExchange.talerUri) {
+                        controller.talerURI = talerURI
                     }
                 }
                 .buttonStyle(TalerButtonStyle(type: isEmpty ? .prominent : .bordered,

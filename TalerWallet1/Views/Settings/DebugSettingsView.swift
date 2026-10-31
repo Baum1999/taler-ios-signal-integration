@@ -25,7 +25,6 @@ struct DebugSettingsView: View {
 #endif
     @AppStorage("logTransactions") var logTransactions: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true
-    @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
@@ -56,13 +55,6 @@ struct DebugSettingsView: View {
     }
     @State private var listID = UUID()
 
-    func setDelay(_ doDelay: Bool, for walletCore: WalletCore) async {
-        symLog.log(doDelay ? "wallet-core delaying by 5 seconds"
-                           : "wallet-core stop delaying")
-        let delayTime = doDelay ? TCDELAY : 0
-        try? await model.devExperimentT("taler://dev-experiment/start-tc?delay_resp=\(delayTime)")
-    }
-
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -74,15 +66,34 @@ struct DebugSettingsView: View {
                                 id1: "devMode",
                         description: String("More information intended for debugging")) { newVal in
                     withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }
-                    Task {
-                        symLog.log((newVal ? "enabling" : "disabling") + " applyDevExperiment")
-                        try? await model.setConfig(setTesting: newVal)
-                        if newVal && developDelay == true {
-                            await setDelay(true, for: walletCore)
-                        }
-                    }
+                    symLog.log((newVal ? "enabling" : "disabling") + " applyDevExperiment")
+                    controller.setDelay(newVal ? controller.tcDelay : 0, controller.fake500)
                 }
                 if showDevelopItems {
+                    let doDelay = String("WalletCore delay")
+                    let delay = controller.tcDelay
+                    SettingsTriState(name: doDelay,
+                                    value: $controller.tcDelay,
+                                      id1: "delay",
+                              description: delay > 0 ? String("3s after each network call")
+                                         : delay < 0 ? String("6s after each network call")
+                                                     : String("After each network call"))
+                    { delay in
+                        controller.setDelay(delay, controller.fake500)
+                    }
+                    if controller.tcDelay != 0 {
+                        let doFake = String("fake html 500")
+                        let fake = controller.fake500
+                        SettingsTriState(name: doFake,
+                                        value: $controller.fake500,
+                                          id1: "fake500",
+                                  description: fake > 0 ? String("2 after each network call")
+                                             : fake < 0 ? String("4 after each network call")
+                                             : String("After each network call"))
+                        { fake in
+                            controller.setDelay(controller.tcDelay, fake)
+                        }
+                    }
 #if DEBUG
                     SettingsToggle(name: String("Log Transactions"), value: $logTransactions,
                                     id1: "logTransactions",
@@ -111,15 +122,7 @@ struct DebugSettingsView: View {
                             consoleManager.clear()
                         }
                     }
-                    SettingsToggle(name: String("Set 5 seconds delay"),
-                                  value: $developDelay.onChange({ delay in
-                        Task {
-                            try await setDelay(delay, for: walletCore)
-                        }
-                    }),
-                                    id1: "delay",
-                            description: String("After each network call"))
-                        .id("delay")
+
                     SettingsToggle(name: String(localized: "Show view sizes"), value: $debugViews,
                                     id1: "debugViews",
                             description: String(localized: "Debug view layout and flickering"))

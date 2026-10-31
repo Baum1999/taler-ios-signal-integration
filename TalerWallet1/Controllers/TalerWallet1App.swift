@@ -16,6 +16,7 @@ import SymLog
 @main
 struct TalerWallet1App: App {
 #if TALER_NIGHTLY
+    // we need an AppDelegate for APNs
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 #endif
     private let symLog = SymLogV(-1, Bundle.main.bundleName)
@@ -32,6 +33,7 @@ struct TalerWallet1App: App {
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
     @State private var pastedString: String? = nil
     @State private var pastedWebURL: String? = nil      // TODO: debounce
+    @State private var stack = CallStack("App")
 
     private let walletCore = WalletCore.shared
     private let controller = Controller.shared
@@ -106,7 +108,7 @@ struct TalerWallet1App: App {
         let colorScheme = preferredColorScheme > 1 ? ColorScheme.dark
                         : preferredColorScheme > 0 ? ColorScheme.light
                                                    : nil    // use the current scheme
-        let mainView = MainView(logger: logger, stack: CallStack("App"))
+        let mainView = MainView(logger: logger, stack: stack.push())
                 .preferredColorScheme(colorScheme)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
@@ -122,12 +124,14 @@ struct TalerWallet1App: App {
                 .task {
 #if DEBUG
                     let testing = true
-                    let delay: TimeInterval = 0.001
+                    let delay: TimeInterval = 1.001
 #else
                     let testing = false
                     let delay: TimeInterval = 2.25
 #endif
-                    try? await controller.initWalletCore(setTesting: testing, delay: delay)
+                    try? await controller.initWalletCore(stack: stack.push("mainView.task"),
+                                                    setTesting: testing,
+                                                         delay: delay)
                 }
         if #available(iOS 16.4, *) {
             return WindowGroup {
@@ -150,7 +154,7 @@ struct TalerWallet1App: App {
             }
 #if TALER_NIGHTLY
             .backgroundTask(.appRefresh("net.taler.refresh")) {
-                symLog.log("backgroundTask running")
+                await symLog.log("backgroundTask running")
             }
 #endif
         } else {
