@@ -133,6 +133,7 @@ class Controller: ObservableObject {
     @Published var subscriptions: [TalerToken] = []
     @Published var defaultExchanges: [DefaultExchange] = []
     @Published var scannedURLs: [ScannedURL] = []
+    @Published var mailboxConfiguration: MailboxConfiguration? = nil
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
