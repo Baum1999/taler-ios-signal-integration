@@ -445,6 +445,12 @@ extension WalletCore {
                 case Notification.Name.ProposalDownloaded.rawValue:             // "proposal-downloaded":
                     symLog.log(message)
                     postNotification(.ProposalDownloaded, userInfo: nil)
+                case Notification.Name.ContactAdded.rawValue:                   // "contact-added":
+                    symLog.log(message)
+                    postNotification(.ContactAdded, userInfo: nil)
+                case Notification.Name.MailboxMessageAdded.rawValue:            // "mailbox-message-added":
+                    symLog.log(message)
+                    postNotification(.MailboxMessageAdded, userInfo: nil)
                 case Notification.Name.TaskObservabilityEvent.rawValue,
                      Notification.Name.RequestObservabilityEvent.rawValue:
                     if isObserving != 0 {

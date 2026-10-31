@@ -250,6 +250,8 @@ extension Notification.Name {
     static let ProposalDownloaded = Notification.Name("proposal-downloaded")
     static let TaskObservabilityEvent = Notification.Name("task-observability-event")
     static let RequestObservabilityEvent = Notification.Name("request-observability-event")
+    static let ContactAdded = Notification.Name("contact-added")
+    static let MailboxMessageAdded = Notification.Name("mailbox-message-added")
 
     static let GeneralError = Notification.Name("error")
     static let TransactionError = Notification.Name("txError")
