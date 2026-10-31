@@ -401,17 +401,17 @@ extension WalletModel {
         return response
     }
     nonisolated func getMailboxMessages(viewHandles: Bool = false)
-      async throws -> [MailboxMessage] {   // M for MainActor
+      async throws -> MailboxMessagesResponse {   // M for MainActor
         let request = GetMailboxMessages()
         let (response, _) = try await sendRequest(request, viewHandles: viewHandles)
-        return response.messages
+        return response
     }
     nonisolated func upsertMailboxMessage(message: MailboxMessage, viewHandles: Bool = false)
       async throws {   // M for MainActor
         let request = UpsertMailboxMessage(message: message)
         let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
-    nonisolated func deleteMailboxMessage(message: MailboxMessage, viewHandles: Bool = false)
+    nonisolated func deleteMailboxMessage(_ message: MailboxMessage, viewHandles: Bool = false)
       async throws {   // M for MainActor
         let request = DeleteMailboxMessage(message: message)
         let _ = try await sendRequest(request, viewHandles: viewHandles)

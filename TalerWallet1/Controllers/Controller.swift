@@ -427,7 +427,12 @@ class Controller: ObservableObject {
         let model = WalletModel.shared
         if let mailboxConfiguration {
             if let response = try? await model.refreshMailbox(mailboxConfiguration) {
-                messages = response.messages
+                let countNew = response.messages.count
+                if let response2 = try? await model.getMailboxMessages() {
+                    messages = response2.messages
+                } else {
+                    messages = response.messages
+                }
 #if DEBUG   // TODO: tell user?
                 if let expiration = response.mailboxExpiration {
                     if expiration != mailboxConfiguration.expiration {
