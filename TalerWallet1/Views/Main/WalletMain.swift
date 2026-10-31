@@ -46,6 +46,9 @@ struct WalletMain: View {
     @AppStorage("oimEuro") var oimEuro: Bool = false
 
     @State private var shouldReloadBalances = 0
+    @State private var shouldReloadContacts = 0
+    @State private var shouldReloadMessages = 0
+    @State private var didRefreshMailbox: Bool = false
     @State private var shouldReloadTransactions = 0
     @State private var selectedTab: TalerTab = .balances
     @State private var showKycAlert: Bool = false
@@ -366,6 +369,12 @@ struct WalletMain: View {
 //            }
             shouldReloadBalances += 1
         }
+        .onNotification(.ContactAdded) {
+            shouldReloadContacts += 1
+        }
+        .onNotification(.MailboxMessageAdded) {
+            shouldReloadMessages += 1
+        }
         .onNotification(.TransactionDeleted) { notification in
             logger.info(".onNotification(.TransactionDeleted) ==> reload balances")
             shouldReloadTransactions += 1
@@ -390,12 +399,34 @@ struct WalletMain: View {
                 controller.playSound(0)
             }
         }
-        .task(id: shouldReloadBalances) {   // runs once at launch, then on each onNotification(.BalanceChange)
+        .task(id: shouldReloadBalances) {   // runs once at launch, then on each .BalanceChange
 //            symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
             await controller.loadBalances(stack.push("refreshing balances"))
             await controller.loadDiscounts(stack.push("refreshing discounts"))
             await controller.loadSubscriptions(stack.push("refreshing passes"))
         } // task
+        .task(id: shouldReloadContacts) {   // runs once at launch, then on each .ContactAdded
+            await contactsThenMailbox(stack.push("shouldReloadContacts: \(shouldReloadContacts)"))
+        }
+        .task(id: shouldReloadMessages) {   // runs once at launch, then on each .MailboxMessageAdded
+            if shouldReloadMessages > 0 {   // skip the one at launch
+                await controller.refreshMailbox(stack.push("refreshing mailbox"))
+            }
+        }
     } // body
+
+    private func contactsThenMailbox(_ stack: CallStack) async {
+        if let count = await controller.loadContacts(stack.push("refreshing contacts")) {
+            if count != 0 {
+                // on cold launch we see how many contacts we have
+                // later how many changed, negative if any got deleted
+            }
+        }
+
+        if !didRefreshMailbox {     // do this only once
+            didRefreshMailbox = true
+            await controller.refreshMailbox(stack.push("refreshing mailbox"))
+        }
+    }
 } // Content
 

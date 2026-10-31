@@ -108,6 +108,7 @@ struct MainView: View {
                     await model.setError(WalletBackendError.walletCoreError(error))
                 }
             }
+            await controller.refreshMailbox(stack.push())
         }
     }
 
