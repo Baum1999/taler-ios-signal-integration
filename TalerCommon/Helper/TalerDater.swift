@@ -70,7 +70,7 @@ public class TalerDater: DateFormatter {
 //    }
 
     /// converts a timestamp into a formatted date string
-    public static func dateString(_ from: Timestamp, _ minimalistic: Bool, relative: Bool = false) -> (String, Date?) {
+    public static func dateString(_ from: Timestamp, _ minimalistic: Bool = false, relative: Bool = false) -> (String, Date?) {
         do {
             let milliseconds = try from.milliseconds()
             let date = Date(milliseconds: milliseconds)
