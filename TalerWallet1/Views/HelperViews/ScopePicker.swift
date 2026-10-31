@@ -31,7 +31,33 @@ fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> 
     return (String("\(urlOrCurrency):\t\(formatted.0.nbs)"),
             String("\(urlOrCurrency): \(formatted.1)"))
 }
+// MARK: -
+struct AliasPicker: View {
+    let stack: CallStack
+    let title: String
+    @Binding var value: Int
+    let types: [TaldirAliasType]
+    let action: (Int) -> Void
 
+    @State private var selected = 0
+
+    var body: some View {
+        Picker(title, selection: $selected) {
+            ForEachWithIndex(array: types) { index, aliasType in
+                Text(aliasType.localized)
+                    .tag(index)
+            }
+        }
+        .talerFont(.title3)
+        .task() {
+            withAnimation { selected = value }
+        }
+        .onChange(of: selected) { newValue in
+            action(newValue)
+        }
+    }
+}
+// MARK: -
 struct CurrencyPicker: View {
     let stack: CallStack
     @Binding var value: Int
@@ -62,6 +88,7 @@ struct CurrencyPicker: View {
         }
     }
 }
+// MARK: -
 struct ScopePicker: View {
 //    private let symLog = SymLogV(0)
     let stack: CallStack
