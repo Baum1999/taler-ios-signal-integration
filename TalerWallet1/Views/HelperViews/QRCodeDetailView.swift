@@ -99,7 +99,8 @@ struct QRCodeDetailView: View {
                         withAnimation { showQRcode = true }
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                 }
-                CopyShare(stack.push(), talerCopyShare, image: qrImage)
+                CopyShare(stack.push(), talerCopyShare, image: qrImage,
+                          subject: subject, talerURI: talerURI)
                     .disabled(false)
 //                  .padding(.bottom)
                     .listRowSeparator(.hidden)

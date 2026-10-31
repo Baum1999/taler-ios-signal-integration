@@ -245,39 +245,141 @@ struct ShareButton: View {
     }
 }
 // MARK: -
+@MainActor
+struct ContactsButton: View {
+    private let symLog = SymLogV(0)
+    let stack: CallStack
+    let talerUri: String?
+    let subject: String?
+    let title: String
+
+    init(_ stack: CallStack, talerUri: String?, subject: String? = nil, title: String? = nil) {
+        self.stack = stack
+        self.talerUri = talerUri
+        self.title = title ?? String(localized: "Contacts")
+        self.subject = subject
+    }
+
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    @EnvironmentObject private var controller: Controller
+
+    @State private var scale: CGFloat = 1.0
+    @State private var showContacts: Bool = false
+
+    func shareAction() -> Void {
+        symLog.log(talerUri)
+        controller.hapticFeedback(.soft)
+        Task {
+            // First scale down quickly
+            withAnimation(.easeIn(duration: 0.1)) {
+                scale = 0.8
+            }
+            // Then bounce back bigger
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.easeOut(duration: 0.25)) {
+                    scale = 1.15
+                }
+                showContacts = true
+            }
+            // Finally settle to normal
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    scale = 1.0
+                }
+            }
+        }
+    }
+
+    var body: some View {
+        if let talerUri {
+            let contactDest = ContactsView(stack: stack.push(), talerURI: talerUri, subject: subject)
+            let actions = Group {
+                NavLink($showContacts) { contactDest }
+            }
+            Button(action: shareAction) {
+                HStack {
+                    Image(systemName: ICONNAME_ALIAS)        // 􀲏
+                        .accessibility(hidden: true)
+                    Text(title)
+                }
+            }
+            .background(actions)
+            .tint(WalletColors().primaryAccent)
+            .talerFont(.body)
+            .scaleEffect(scale)
+            .disabled(!isEnabled)
+        }
+    }
+}
+// MARK: -
 struct CopyShare: View {
     let stack: CallStack
+    let textToCopy: String      // either talerURI, or report
+    let image: UIImage?         // either QRcode of talerURI, or nil (report)
+    let subject: String?
+    let talerURI: String?
+
     @Environment(\.isEnabled) private var isEnabled: Bool
 
-    let textToCopy: String
-    let image: UIImage?
-
     init(_ stack: CallStack, _ string: String, image: UIImage? = nil,
+         subject: String? = nil, talerURI: String? = nil
     ) {
         self.stack = stack
         self.textToCopy = string
         self.image = image
+        self.subject = subject
+#if GNU_TALER || TALER_NIGHTLY
+        self.talerURI = talerURI
+#else
+        self.talerURI = nil
+#endif
     }
 
     var body: some View {
+        let withContacts: Bool = talerURI != nil
         let copyB = CopyButton(textToCopy, vertical: false, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
         let share = ShareButton(textToCopy, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
+        let contacts = ContactsButton(stack.push(), talerUri: talerURI, subject: subject)
+            .buttonStyle(TalerButtonStyle(type: .bordered))
 
         let vLayout = VStack {
             copyB
             share
+            if withContacts {
+                contacts
+            }
         }
 
         if #available(iOS 16.0, *) {
             let hLayout = HStack(spacing: HSPACING) {
                 copyB
                 share
+                if withContacts {
+                    contacts
+                }
             }
-            ViewThatFits(in: .horizontal) {
-                hLayout
-                vLayout
+
+            if withContacts {
+                let mLayout = VStack {
+                    HStack(spacing: HSPACING) {
+                        copyB
+                        share
+                    }
+                    contacts
+                }
+
+                ViewThatFits(in: .horizontal) {
+                    hLayout
+                    mLayout
+                    vLayout
+                }
+            } else {
+                ViewThatFits(in: .horizontal) {
+                    hLayout
+                    vLayout
+                }
             }
         } else {
             vLayout
