@@ -68,6 +68,18 @@ struct MailboxView: View {
                 } else {
                     ForEachWithIndex(array: messages) { index, message in
                         messageRowV(message)
+                            .swipeActions(edge: .trailing) {
+                                Button {
+//                                    symLog?.log("deleteAction")
+                                    Task { // runs on MainActor
+                                        try? await model.deleteMailboxMessage(message)
+                                        controller.messages.remove(at: index)
+                                    }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                .tint(WalletColors().negative)
+                            }
                     }
                 }
             }
