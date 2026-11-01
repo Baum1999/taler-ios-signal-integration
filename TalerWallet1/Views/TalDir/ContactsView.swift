@@ -101,7 +101,7 @@ struct ContactsView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let a11yLabelStr = String(localized: "Add Contact", comment: "a11y for the + button")
+        let a11yLabelStr = String(localized: "Add contact", comment: "a11y for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
             showAddDialog = true
         }
