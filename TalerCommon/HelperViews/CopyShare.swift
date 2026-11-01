@@ -298,7 +298,7 @@ struct ContactsButton: View {
             }
             Button(action: shareAction) {
                 HStack {
-                    Image(systemName: ICONNAME_ALIAS)        // 􀲏
+                    Image(systemName: ICONNAME_PERSON3)        // 􀝊
                         .accessibility(hidden: true)
                     Text(title)
                 }
