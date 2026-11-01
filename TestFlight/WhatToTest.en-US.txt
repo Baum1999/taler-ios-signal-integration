@@ -1,3 +1,10 @@
+Version 1.6.18 (wallet-core 1.6.49)
+
+- fix error handling
+- fix flicker on QR codes
+• first implementation of TalDir (Taler Nightly only)
+
+
 Version 1.6.17 (wallet-core 1.6.48.1)
 
 • complete Discounts + Passes
