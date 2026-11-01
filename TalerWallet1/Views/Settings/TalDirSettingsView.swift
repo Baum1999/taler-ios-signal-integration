@@ -56,6 +56,7 @@ struct TalDirSettingsView: View {
                                 imageName: ICONNAME_MAILBOX,    // 􀍷
                               description: String(localized: "P2P Messaging")) {}
                     }.listRowSeparator(.hidden)
+#if TALDIR2
                     SettingsToggle(name: String(localized: "Automatically accept"),
                                   value: $acceptAutomatically,
                                     id1: "acceptAutomatically",
@@ -66,7 +67,7 @@ struct TalDirSettingsView: View {
                                     id1: "deleteAutomatically",
                             description: String(localized: "...messages after the transaction finishes")
                     )
-
+#endif
                     let aliasTitle = String(localized: "TitleAlias", defaultValue: "Alias Registration")
                     let aliasDest = AliasView(stack: stack.push(aliasTitle),
                                            navTitle: aliasTitle)
@@ -80,19 +81,26 @@ struct TalDirSettingsView: View {
 
                 }
             } else {
-                Text("You need a TalDir mailbox to be able to receive money that other people send to your TalDir Alias.")
+                Text("If you only want to send money (or payment requests) to others you don't need a mailbox.")
                     .listRowSeparator(.hidden)
-                Text("Once you have a mailbox, create Aliases and publish them on your website, GitHub page, or any other place.")
+                let contactsIcon = Image(systemName: ICONNAME_PERSON3)  // 􀝊
+                Text("Just add contacts, e.g. by scanning a QR code. Send as usual, then in the final step choose '\(contactsIcon)\(NONBREAKING)Contacts'.", comment: "contactsIcon, NONBREAKING - don't add a space")
+                    .padding(.top, -4)
+                    .padding(.bottom, 6)
+                    .listRowSeparator(.visible)
+                Text("You need a mailbox to be able to receive money (or requests) that other people send to your mail address or phone number.")
+                    .padding(.top, 6)
+                    .listRowSeparator(.hidden)
+                Text("Once you have a mailbox, create one or more Aliases (of your mail address, phone number, matrix ID, ...) and publish them on your website, GitHub page, on Mastodon or any other place.")
                     .listRowSeparator(.hidden)
                 Button("Create Mailbox") {
                     Task {
                         await controller.createMailbox()
                     }
-                }
-                .buttonStyle(TalerButtonStyle(type: .bordered))
-                .padding()
-                Text("Your mailbox will be hosted at gnunet.org. Currently there is no fee. Other providers may charge a small monthly fee.")
+                }.buttonStyle(TalerButtonStyle(type: .bordered))
+                    .padding()
                     .listRowSeparator(.hidden)
+                Text("Your mailbox will be hosted at gnunet.org. Currently there is no fee.")
             }
         }
             .listStyle(myListStyle.style).anyView
