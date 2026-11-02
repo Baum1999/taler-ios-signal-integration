@@ -505,6 +505,35 @@ enum SignalLinkSelfCheck {
                groupStoreReloaded.info(forTransactionId: "tx:a")?.groupId == "corr1")
         UserDefaults.standard.removePersistentDomain(forName: groupSuite)
 
+        // 39) Signal-Kontakt in der Transaktionsliste (N19).
+        expect("avatarFile: gueltiger Name", SignalSharedAvatar.isValidFileName("abc-12_x.jpg"))
+        expect("avatarFile: Pfadanteil abgelehnt", !SignalSharedAvatar.isValidFileName("../x.jpg"))
+        expect("avatarFile: falsche Endung abgelehnt", !SignalSharedAvatar.isValidFileName("x.png"))
+        expect("avatarFile: leer abgelehnt", !SignalSharedAvatar.isValidFileName(".jpg"))
+        let contactSuite = "SignalLinkSelfCheck.Contacts"
+        UserDefaults.standard.removePersistentDomain(forName: contactSuite)
+        let contactFolder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("SignalLinkSelfCheck-contacts", isDirectory: true)
+        try? FileManager.default.removeItem(at: contactFolder)
+        let contactStore = SignalContactStore(defaults: UserDefaults(suiteName: contactSuite)!,
+                                              folder: contactFolder)
+        contactStore.record(transactionIds: ["tx:1", "", "tx:2"],
+                            contact: SignalContact(name: "Alice", isGroup: false, appName: "Signal", avatarFile: nil),
+                            avatarKey: "corr/1", avatarJPEG: nil)
+        expect("contact store: Eintrag gelesen",
+               contactStore.contact(forTransactionId: "tx:2")?.name == "Alice")
+        expect("contact store: geteilt ueber Anteile",
+               contactStore.contact(forTransactionId: "tx:1") == contactStore.contact(forTransactionId: "tx:2"))
+        expect("contact store: unbekannt -> nil", contactStore.contact(forTransactionId: "tx:x") == nil)
+        expect("contact store: ohne Avatar kein Bild",
+               contactStore.contact(forTransactionId: "tx:1").flatMap { contactStore.avatar(for: $0) } == nil)
+        let contactReloaded = SignalContactStore(defaults: UserDefaults(suiteName: contactSuite)!,
+                                                 folder: contactFolder)
+        expect("contact store: ueberlebt neue Instanz",
+               contactReloaded.contact(forTransactionId: "tx:1")?.appName == "Signal")
+        UserDefaults.standard.removePersistentDomain(forName: contactSuite)
+        try? FileManager.default.removeItem(at: contactFolder)
+
         return failed
     }
 

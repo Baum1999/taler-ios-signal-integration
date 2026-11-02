@@ -175,8 +175,13 @@ final class SignalComposeSendModel: ObservableObject {
     private let wallet = WalletModel.shared
     private let controller = Controller.shared
 
+    /// Verkleinerter Avatar aus dem gemeinsamen Container (nil = Platzhalter).
+    let avatarJPEG: Data?
+    var avatarImage: UIImage? { avatarJPEG.flatMap { UIImage(data: $0) } }
+
     init(params: ComposeSendParams) {
         self.params = params
+        self.avatarJPEG = SignalSharedAvatar.load(fileName: params.avatarFile)
         self.direction = params.direction
         if params.isGroup {
             // Empfänger ohne Absender, vorbelegt aus memberCount (nur
@@ -452,6 +457,11 @@ final class SignalComposeSendModel: ObservableObject {
             }
         }
 
+        // Signal-Kontakt jetzt merken (nicht erst nach dem URI-Polling):
+        // die Transaktionen existieren bereits und sollen auch bei einem
+        // späteren Fehler in der Liste als "über Signal" erkennbar sein.
+        recordContact(transactionIds: results.filter { !$0.failed }.compactMap { $0.transactionId })
+
         // Endgültiger Initiate-Fehler?
         if results.contains(where: { $0.failed }) {
             if count == 1 {
@@ -488,6 +498,18 @@ final class SignalComposeSendModel: ObservableObject {
                 enterPartialFailure(failed: 1, of: count)
             }
         }
+    }
+
+    private func recordContact(transactionIds: [String]) {
+        let contact = SignalContact(name: Self.sanitize(params.recipientHint).map { String($0.prefix(80)) },
+                                    isGroup: params.isGroup,
+                                    appName: Self.sanitize(params.senderAppName),
+                                    avatarFile: nil)
+        SignalContactStore.shared.record(transactionIds: transactionIds,
+                                         contact: contact,
+                                         avatarKey: params.ctx.correlationId,
+                                         avatarJPEG: avatarJPEG)
+        SignalSharedAvatar.remove(fileName: params.avatarFile)
     }
 
     /// Pollt je Transaktion getTransactionById, bis talerUri vorliegt.
@@ -629,17 +651,22 @@ struct SignalComposeSendView: View {
     /// das Back-Button-Label des naechsten Screens sowie Accessibility
     /// braucht; dieses principal-Toolbar-Item ueberschreibt nur die
     /// Anzeige in der Navigationsleiste.
-    ///
-    /// TODO Avatar: kein Avatar-Bildchen vor dem Titel, solange
-    /// ComposeSendParams kein Avatar-Feld hat (s. SignalLinkRequest.swift) -
-    /// kommt wenn Apple Developer Program.
     @ViewBuilder
     private var titleView: some View {
         if let hint = vm.sanitizedHint {
-            (Text("Zahlung für ") + Text(hint).fontWeight(.bold))
-                .font(.headline)
-                .lineLimit(1)
-                .truncationMode(.tail)
+            HStack(spacing: 8) {
+                if let avatar = vm.avatarImage {
+                    Image(uiImage: avatar)
+                        .resizable().scaledToFill()
+                        .frame(width: 28, height: 28)
+                        .clipShape(Circle())
+                        .accessibilityHidden(true)
+                }
+                (Text("Zahlung für ") + Text(hint).fontWeight(.bold))
+                    .font(.headline)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
         } else {
             Text("Zahlung").font(.headline)
         }

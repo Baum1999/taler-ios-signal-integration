@@ -58,19 +58,16 @@ struct SignalReturnContext {
 /// Alle Werte sind untrusted und dienen ausschließlich der Anzeige bzw.
 /// als Anfangsstellung - nie für Entscheidungen über Geld (Vertrag 2.6).
 ///
-/// TODO Avatar-Bild: Android bekommt ein Avatar-Feld im Protokoll
-/// (content://-URI + grantUriPermission an TalerAllowlist.PACKAGE, siehe
-/// TalerSendActions.kt). Fuer iOS war ein App-Group-Shared-Container als
-/// Transportweg angedacht - das Entitlement steht erst mit einem
-/// kostenpflichtigen Apple Developer Program-Account zur Verfuegung
-/// (aktuell nur Personal-Team/kostenloser Account). Bis dahin bleibt
-/// `avatar` hier bewusst aus, kommt wenn Apple Developer Program.
+/// `avatarFile`: Dateiname eines vom Sender im gemeinsamen App-Group-Ordner
+/// abgelegten Avatars (iOS-Gegenstück zur Android-`avatarUri`, siehe
+/// SignalSharedAvatar). Nur der Name, kein Pfad.
 struct ComposeSendParams {
     let recipientHint: String?
     // Anzeigename der sendenden Messenger-App (z.B. "Signal"), vom Absender
     // selbst gesetzt, keine feste App-Liste - befuellt nur den
     // Vorschlagstext im Zweck-Feld (SignalComposeSendView.swift).
     let senderAppName: String?
+    let avatarFile: String?
     let isGroup: Bool
     let direction: SignalLinkDirection
     let disappearingMessagesSeconds: Int
@@ -207,6 +204,7 @@ extension SignalLinkRequest {
                 let params = ComposeSendParams(
                     recipientHint: query.first("recipientHint"),
                     senderAppName: query.first("senderAppName"),
+                    avatarFile: query.first("avatarFile"),
                     isGroup: isGroup,
                     direction: direction,
                     disappearingMessagesSeconds: nonNegativeInt(query.first("disappearingMessagesSeconds")),

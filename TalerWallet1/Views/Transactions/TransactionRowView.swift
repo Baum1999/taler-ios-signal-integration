@@ -363,6 +363,7 @@ struct TransactionRowView: View {
         let textColor = textColor()
         let foreColor = foreColor(textColor)
         let iconBadge = iconBadge(foreColor)
+        VStack(alignment: .leading, spacing: 4) {
         HStack {
             iconBadge.talerFont(.title2)
 #if TALER_NIGHTLY
@@ -375,6 +376,13 @@ struct TransactionRowView: View {
 #else   // Stop using dynamic layouts for Taler Wallet and GNU Taler because of flickering
             let for2Color = for2Color(textColor)
             layout3(topString, textColor, for2Color)
+#endif
+        }
+#if TALER_SIGNAL
+            // Herkunft "über Signal" (SignalContactStore), eingerückt unter
+            // das Icon; ohne gespeicherten Kontext keine Zeile.
+            SignalContactLine(transactionId: transaction.id)
+                .padding(.leading, 44)
 #endif
         }
             .accessibilityElement(children: .combine)

@@ -321,6 +321,10 @@ struct TransactionSummaryList: View {
                                 dateAndStatus(common)
                                     .listRowSeparator(.hidden)
                                     .talerFont(.title)
+#if TALER_SIGNAL
+                                // Herkunft "über Signal" (SignalContactStore)
+                                SignalContactLine(transactionId: transactionId)
+#endif
                             }
                             if isWorking {
                                 RotatingTaler(size: 80, progress: true, once: false,

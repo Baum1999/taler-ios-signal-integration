@@ -156,10 +156,11 @@ iOS `talerlink://compose-send`.
 | `correlationId` | ja | UUID | siehe 2.4 | roh (nur `0-9a-f-`) |
 | `returnUri` | ja | URI | immer `sgnl://taler-return` | streng prozent-kodiert |
 | `memberCount` | nur wenn `isGroup=true` | Ganzzahl >= 0 | Zahl der Gruppenmitglieder laut Signal. Fehlt oder nicht parsbar: `0`. Nur Hinweis, Taler verlässt sich nicht darauf | Dezimalziffern |
+| `avatarFile` | nein | Dateiname | **iOS-Transport** des Chat-Avatars (Android nutzt dafür die `avatarUri`, eine `content://`-URI mit Leserecht). Nur ein Name `<correlationId>.jpg`, kein Pfad: Signal legt das JPEG (96 px) im Ordner `taler-compose-avatars` des gemeinsamen App-Group-Containers ab (Info.plist-Schlüssel `TalerShareAppGroup` in beiden Apps; fehlt er, entfällt der Parameter). Taler prüft den Namen (`^[A-Za-z0-9_-]{1,64}\.jpg$`), liest höchstens 512 KB, dekodiert über ImageIO, verkleinert auf 96 px, übernimmt die Kopie in den Kontaktspeicher und löscht die Quelle; Signal räumt Reste nach 1 h auf. Fehlt oder scheitert er: Platzhalter-Icon. Angreiferkontrolliert, nur Anzeige | streng prozent-kodiert |
 
 Sender-Reihenfolge: `recipientHint`, `senderAppName`, `isGroup`, `direction`,
 `disappearingMessagesSeconds`, `correlationId`, `returnUri`, dann (nur
-Gruppe) `memberCount`. [Ist Android: `TalerSendActions.kt:37-51`]
+Gruppe) `memberCount`, auf iOS zuletzt `avatarFile` (nur wenn vorhanden). [Ist Android: `TalerSendActions.kt:37-51`]
 
 Beispiel (1:1-Chat, Umbrüche nur zur Lesbarkeit):
 
