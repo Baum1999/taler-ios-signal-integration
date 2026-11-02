@@ -66,6 +66,17 @@ struct TalerWallet1App: App {
     func handlePasted(_ string: String) -> Bool {
         let uris = TalerURIExtractor.extractAll(string)
         guard let first = uris.first else { return false }
+#if TALER_SIGNAL
+        // Mehrere Anteile (z. B. Gruppen-Split aus Signal): erst die
+        // Sammelkarte, der Nutzer wählt den Anteil (MultiUriSummaryView).
+        if uris.count > 1 {
+            Task { @MainActor in
+                NotificationCenter.default.post(name: .PasteMultiAction, object: nil,
+                                                userInfo: [NOTIFICATIONPASTEMULTI: uris])
+            }
+            return true
+        }
+#endif
         Task { @MainActor in
             for uri in uris.dropFirst() {
                 controller.saveURL(uri, urlCommand: controller.command(uri.host ?? EMPTYSTRING))

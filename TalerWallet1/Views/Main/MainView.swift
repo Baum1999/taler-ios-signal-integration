@@ -34,6 +34,8 @@ struct MainView: View {
 #if TALER_SIGNAL
     // talerlink://-Links (Signal -> Taler); Router hält den offenen Request
     @ObservedObject private var signalLinkRouter = SignalLinkRouter.shared
+    // Einfügen mit mehreren taler://-URIs: Sammelkarte vor dem Annehmen-Sheet
+    @State private var multiPaste: MultiPaste?
 #endif
     @State private var selectedBalance: Balance? = nil      // for sheets, gets set in TransactionsListView
     @State private var urlToOpen: URL? = nil
@@ -333,6 +335,16 @@ struct MainView: View {
                 }   // ActionSheet
 #endif
 #if TALER_SIGNAL
+                .sheet(item: unlocked($multiPaste, locked)) { paste in
+                    MultiUriSummaryView(uris: paste.uris) { url in
+                        multiPaste = nil
+                        // das Annehmen-Sheet erst nach dem Schließen der Sammelkarte
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            NotificationCenter.default.post(name: .PasteAction, object: nil,
+                                userInfo: [NOTIFICATIONPASTE: PasteType(pastedURL: url)])
+                        }
+                    }
+                }
                 .sheet(item: unlocked($signalLinkRouter.pending, locked)) { request in
                     // talerlink://compose-* (compose-send aus T3,
                     // compose-refund aus T4, compose-abort aus T5)
@@ -393,6 +405,13 @@ struct MainView: View {
 #endif
         }   }
 
+#if TALER_SIGNAL
+        .onNotification(.PasteMultiAction) { notification in
+            if let uris = notification.userInfo?[NOTIFICATIONPASTEMULTI] as? [URL] {
+                multiPaste = MultiPaste(uris: uris)
+            }
+        }
+#endif
         .onNotification(.PasteAction) { notification in
             if let notifData = notification.userInfo?[NOTIFICATIONPASTE] as? PasteType {
                 symLog.log(".PasteAction: \(notifData)")

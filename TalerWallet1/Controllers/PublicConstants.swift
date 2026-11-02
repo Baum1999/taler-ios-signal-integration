@@ -217,6 +217,7 @@ public let NOTIFICATIONPHASE = "notif.phase"
 public let NOTIFICATIONANIMATION = "notif.animation"
 public let NOTIFICATIONSHARE = "notif.share"
 public let NOTIFICATIONPASTE = "notif.paste"
+public let NOTIFICATIONPASTEMULTI = "notif.pasteMulti"
 public let NOTIFICATIONPAYLOAD = "notif.payload"
 
 /// Notifications sent by wallet-core
@@ -267,4 +268,5 @@ extension Notification.Name {
     static let SettingsAction = Notification.Name("settingsAction")
     static let ShareAction = Notification.Name("shareAction")
     static let PasteAction = Notification.Name("pasteAction")
+    static let PasteMultiAction = Notification.Name("pasteMultiAction")
 }
