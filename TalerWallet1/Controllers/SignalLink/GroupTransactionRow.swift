@@ -18,10 +18,11 @@ extension TransactionListEntry where T == TalerTransaction {
     }
 }
 
-/// Auf-/zuklappbare Sammelzeile für einen Gruppen-Split
-/// (Android-Gegenstück: GroupTransactionRow in TransactionsComposable.kt).
-/// Aufgeklappt bleibt jeder Anteil eine ganz normale Zeile der Liste -
-/// Detailansicht und Löschen funktionieren wie bei Einzeltransaktionen.
+/// Sammelzeile für einen Gruppen-Split: sieht aus wie eine einzelne
+/// Transaktion (TransactionRowView) und zeigt alles, was für alle Anteile
+/// gleich ist. Antippen führt zur Liste der Anteile, dort bleibt jeder Anteil
+/// eine ganz normale Zeile - Detailansicht, Abbrechen und Löschen funktionieren
+/// wie bei Einzeltransaktionen.
 struct GroupTransactionRow<Row: View>: View {
     let groupId: String
     let shares: [TalerTransaction]
@@ -29,55 +30,87 @@ struct GroupTransactionRow<Row: View>: View {
     let scope: ScopeInfo
     @ViewBuilder let row: (TalerTransaction) -> Row
 
-    @State private var expanded = false
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {
-        DisclosureGroup(isExpanded: $expanded) {
-            ForEach(shares, id: \.self) { tx in
-                row(tx)
+        NavigationLink {
+            List {
+                ForEach(shares, id: \.self) { tx in
+                    row(tx)
+                }
             }
+            .listStyle(myListStyle.style).anyView
+            .background(FullBackground())
+            .navigationTitle(String(localized: "Anteile"))
         } label: {
             GroupTransactionHeader(shares: shares, includeSelf: includeSelf, scope: scope)
+                .padding(.leading, ICONLEADING)
         }
     }
 }
 
+/// Aufbau wie layout3 in TransactionRowView: Icon links, Zweck oben, Betrag
+/// rechts, Zeit unten links. Zweck, Zeit, Richtung und Signal-Kontakt stammen
+/// aus demselben Sende-Vorgang und sind für alle Anteile gleich, daher reicht
+/// der erste Anteil als Quelle.
 struct GroupTransactionHeader: View {
     let shares: [TalerTransaction]
     let includeSelf: Bool?
     let scope: ScopeInfo
 
     var body: some View {
-        let title = shares.lazy
-            .compactMap { $0.groupSummary?.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .first { !$0.isEmpty } ?? String(localized: "Gruppenzahlung")
-        let progress = GroupTransactionSummary.progress(
-            states: shares.map { $0.common.txState.major }, includeSelf: includeSelf)
-        let total = GroupTransactionSummary.total(
-            amounts: shares.map { $0.common.amountEffective }, includeSelf: includeSelf)
+        if let first = shares.first {
+            let title = shares.lazy
+                .compactMap { $0.groupSummary?.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .first { !$0.isEmpty } ?? String(localized: "Gruppenzahlung")
+            let progress = GroupTransactionSummary.progress(
+                states: shares.map { $0.common.txState.major }, includeSelf: includeSelf)
+            let total = GroupTransactionSummary.total(
+                amounts: shares.map { $0.common.amountEffective }, includeSelf: includeSelf)
+            let incoming = first.common.isIncoming
+            let finished = progress.open == 0
 
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .talerFont(.headline)
-            Text("\(shares.count) Empfänger")
-                .talerFont(.subheadline)
-                .foregroundColor(.secondary)
-            if let total {
-                HStack(spacing: 4) {
-                    AmountV(scope, total)
-                    Text(includeSelf == true ? "gesamt (inkl. mir)" : "gesamt")
+            VStack(alignment: .leading, spacing: 4) {
+                // Abstand 0 wie bei Einzelzeilen: dort ergibt er sich daraus, dass
+                // die Betragszeile mit einem Spacer beginnt, hier beginnt sie mit Text.
+                HStack(spacing: 0) {
+                    TransactionIconBadge(type: first.common.type,
+                                    foreColor: finished ? WalletColors().transactionColor(incoming)
+                                                        : WalletColors().pendingColor(incoming),
+                                         done: finished,
+                                     incoming: incoming,
+                                shouldConfirm: false,
+                                     needsKYC: false)
+                        .talerFont(.title2)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(title)
+                            .talerFont(.headline)
+                            .padding(.bottom, -2.0)
+                        if let total {
+                            HStack {
+                                Text(includeSelf == true ? "gesamt (inkl. mir)" : "gesamt")
+                                    .talerFont(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer(minLength: 0)
+                                AmountV(scope, total, isNegative: total.isZero ? nil : !incoming)
+                            }
+                        }
+                        TransactionTimeline(timestamp: first.common.timestamp,
+                                            textColor: .primary, layout: 3, maxLines: 10)
+                    }
                 }
-                .talerFont(.subheadline)
-                .foregroundColor(.secondary)
+                Group {
+                    SignalContactLine(transactionId: first.id)
+                    GroupProgressBar(progress: progress)
+                        .padding(.top, 2)
+                    Text("\(progress.paid) bezahlt · \(progress.open) offen · \(progress.declined) abgelehnt")
+                        .talerFont(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.leading, 44)
             }
-            GroupProgressBar(progress: progress)
-                .padding(.top, 2)
-            Text("\(progress.paid) bezahlt · \(progress.open) offen · \(progress.declined) abgelehnt")
-                .talerFont(.caption)
-                .foregroundColor(.secondary)
+            .accessibilityElement(children: .combine)
         }
-        .padding(.vertical, 4)
-        .accessibilityElement(children: .combine)
     }
 }
 
