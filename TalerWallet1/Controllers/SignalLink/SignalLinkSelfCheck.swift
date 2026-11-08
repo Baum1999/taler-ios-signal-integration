@@ -534,6 +534,61 @@ enum SignalLinkSelfCheck {
         UserDefaults.standard.removePersistentDomain(forName: contactSuite)
         try? FileManager.default.removeItem(at: contactFolder)
 
+        // 40) taler-open: Signal-Nachricht zur Zahlung öffnen (Abschnitt 12,
+        // N20). Hashes wie TalerOpenLinkTest in signal-ios.
+        let pushUri = "taler://pay-push/exchange.example.org/7Q4XK2"
+        let pushHash = "b128b650d7a36d51ebef90db845d6eff7c01cc99c6246b5179743c1d7c176147"
+        let pullUri = "taler://pay-pull/exchange.example.org/BBBB"
+        let pullHash = "cc50c43eff63012e647a5808223fae212472d70d0243f32e8971f64ae212104e"
+        let openUrl = ReturnURLBuilder.openPayment(uriHashes: [pullHash, pushHash.uppercased(), pullHash, "zz"])
+        expect("taler-open: Aufbau, klein, ohne Duplikate und ungültige Werte",
+               openUrl?.absoluteString
+                   == "\(ReturnURLBuilder.returnScheme)://taler-open?v=1&uriHash=\(pullHash)&uriHash=\(pushHash)")
+        expect("taler-open: ohne gültigen Hash kein Link",
+               ReturnURLBuilder.openPayment(uriHashes: ["abc", ""]) == nil)
+        let manyHashes = (0..<40).map { String(repeating: "0", count: 62) + String(format: "%02lx", $0) }
+        expect("taler-open: höchstens 32 Hashes",
+               ReturnURLBuilder.openPayment(uriHashes: manyHashes)?.query?
+                   .components(separatedBy: "uriHash=").count == ReturnURLBuilder.maxOpenHashes + 1)
+        expect("taler-open: kein Rücksprung-Ziel",
+               openUrl.map { !ReturnURLBuilder.isAllowedTarget($0) } ?? false)
+        let ownSuite = "SignalLinkSelfCheck.OwnUris"
+        UserDefaults.standard.removePersistentDomain(forName: ownSuite)
+        let ownStore = OwnUriStore(defaults: UserDefaults(suiteName: ownSuite)!)
+        ownStore.record(uri: pushUri, transactionId: "tx:1")
+        ownStore.record(uri: pullUri, transactionId: "tx:2", groupId: "g")
+        expect("own uris: Hash wie in Signal (SHA-256 der URI)",
+               ownStore.uriHashes(forTransactionIds: ["tx:1"]) == [pushHash])
+        expect("own uris: Reihenfolge der Transaktionen, Unbekannte übersprungen",
+               ownStore.uriHashes(forTransactionIds: ["tx:2", "tx:x", "tx:1"]) == [pullHash, pushHash])
+        UserDefaults.standard.removePersistentDomain(forName: ownSuite)
+
+        // 41) Ablaufangabe in der Zeitzeile: Warnfarbe in den letzten 5 %.
+        // DateComponentsFormatter kann ein geschütztes Leerzeichen liefern.
+        func plain(_ expiry: SignalExpiry) -> SignalExpiry {
+            switch expiry {
+                case .normal(let text): return .normal(text.replacingOccurrences(of: "\u{00A0}", with: " "))
+                case .warning(let text): return .warning(text.replacingOccurrences(of: "\u{00A0}", with: " "))
+                case .expired: return .expired
+            }
+        }
+        let start = Date(timeIntervalSince1970: 1_000_000)
+        let end = start.addingTimeInterval(30 * 86_400)
+        expect("ablauf: normal in Tagen",
+               plain(SignalExpiry.evaluate(start: start, end: end, now: start.addingTimeInterval(2 * 86_400)))
+                   == .normal("noch 28 Tage gültig"))
+        expect("ablauf: Warnung ab 5 % Restlaufzeit (36 h von 30 Tagen)",
+               plain(SignalExpiry.evaluate(start: start, end: end, now: end.addingTimeInterval(-36 * 3_600)))
+                   == .warning("noch 36 Stunden gültig"))
+        expect("ablauf: knapp darüber keine Warnung",
+               plain(SignalExpiry.evaluate(start: start, end: end, now: end.addingTimeInterval(-37 * 3_600)))
+                   == .normal("noch 37 Stunden gültig"))
+        expect("ablauf: abgelaufen", SignalExpiry.evaluate(start: start, end: end, now: end) == .expired)
+        expect("ablauf: ohne Startzeit keine Warnung",
+               plain(SignalExpiry.evaluate(start: nil, end: end, now: end.addingTimeInterval(-90 * 60)))
+                   == .normal("noch 90 Minuten gültig"))
+        expect("ablauf: unter einer Minute", SignalExpiry.remainingText(seconds: 30) == "läuft gleich ab")
+
         return failed
     }
 

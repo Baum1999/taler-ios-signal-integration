@@ -108,6 +108,18 @@ struct TransactionRowView: View {
     var isZero: Bool { common.amountEffective.isZero }
     var incoming: Bool { common.isIncoming }
     var refreshZero: Bool { common.type.isRefresh && isZero }
+#if TALER_SIGNAL
+    /// Zahlung kam über Signal (SignalContactStore): dann steht die Zeit
+    /// unter der Kontaktzeile statt im Kopf der Zeile.
+    var hasSignalContact: Bool { SignalContactStore.shared.contact(forTransactionId: transaction.id) != nil }
+    /// Ablauf einer noch offenen P2P-Zahlung (wartet auf Annahme bzw.
+    /// Bezahlung oder auf meine Entscheidung), sonst nil.
+    var openExpiration: Timestamp? {
+        guard transaction.isPending || transaction.isDialog,
+              case .peer2peer(let p2p) = transaction else { return nil }
+        return p2p.details.info.expiration
+    }
+#endif
 
     func textColor() -> Color {
         let isDark = colorScheme == .dark
@@ -268,9 +280,17 @@ struct TransactionRowView: View {
                     .background(blue.opacity(0.2))
 #endif
             }
+#if TALER_SIGNAL
+            // Mit Signal-Kontakt steht die Zeit ganz unten im body, nicht
+            // hier. Offene P2P-Zahlungen zeigen zusätzlich, wie lange sie gelten.
+            if !hasSignalContact {
+                SignalTimeline(timestamp: common.timestamp, expiration: openExpiration, textColor: textColor)
+            }
+#else
             TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3, maxLines: 10)
 #if TALER_NIGHTLY
                 .overlay { Color.clear.border(green) }
+#endif
 #endif
         }
         ZStack {
@@ -380,9 +400,17 @@ struct TransactionRowView: View {
         }
 #if TALER_SIGNAL
             // Herkunft "über Signal" (SignalContactStore), eingerückt unter
-            // das Icon; ohne gespeicherten Kontext keine Zeile.
-            SignalContactLine(transactionId: transaction.id)
+            // das Icon, darunter die Zeit mit Ablauf; ohne gespeicherten
+            // Kontext keine Zeile. Antippen der Kontaktzeile öffnet die
+            // Nachricht in Signal.
+            if hasSignalContact {
+                VStack(alignment: .leading, spacing: 4) {
+                    SignalContactLine(transactionId: transaction.id)
+                    SignalTimeline(timestamp: common.timestamp, expiration: openExpiration,
+                                   textColor: textColor)
+                }
                 .padding(.leading, 44)
+            }
 #endif
         }
             .accessibilityElement(children: .combine)

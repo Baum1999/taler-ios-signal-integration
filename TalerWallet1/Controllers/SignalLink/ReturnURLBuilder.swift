@@ -73,6 +73,37 @@ enum ReturnURLBuilder {
         UIApplication.shared.open(url)
     }
 
+    /// Ziel von "Nachricht in Signal zeigen" (Vertrag Abschnitt 12).
+    static let openBase = "\(returnScheme)://taler-open"
+    static let maxOpenHashes = 32
+
+    /// taler-open-Link: v=1, dann je URI-Hash ein uriHash (64 Hex-Zeichen,
+    /// klein), höchstens 32. Nur Hashes, nie die URI selbst - iOS kann nicht
+    /// prüfen, welche App das Scheme registriert hat. nil ohne gültigen Hash.
+    static func openPayment(uriHashes: [String]) -> URL? {
+        var hashes: [String] = []
+        for hash in uriHashes.map({ $0.lowercased() }) where !hashes.contains(hash) {
+            guard hash.utf8.count == 64, hash.allSatisfy({ $0.isASCII && $0.isHexDigit }) else { continue }
+            hashes.append(hash)
+            if hashes.count == maxOpenHashes { break }
+        }
+        guard !hashes.isEmpty else { return nil }
+        let query = (["v=1"] + hashes.map { "uriHash=" + $0 }).joined(separator: "&")
+        return URL(string: openBase + "?" + query)
+    }
+
+    /// Öffnet die Signal-Nachricht zu diesen eigenen Transaktionen (Einzel-
+    /// zahlung oder alle Anteile eines Splits). false, wenn keine URI dazu
+    /// bekannt ist - dann gibt es in Signal auch keine Nachricht.
+    @MainActor
+    @discardableResult
+    static func openPaymentMessage(transactionIds: [String]) -> Bool {
+        guard let url = openPayment(uriHashes: OwnUriStore.shared.uriHashes(forTransactionIds: transactionIds))
+        else { return false }
+        UIApplication.shared.open(url)
+        return true
+    }
+
     /// Setzt das Ziel neu zusammen: festes returnBase,
     /// danach die streng kodierten Parameter. Die Query des returnUri aus
     /// dem Anfrage-Link wird nie übernommen (Vertrag 2.6).

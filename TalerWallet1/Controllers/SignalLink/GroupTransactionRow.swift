@@ -50,9 +50,10 @@ struct GroupTransactionRow<Row: View>: View {
 }
 
 /// Aufbau wie layout3 in TransactionRowView: Icon links, Zweck oben, Betrag
-/// rechts, Zeit unten links. Zweck, Zeit, Richtung und Signal-Kontakt stammen
-/// aus demselben Sende-Vorgang und sind für alle Anteile gleich, daher reicht
-/// der erste Anteil als Quelle.
+/// rechts; darunter Signal-Kontakt, Fortschritt und ganz unten die Zeit mit
+/// Ablauf (wie bei Einzelzeilen mit Signal-Kontakt). Zweck, Zeit, Richtung
+/// und Signal-Kontakt stammen aus demselben Sende-Vorgang und sind für alle
+/// Anteile gleich, daher reicht der erste Anteil als Quelle.
 struct GroupTransactionHeader: View {
     let shares: [TalerTransaction]
     let includeSelf: Bool?
@@ -69,6 +70,15 @@ struct GroupTransactionHeader: View {
                 amounts: shares.map { $0.common.amountEffective }, includeSelf: includeSelf)
             let incoming = first.common.isIncoming
             let finished = progress.open == 0
+            // Frühester Ablauf der noch offenen Anteile (alle entstanden im
+            // selben Vorgang, in der Regel also derselbe Zeitpunkt).
+            let expiration = shares
+                .filter { $0.isPending || $0.isDialog }
+                .compactMap { share -> Timestamp? in
+                    guard case .peer2peer(let p2p) = share else { return nil }
+                    return p2p.details.info.expiration
+                }
+                .min { (SignalExpiry.date($0) ?? .distantFuture) < (SignalExpiry.date($1) ?? .distantFuture) }
 
             VStack(alignment: .leading, spacing: 4) {
                 // Abstand 0 wie bei Einzelzeilen: dort ergibt er sich daraus, dass
@@ -95,17 +105,18 @@ struct GroupTransactionHeader: View {
                                 AmountV(scope, total, isNegative: total.isZero ? nil : !incoming)
                             }
                         }
-                        TransactionTimeline(timestamp: first.common.timestamp,
-                                            textColor: .primary, layout: 3, maxLines: 10)
                     }
                 }
                 Group {
-                    SignalContactLine(transactionId: first.id)
+                    SignalContactLine(transactionIds: shares.map { $0.id })
                     GroupProgressBar(progress: progress)
                         .padding(.top, 2)
                     Text("\(progress.paid) bezahlt · \(progress.open) offen · \(progress.declined) abgelehnt")
                         .talerFont(.caption)
                         .foregroundColor(.secondary)
+                    SignalTimeline(timestamp: first.common.timestamp,
+                                   expiration: finished ? nil : expiration,
+                                   textColor: .primary)
                 }
                 .padding(.leading, 44)
             }

@@ -12,34 +12,60 @@ import SwiftUI
 /// android-nachzieh-liste.md N19). Ohne gespeicherten Kontext entsteht keine
 /// Zeile - Transaktionen, die nicht über Signal angestoßen wurden, bleiben
 /// unverändert.
+///
+/// Antippen öffnet in Signal die Nachricht zu dieser Zahlung (Link
+/// taler-open, link-protokoll.md 12, N20); Signal fragt dabei sofort den
+/// aktuellen Status ab. Bei einem Gruppen-Split stehen alle Anteile in
+/// `transactionIds`, der Kontakt kommt vom ersten.
 struct SignalContactLine: View {
+    private let transactionIds: [String]
     private let contact: SignalContact?
     private let avatar: UIImage?
 
-    init(transactionId: String, store: SignalContactStore = .shared) {
-        let contact = store.contact(forTransactionId: transactionId)
+    init(transactionIds: [String], store: SignalContactStore = .shared) {
+        self.transactionIds = transactionIds
+        let contact = transactionIds.first.flatMap { store.contact(forTransactionId: $0) }
         self.contact = contact
         self.avatar = contact.flatMap { store.avatar(for: $0) }
     }
 
+    init(transactionId: String, store: SignalContactStore = .shared) {
+        self.init(transactionIds: [transactionId], store: store)
+    }
+
     var body: some View {
         if let contact {
-            HStack(spacing: 6) {
-                Image("signal_logo")
-                    .resizable()
-                    .frame(width: 16, height: 16)
-                    .accessibilityHidden(true)
-                avatarView(isGroup: contact.isGroup)
-                if let name = contact.name {
-                    Text(name)
-                        .talerFont(.subheadline)
+            let appName = contact.appName ?? "Signal"
+            // borderless: in einer List-Zeile (auch als NavigationLink-Label)
+            // reagiert nur die Kontaktzeile, der Rest der Zeile öffnet weiter
+            // die Details.
+            Button {
+                ReturnURLBuilder.openPaymentMessage(transactionIds: transactionIds)
+            } label: {
+                HStack(spacing: 6) {
+                    Image("signal_logo")
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                        .accessibilityHidden(true)
+                    avatarView(isGroup: contact.isGroup)
+                    if let name = contact.name {
+                        Text(name)
+                            .talerFont(.subheadline)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                    Image(systemName: "arrow.up.forward.app")
+                        .talerFont(.caption)
                         .foregroundColor(.secondary)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
+                        .accessibilityHidden(true)
                 }
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.borderless)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(Text("\(contact.appName ?? "Signal"): \(contact.name ?? "")"))
+            .accessibilityLabel(Text("\(appName): \(contact.name ?? "")"))
+            .accessibilityHint(Text("Öffnet die Nachricht zu dieser Zahlung in \(appName)."))
         }
     }
 

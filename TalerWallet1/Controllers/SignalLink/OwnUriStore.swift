@@ -36,7 +36,8 @@ final class OwnUriStore {
     private let defaults: UserDefaults
     private let lock = NSLock()
 
-    private init(defaults: UserDefaults = .standard) {
+    /// Eigene Instanzen nur für die Selbstprüfung (eigene UserDefaults-Suite).
+    init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
     }
 
@@ -62,6 +63,25 @@ final class OwnUriStore {
         lock.lock()
         defer { lock.unlock() }
         return loadEntries()[Self.key(for: uri)]
+    }
+
+    /// SHA-256 (hex) der URIs, die zu diesen Transaktionen gehören, in der
+    /// Reihenfolge der transactionIds - für den Link taler-open, der statt
+    /// der URI nur ihren Hash an Signal gibt (link-protokoll.md 12).
+    func uriHashes(forTransactionIds transactionIds: [String]) -> [String] {
+        lock.lock()
+        defer { lock.unlock() }
+        var hashesById: [String: [String]] = [:]
+        for (hash, entry) in loadEntries() {
+            hashesById[entry.transactionId, default: []].append(hash)
+        }
+        var result: [String] = []
+        for id in transactionIds {
+            for hash in (hashesById[id] ?? []).sorted() where !result.contains(hash) {
+                result.append(hash)
+            }
+        }
+        return result
     }
 
     /// Anzahl gemerkter Einträge (Diagnose, ohne URIs preiszugeben).
